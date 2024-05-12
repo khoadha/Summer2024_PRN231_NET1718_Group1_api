@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using MimeKit;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace BusinessObjects.ConfigurationModels {
     public class EmailConfiguration {

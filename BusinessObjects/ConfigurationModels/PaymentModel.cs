@@ -172,4 +172,3 @@ namespace BusinessObjects.ConfigurationModels {
         }
     }
 }
-}

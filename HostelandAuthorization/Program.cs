@@ -3,10 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using System.Text;
 using Microsoft.AspNetCore.Http.Features;
 using BusinessObjects.ConfigurationModels;
+using HostelandAuthorization.Extensions;
 using BusinessObjects.Entities;
-using Microsoft.AspNet.OData.Builder;
-using Microsoft.OData.Edm;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,11 +15,15 @@ builder.Services.AddControllers()
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+
 var emailConfig = builder.Configuration
         .GetSection("EmailConfiguration")
         .Get<EmailConfiguration>();
 builder.Services.AddSingleton(emailConfig);
 
+builder.Services.ConfigureDILifeTime();
+builder.Services.ConfigureCors();
+builder.Services.ConfigureSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddLogging();
 builder.Services.AddHttpClient();
@@ -34,8 +36,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //=====================  DATABASE  ==========================
-builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(
-   builder.Configuration.GetConnectionString("DefaultConnection")
+
+ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(
+    builder.Configuration.GetConnectionString("DefaultConnection")
 ));
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => {
@@ -49,7 +52,10 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => {
 .AddDefaultTokenProviders()
 .AddEntityFrameworkStores<AppDbContext>();
 
+
 var key = Encoding.ASCII.GetBytes(builder.Configuration.GetSection("JWT:Secret").Value);
+builder.Services.ConfigureAuthentication(key);
+
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
@@ -72,9 +78,3 @@ app.UseCookiePolicy();
 app.MapControllers();
 
 app.Run();
-
-
-static IEdmModel GetEdmModel() {
-    ODataConventionModelBuilder builder = new();
-    return builder.GetEdmModel();
-}
