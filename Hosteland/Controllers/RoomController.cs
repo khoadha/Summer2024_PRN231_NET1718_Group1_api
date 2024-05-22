@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.OData;
+﻿using BusinessObjects.Entities;
+using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Mvc;
 using System.Web.Http;
 using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
@@ -11,19 +12,19 @@ namespace Hosteland.Controllers {
 
         List<Room> listRoom = new List<Room>() {
                 new Room {
-                    ID=1,
+                    Id=1,
                     Name= "Room1"
                 },
                 new Room {
-                    ID=2,
+                    Id=2,
                     Name= "Room2"
                 },
                 new Room {
-                    ID=3,
+                    Id=3,
                     Name= "Room3"
                 },
                 new Room {
-                    ID=4,
+                    Id=4,
                     Name= "Room4"
                 },
         };
@@ -42,13 +43,9 @@ namespace Hosteland.Controllers {
         [EnableQuery]
         [HttpGet("{id}")]
         public SingleResult<Room> Get([FromODataUri] int key) {
-            var data = listRoom.Where(a => a.ID == key).AsQueryable();
+            var data = listRoom.Where(a => a.Id == key).AsQueryable();
             return SingleResult.Create(data);
         }
 
     }
-}
-public class Room {
-    public int ID { get; set; }
-    public string Name { get; set; }
 }

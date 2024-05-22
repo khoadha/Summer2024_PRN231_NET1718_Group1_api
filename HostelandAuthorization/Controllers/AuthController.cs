@@ -95,8 +95,7 @@ namespace HostelandAuthorization.Controllers {
                     UserName = model.Username,
                     Email = model.Email,
                     PhoneNumber = model.PhoneNumber,
-                    ImgPath = imageUrl,
-                    //AccountBalance = 0,
+                    AccountBalance = 0,
                 };
 
                 var isCreated = await _userManager.CreateAsync(newUser, model.Password);
@@ -180,7 +179,6 @@ namespace HostelandAuthorization.Controllers {
                         var newAccessToken = await GenerateToken(existingUser);
                         var newRefreshToken = await CreateRefreshToken();
 
-                        existingUser.LastLoginTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneById);
                         existingUser.RefreshToken = newRefreshToken;
                         existingUser.RefreshTokenExpiryTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneById).AddDays(7);
                         _userService.Save();
@@ -193,7 +191,7 @@ namespace HostelandAuthorization.Controllers {
                         var newUser = new ApplicationUser() {
                             UserName = payload.Name,
                             Email = payload.Email,
-                            ImgPath = payload.Picture,
+                            AccountBalance = 0,
                         };
 
                         var isCreated = await _userManager.CreateAsync(newUser);
@@ -205,10 +203,6 @@ namespace HostelandAuthorization.Controllers {
                             var newAccessToken = await GenerateToken(newUser);
                             var newRefreshToken = await CreateRefreshToken();
                             newUser.RefreshToken = newRefreshToken;
-
-                            if(existingUser is not null) {
-                                existingUser.LastLoginTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneById);
-                            }
 
                             newUser.RefreshTokenExpiryTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneById).AddDays(7);
                             _userService.Save();
@@ -284,7 +278,6 @@ namespace HostelandAuthorization.Controllers {
                 var newAccessToken = existingUser.Token;
                 var newRefreshToken = await CreateRefreshToken();
                 existingUser.RefreshToken = newRefreshToken;
-                existingUser.LastLoginTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneById);
                 existingUser.RefreshTokenExpiryTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneById);
                 _userService.Save();
 
@@ -497,7 +490,6 @@ namespace HostelandAuthorization.Controllers {
             var claims = new List<Claim>
                 {
                     new Claim("Id", user.Id),
-                    new Claim("ImgPath", user.ImgPath),
                     new Claim(ClaimTypes.NameIdentifier, user.Id),
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
                     new Claim(JwtRegisteredClaimNames.Name, user.UserName),
