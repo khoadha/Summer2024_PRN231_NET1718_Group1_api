@@ -1,12 +1,20 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using HostelandAuthorization.Services.ApplicationUserService;
+using HostelandAuthorization.Services.EmailService;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Repositories.ApplicationUserRepositories;
 
 namespace HostelandAuthorization.Extensions {
     public static class ServiceExtensions {
 
         public static void ConfigureDILifeTime(this IServiceCollection services) {
-            
+            services.AddScoped<IApplicationUserService, ApplicationUserService>();
+
+            services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
+
+            services.AddScoped<IBlobService, BlobService>();
+            services.AddScoped<IEmailService, EmailService>();
         }
 
         public static void ConfigureCors(this IServiceCollection services) {

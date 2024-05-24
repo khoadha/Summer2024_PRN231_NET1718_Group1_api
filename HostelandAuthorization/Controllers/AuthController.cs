@@ -88,14 +88,18 @@ namespace HostelandAuthorization.Controllers {
                     });
                 }
 
-
-                var imageUrl = await _blobService.UploadFileAsync(model.Image);
+                var imageUrl = "";
+                if (model.Image != null)
+                {
+                    imageUrl = await _blobService.UploadFileAsync(model.Image);
+                }
 
                 var newUser = new ApplicationUser() {
                     UserName = model.Username,
                     Email = model.Email,
                     PhoneNumber = model.PhoneNumber,
                     AccountBalance = 0,
+                    ImgPath = imageUrl,
                 };
 
                 var isCreated = await _userManager.CreateAsync(newUser, model.Password);
@@ -467,11 +471,19 @@ namespace HostelandAuthorization.Controllers {
 
         private async Task<string> GenerateToken(ApplicationUser user) {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
-
+            if (string.IsNullOrEmpty(jwtSecret))
+            {
+                throw new InvalidOperationException("JWT secret key is missing or empty.");
+            }
             var key = Encoding.ASCII.GetBytes(jwtSecret);
 
-            var claims = await GetAllValidClaims(user);
+            if (key.Length < 32)
+            {
+                throw new InvalidOperationException("JWT secret key length is less than 256 bits.");
+            }
 
+            var claims = await GetAllValidClaims(user);
+            
             var tokenDescriptor = new SecurityTokenDescriptor() {
                 Subject = new ClaimsIdentity(claims),
                 Expires = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneById).AddHours(7),
@@ -479,7 +491,6 @@ namespace HostelandAuthorization.Controllers {
             };
 
             var token = jwtTokenHandler.CreateToken(tokenDescriptor);
-
             var jwtToken = jwtTokenHandler.WriteToken(token);
 
             return jwtToken;
@@ -490,6 +501,7 @@ namespace HostelandAuthorization.Controllers {
             var claims = new List<Claim>
                 {
                     new Claim("Id", user.Id),
+                    new Claim("ImgPath", user.ImgPath),
                     new Claim(ClaimTypes.NameIdentifier, user.Id),
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
                     new Claim(JwtRegisteredClaimNames.Name, user.UserName),

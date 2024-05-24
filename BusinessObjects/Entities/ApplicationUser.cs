@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace BusinessObjects.Entities {
     [Index(nameof(PhoneNumber), IsUnique = true)]
     public class ApplicationUser : IdentityUser {
+        public string? ImgPath { get; set; }
         [NotMapped]
         public string? Token { get; set; }
         public string? RefreshToken { get; set; }
