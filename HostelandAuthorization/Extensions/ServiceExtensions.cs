@@ -1,9 +1,11 @@
 ﻿using HostelandAuthorization.Services.ApplicationUserService;
 using HostelandAuthorization.Services.EmailService;
+using HostelandAuthorization.Services.RoomService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Repositories.ApplicationUserRepositories;
+using Repositories.RoomRepository;
 
 namespace HostelandAuthorization.Extensions {
     public static class ServiceExtensions {
@@ -12,7 +14,8 @@ namespace HostelandAuthorization.Extensions {
             services.AddScoped<IApplicationUserService, ApplicationUserService>();
 
             services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
-
+            services.AddScoped<IRoomService, RoomService>();
+            services.AddScoped<IRoomRepository, RoomRepository>();
             services.AddScoped<IBlobService, BlobService>();
             services.AddScoped<IEmailService, EmailService>();
         }
