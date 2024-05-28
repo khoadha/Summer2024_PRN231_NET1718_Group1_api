@@ -195,6 +195,7 @@ namespace HostelandAuthorization.Controllers {
                         var newUser = new ApplicationUser() {
                             UserName = payload.Name,
                             Email = payload.Email,
+                            ImgPath = payload.Picture,
                             AccountBalance = 0,
                         };
 
@@ -518,12 +519,12 @@ namespace HostelandAuthorization.Controllers {
                 var role = await _roleManager.FindByNameAsync(userRole);
                 if (role != null) {
                     claims.Add(new Claim(ClaimTypes.Role, userRole));
-                    if (userRole == AppRole.USER) {
-                        if (!string.IsNullOrEmpty(user.PhoneNumber)) {
-                            claims.Add(new Claim("PhoneNumber", user.PhoneNumber));
-                        }
+                    //if (userRole == AppRole.USER) {
+                    //    if (!string.IsNullOrEmpty(user.PhoneNumber)) {
+                    //        claims.Add(new Claim("PhoneNumber", user.PhoneNumber));
+                    //    }
                         
-                    }
+                    //}
                     var roleClaims = await _roleManager.GetClaimsAsync(role);
                     foreach (var roleClaim in roleClaims) {
                         claims.Add(roleClaim);
