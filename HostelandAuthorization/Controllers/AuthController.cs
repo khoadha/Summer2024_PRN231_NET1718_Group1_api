@@ -68,22 +68,11 @@ namespace HostelandAuthorization.Controllers {
 
                 var userExists = await _userManager.FindByEmailAsync(model.Email);
 
-                var isPhoneNumberExist = await _userManager.Users.AnyAsync(a => a.PhoneNumber == model.PhoneNumber);
-
                 if (userExists != null) {
                     return BadRequest(new AuthResult() {
                         Result = false,
                         Errors = new List<string>() {
                             "Email đã được sử dụng cho một tài khoản khác!"
-                        }
-                    });
-                }
-
-                if (isPhoneNumberExist) {
-                    return BadRequest(new AuthResult() {
-                        Result = false,
-                        Errors = new List<string>() {
-                            "Số điện thoại đã được sử dụng cho một tài khoản khác!"
                         }
                     });
                 }
@@ -97,7 +86,6 @@ namespace HostelandAuthorization.Controllers {
                 var newUser = new ApplicationUser() {
                     UserName = model.Username,
                     Email = model.Email,
-                    PhoneNumber = model.PhoneNumber,
                     AccountBalance = 0,
                     ImgPath = imageUrl,
                 };
