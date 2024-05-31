@@ -5,14 +5,17 @@ using BusinessObjects.DTOs;
 namespace HostelandAuthorization.Helper {
     public class MappingProfiles : Profile {
         public MappingProfiles() {
-            //AUTH
+            // AUTH
             CreateMap<UserLoginRequestDto, ApplicationUser>();
 
-            //ROOM CATEGORY
+            // ROOM CATEGORY
             CreateMap<RoomCategory, GetRoomCategoryDto>();
             CreateMap<AddRoomCategoryDto, RoomCategory>();
 
-            //ROOM
+            // FURNITURE
+
+
+            // ROOM
             CreateMap<Room, GetRoomDTO>()
                 .ForMember(des => des.ImgPath, act => act.MapFrom(src => src.RoomImages.First().Url))
                 .ForMember(des => des.CategoryName, act => act.MapFrom(src => src.Category.CategoryName));
@@ -22,6 +25,12 @@ namespace HostelandAuthorization.Helper {
                 .ForMember(des => des.RoomImages, act => act.MapFrom(src => src.RoomImages))
                 .ForMember(des => des.RoomFurniture, act => act.MapFrom(src => src.RoomFurniture));
 
+            CreateMap<AddRoomDTO, Room>();
+                //.ForMember(des => des.RoomImages, act => act.MapFrom(src => src.Files));
+
+            //CreateMap<UpdateProductDto, Product>();
+            //CreateMap<Product, UpdateProductImageDto>();
+
 
             // FURNITURE
             CreateMap<RoomFurniture, RoomFurnitureDTO>()
@@ -29,10 +38,7 @@ namespace HostelandAuthorization.Helper {
 
             CreateMap<Furniture, FurnitureDTO>();
 
-            //CreateMap<AddProductDto, Product>();
-
-            //CreateMap<UpdateProductDto, Product>();
-            //CreateMap<Product, UpdateProductImageDto>();
+            
         }
     }
 }

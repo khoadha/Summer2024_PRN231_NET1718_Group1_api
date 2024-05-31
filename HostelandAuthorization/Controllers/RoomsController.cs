@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BusinessObjects.DTOs;
 using BusinessObjects.Entities;
 using HostelandAuthorization.Services.RoomService;
 using Microsoft.AspNetCore.Mvc;
@@ -7,39 +8,43 @@ using Microsoft.EntityFrameworkCore;
 namespace HostelandAuthorization.Controllers
 {
     [ApiController]
-    [Route("api/v1/")]
+    [Route("api/v1/[controller]")]
 
-    public class RoomController : ControllerBase
+    public class RoomsController : ControllerBase
     {
         private readonly IMapper _mapper;
         private readonly IRoomService _roomService;
 
-        public RoomController (IMapper mapper, IRoomService roomService)
+        public RoomsController (IMapper mapper, IRoomService roomService)
         {
             _mapper = mapper;
             _roomService = roomService;
         }
 
         [HttpGet]
-        [Route("room/get-room")]
+        [Route("get-room")]
         public async Task<ActionResult<List<Room>>> GetRooms()
         {
             var rooms = await _roomService.GetRooms();
-            //var response = _mapper.Map<List<GetCategoryDto>>(rooms.Data);
-            return Ok(rooms);
+            var response = _mapper.Map<List<GetRoomDTO>>(rooms.Data);
+            return Ok(response);
         }
 
         [HttpPost]
-        [Route("room/add")]
-        public async Task<IActionResult> AddRoom([FromBody] Room room)
+        [Route("add")]
+        public async Task<IActionResult> AddRoom([FromForm] AddRoomDTO roomDto)
         {
+            var room = _mapper.Map<Room>(roomDto);
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(new { Result = false, Message = "Invalid data" });
             }
 
-            var createdRoom = await _roomService.AddRoom(room);
-            return Ok(createdRoom);
+            var serviceResponse = await _roomService.AddRoom(room);
+            var response = _mapper.Map<GetRoomDTO>(serviceResponse.Data);
+            return Ok(response);
+
         }
 
         [HttpPut("{id}")]

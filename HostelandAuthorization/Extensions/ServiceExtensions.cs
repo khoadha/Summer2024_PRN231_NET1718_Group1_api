@@ -1,23 +1,34 @@
 ﻿using HostelandAuthorization.Services.ApplicationUserService;
 using HostelandAuthorization.Services.EmailService;
+using HostelandAuthorization.Services.FurnitureService;
+using HostelandAuthorization.Services.RoomCategoryService;
 using HostelandAuthorization.Services.RoomService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Repositories.ApplicationUserRepositories;
+using Repositories.FurnitureRepository;
+using Repositories.RoomCategoryRepository;
 using Repositories.RoomRepository;
 
 namespace HostelandAuthorization.Extensions {
     public static class ServiceExtensions {
 
         public static void ConfigureDILifeTime(this IServiceCollection services) {
-            services.AddScoped<IApplicationUserService, ApplicationUserService>();
-
-            services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
-            services.AddScoped<IRoomService, RoomService>();
-            services.AddScoped<IRoomRepository, RoomRepository>();
-            services.AddScoped<IBlobService, BlobService>();
+            // SERVICE
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IBlobService, BlobService>();
+
+            services.AddScoped<IApplicationUserService, ApplicationUserService>();
+            services.AddScoped<IRoomService, RoomService>();
+            services.AddScoped<IRoomCategoryService, RoomCategoryService>();
+            services.AddScoped<IFurnitureService, FurnitureService>();
+
+            // REPOSITORY
+            services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
+            services.AddScoped<IRoomRepository, RoomRepository>();
+            services.AddScoped<IRoomCategoryRepository, RoomCategoryRepository>();
+            services.AddScoped<IFurnitureRepository, FurnitureRepository>();
         }
 
         public static void ConfigureCors(this IServiceCollection services) {
