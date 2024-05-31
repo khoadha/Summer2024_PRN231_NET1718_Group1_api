@@ -26,7 +26,7 @@ namespace HostelandAuthorization.Controllers
         public async Task<ActionResult<List<Room>>> GetRooms()
         {
             var rooms = await _roomService.GetRooms();
-            var response = _mapper.Map<List<GetRoomDTO>>(rooms.Data);
+            var response = _mapper.Map<List<GetRoomDetailDTO>>(rooms.Data);
             return Ok(response);
         }
 
@@ -34,14 +34,14 @@ namespace HostelandAuthorization.Controllers
         [Route("add")]
         public async Task<IActionResult> AddRoom([FromForm] AddRoomDTO roomDto)
         {
-            var room = _mapper.Map<Room>(roomDto);
+            //var room = _mapper.Map<Room>(roomDto);
 
             if (!ModelState.IsValid)
             {
                 return BadRequest(new { Result = false, Message = "Invalid data" });
             }
 
-            var serviceResponse = await _roomService.AddRoom(room);
+            var serviceResponse = await _roomService.AddRoom(roomDto, roomDto.Files);
             var response = _mapper.Map<GetRoomDTO>(serviceResponse.Data);
             return Ok(response);
 

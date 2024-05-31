@@ -12,7 +12,7 @@ public class BlobService : IBlobService {
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
     .Build();
 
-    private readonly string ImageFolder = "EXE";
+    private readonly string ImageFolder = "PRN";
     private readonly string ContainerClient = "files";
     private readonly string _storageAccount = config["Azure:Blob:StorageAccount"];
     private readonly string _accessKey = config["Azure:Blob:AccessKey"];

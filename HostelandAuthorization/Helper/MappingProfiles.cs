@@ -13,7 +13,10 @@ namespace HostelandAuthorization.Helper {
             CreateMap<AddRoomCategoryDto, RoomCategory>();
 
             // FURNITURE
+            CreateMap<RoomFurniture, RoomFurnitureDTO>();
 
+            CreateMap<Furniture, FurnitureDTO>();
+            CreateMap<AddFurnitureDTO, Furniture>();
 
             // ROOM
             CreateMap<Room, GetRoomDTO>()
@@ -26,17 +29,17 @@ namespace HostelandAuthorization.Helper {
                 .ForMember(des => des.RoomFurniture, act => act.MapFrom(src => src.RoomFurniture));
 
             CreateMap<AddRoomDTO, Room>();
-                //.ForMember(des => des.RoomImages, act => act.MapFrom(src => src.Files));
+                //.ForMember(dest => dest.RoomFurniture, opt => opt.MapFrom(src => src.Furnitures.Select(f => new RoomFurniture
+                //{
+                //    FurnitureId = f.FurnitureId,
+                //    Quantity = f.Quantity
+                //})));
 
             //CreateMap<UpdateProductDto, Product>();
             //CreateMap<Product, UpdateProductImageDto>();
 
 
-            // FURNITURE
-            CreateMap<RoomFurniture, RoomFurnitureDTO>()
-                .ForMember(des => des.Furniture, act => act.MapFrom(src => src.Furniture));
-
-            CreateMap<Furniture, FurnitureDTO>();
+            
 
             
         }

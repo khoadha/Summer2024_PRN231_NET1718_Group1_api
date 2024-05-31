@@ -1,4 +1,6 @@
-﻿using BusinessObjects.Entities;
+﻿using BusinessObjects.DTOs;
+using BusinessObjects.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -19,16 +21,43 @@ namespace Repositories.RoomRepository
 
         public async Task<List<Room>> GetRoom()
         {
-            var list = await _context.Rooms.ToListAsync();
+            var list = await _context.Rooms
+                .Include(r => r.Category)
+                .Include(r => r.RoomImages) 
+                .Include(r => r.RoomFurniture) 
+                .ToListAsync();
             return list;
         }
 
-        public async Task<Room> AddRoom(Room room)
+        public async Task<Room> AddRoom(Room room, List<RoomImage> images, List<RoomFurniture> roomFurnitures)
         {
-            _context.Rooms.Add(room);
-            await _context.SaveChangesAsync();
+
+            try
+            {
+                // create room in room tbl
+                room.IsAvailable = true;
+                room.RoomImages = images;
+
+                _context.Rooms.Add(room);
+                await _context.SaveChangesAsync();
+
+                // add furniture to room
+                foreach (var roomFurniture in roomFurnitures)
+                {
+                    roomFurniture.RoomId = room.Id;
+                }
+
+                await _context.RoomFurniture.AddRangeAsync(roomFurnitures);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("An error occurred while adding the room.", ex);
+            }
+
             return room;
         }
+
 
         public async Task<Room> EditRoom(Room room)
         {
