@@ -1,13 +1,14 @@
 ﻿using BusinessObjects.ConfigurationModels;
 using BusinessObjects.Entities;
+using Repositories.FurnitureRepository;
 
 namespace HostelandAuthorization.Services.FurnitureService
 {
     public class FurnitureService : IFurnitureService
     {
-        private readonly IFurnitureService _repo;
+        private readonly IFurnitureRepository _repo;
 
-        public FurnitureService(IFurnitureService repo)
+        public FurnitureService(IFurnitureRepository repo)
         {
             _repo = repo;
         }

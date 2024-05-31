@@ -1,22 +1,24 @@
 ﻿using BusinessObjects.ConfigurationModels;
 using BusinessObjects.Entities;
+using Repositories.RoomCategoryRepository;
 
 namespace HostelandAuthorization.Services.RoomCategoryService
 {
     public class RoomCategoryService : IRoomCategoryService
     {
-        private readonly IRoomCategoryService _repo;
-        public RoomCategoryService(IRoomCategoryService repo)
+        private readonly IRoomCategoryRepository _repo;
+
+        public RoomCategoryService(IRoomCategoryRepository repo)
         {
             _repo = repo;
         }
 
-        public async Task<ServiceResponse<RoomCategory>> AddRoomCategory(RoomCategory category)
+        public async Task<ServiceResponse<RoomCategory>> AddRoomCategory(RoomCategory RoomCategory)
         {
             var serviceResponse = new ServiceResponse<RoomCategory>();
             try
             {
-                var addedCate = await _repo.AddRoomCategory(category);
+                var addedCate = await _repo.AddRoomCategory(RoomCategory);
                 serviceResponse.Data = addedCate;
             }
             catch (Exception ex)
@@ -27,6 +29,7 @@ namespace HostelandAuthorization.Services.RoomCategoryService
             return serviceResponse;
         }
 
+ 
 
         public async Task<ServiceResponse<List<RoomCategory>>> GetRoomCategories()
         {
