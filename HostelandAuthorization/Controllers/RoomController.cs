@@ -2,6 +2,7 @@
 using BusinessObjects.Entities;
 using HostelandAuthorization.Services.RoomService;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HostelandAuthorization.Controllers
 {
@@ -24,6 +25,7 @@ namespace HostelandAuthorization.Controllers
         public async Task<ActionResult<List<Room>>> GetRooms()
         {
             var rooms = await _roomService.GetRooms();
+            //var response = _mapper.Map<List<GetCategoryDto>>(rooms.Data);
             return Ok(rooms);
         }
 
@@ -38,6 +40,35 @@ namespace HostelandAuthorization.Controllers
 
             var createdRoom = await _roomService.AddRoom(room);
             return Ok(createdRoom);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutRoom([FromRoute]int id, [FromBody] Room room)
+        {
+            //if (id != room.Id)
+            //{
+            //    return BadRequest();
+            //}
+
+            //_context.Entry(room).State = EntityState.Modified;
+
+            //try
+            //{
+            //    await _context.SaveChangesAsync();
+            //}
+            //catch (DbUpdateConcurrencyException)
+            //{
+            //    if (!RoomExists(id))
+            //    {
+            //        return NotFound();
+            //    }
+            //    else
+            //    {
+            //        throw;
+            //    }
+            //}
+
+            return NoContent();
         }
     }
 }

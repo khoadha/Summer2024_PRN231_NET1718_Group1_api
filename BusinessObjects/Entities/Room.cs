@@ -5,6 +5,8 @@ namespace BusinessObjects.Entities {
     public class Room : BaseEntity {
         public string? Name { get; set; }
         public int RoomSize { get; set; }
+        public string? RoomDescription { get; set; }
+        public double RoomArea { get; set; }
         public double CostPerDay { get; set; }
         public string? Location { get; set; }
         [ForeignKey("CategoryId")]
@@ -23,6 +25,7 @@ namespace BusinessObjects.Entities {
     public class RoomFurniture : BaseEntity {
         public int FurnitureId { get; set; }
         public int RoomId { get; set; }
+        public int Quantity { get; set; }
         public virtual Room? Room { get; set; }
         public virtual Furniture? Furniture { get; set; }
     }
