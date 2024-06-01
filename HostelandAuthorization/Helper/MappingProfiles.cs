@@ -1,6 +1,7 @@
 ﻿using BusinessObjects.Entities;
 using AutoMapper;
 using BusinessObjects.DTOs;
+using HostelandAuthorization.Shared;
 
 namespace HostelandAuthorization.Helper {
     public class MappingProfiles : Profile {
@@ -51,6 +52,16 @@ namespace HostelandAuthorization.Helper {
             
 
             
+            // ORDER
+            CreateMap<GuestDto, Guest>();
+            CreateMap<CreateOrderDto, Order>()
+                        .ForMember(dest => dest.Guests, opt => opt.MapFrom(src => src.Guests));
+            CreateMap<CreateOrderDto, Contract>();
+
+            //CreateMap<AddProductDto, Product>();
+
+            //CreateMap<UpdateProductDto, Product>();
+            //CreateMap<Product, UpdateProductImageDto>();
         }
     }
 }
