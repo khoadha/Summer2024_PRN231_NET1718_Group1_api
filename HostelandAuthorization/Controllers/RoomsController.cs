@@ -32,11 +32,10 @@ namespace HostelandAuthorization.Controllers
 
         [HttpGet]
         [Route("get-room/{id}")]
-        public async Task<ActionResult<List<Room>>> GetRoomById([FromRoute] int id)
+        public async Task<ActionResult<Room>> GetRoomById([FromRoute] int id)
         {
             var rooms = await _roomService.GetRoomById(id);
-            var response = _mapper.Map<List<GetRoomDetailDTO>>(rooms.Data);
-            return Ok(response);
+            return Ok(rooms);
         }
         [HttpGet]
         [Route("search-room/{query}")]

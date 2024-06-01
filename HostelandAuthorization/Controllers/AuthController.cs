@@ -452,7 +452,7 @@ namespace HostelandAuthorization.Controllers {
 
         #region Private Method
         private string BuildEmailConfirmationLink(string userId, string token) {
-            return $"{callbackUrl}/check-register-email?userId={userId}&token={token}";
+            return $"{callbackUrl}/confirm-email?userId={userId}&token={token}";
         }
         private string BuildResetPasswordLink(string userId, string token) {
             return $"{callbackUrl}/reset-password?userId={userId}&token={token}";
