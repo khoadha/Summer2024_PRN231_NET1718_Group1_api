@@ -41,8 +41,8 @@ namespace HostelandAuthorization.Controllers
                 return BadRequest(new { Result = false, Message = "Invalid data" });
             }
 
-            var serviceResponse = await _roomService.AddRoom(roomDto, roomDto.Files);
-            var response = _mapper.Map<GetRoomDTO>(serviceResponse.Data);
+            var serviceResponse = await _roomService.AddRoom(roomDto);
+            var response = _mapper.Map<GetRoomDetailDTO>(serviceResponse.Data);
             return Ok(response);
 
         }

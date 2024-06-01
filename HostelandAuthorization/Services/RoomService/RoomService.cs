@@ -26,14 +26,14 @@ namespace HostelandAuthorization.Services.RoomService
             serviceResponse.Data = listRoom;
             return serviceResponse;
         }
-        public async Task<ServiceResponse<Room>> AddRoom(AddRoomDTO roomDto, List<IFormFile> images)
+        public async Task<ServiceResponse<Room>> AddRoom(AddRoomDTO roomDto)
         {
             var serviceResponse = new ServiceResponse<Room>();
             try
             {
                 // Convert images to RoomImage objects
                 var roomImages = new List<RoomImage>();
-                foreach (var file in images)
+                foreach (var file in roomDto.Files)
                 {
                     string callbackUrl = await _blobService.UploadFileAsync(file);
                     RoomImage roomImage = new RoomImage
@@ -44,11 +44,16 @@ namespace HostelandAuthorization.Services.RoomService
                 }
 
                 // Convert Furnitures from DTO to RoomFurniture entities
-                var roomFurnitures = roomDto.Furnitures.Select(f => new RoomFurniture
+                var rfs = new List<RoomFurniture>();
+                foreach(var rf in roomDto.Furnitures)
                 {
-                    FurnitureId = f.FurnitureId,
-                    Quantity = f.Quantity
-                }).ToList();
+                    RoomFurniture roomFurniture = new RoomFurniture
+                    {
+                        FurnitureId = rf.FurnitureId,
+                        Quantity = rf.Quantity,
+                    };
+                    rfs.Add(roomFurniture);
+                }
 
                 // Convert AddRoomDTO to Room entity
                 var room = new Room
@@ -63,7 +68,7 @@ namespace HostelandAuthorization.Services.RoomService
                 };
 
                 // Call repository method
-                serviceResponse.Data = await _roomRepository.AddRoom(room, roomImages, roomFurnitures);
+                serviceResponse.Data = await _roomRepository.AddRoom(room, roomImages, rfs);
             }
             catch (Exception ex)
             {

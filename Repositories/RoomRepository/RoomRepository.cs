@@ -38,15 +38,14 @@ namespace Repositories.RoomRepository
                 room.IsAvailable = true;
                 room.RoomImages = images;
 
-                _context.Rooms.Add(room);
-                await _context.SaveChangesAsync();
-
                 // add furniture to room
-                foreach (var roomFurniture in roomFurnitures)
+                foreach (var r in roomFurnitures)
                 {
-                    roomFurniture.RoomId = room.Id;
+                    r.RoomId = room.Id;
                 }
+                room.RoomFurniture = roomFurnitures;
 
+                _context.Rooms.Add(room);
                 await _context.RoomFurniture.AddRangeAsync(roomFurnitures);
                 await _context.SaveChangesAsync();
             }

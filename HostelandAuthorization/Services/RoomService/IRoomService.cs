@@ -7,6 +7,6 @@ namespace HostelandAuthorization.Services.RoomService
     public interface IRoomService
     {
         Task<ServiceResponse<List<Room>>> GetRooms();
-        Task<ServiceResponse<Room>> AddRoom(AddRoomDTO room, List<IFormFile> images);
+        Task<ServiceResponse<Room>> AddRoom(AddRoomDTO room);
     }
 }
