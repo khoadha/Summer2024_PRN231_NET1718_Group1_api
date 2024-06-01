@@ -86,5 +86,14 @@ namespace HostelandAuthorization.Services.RoomService
             return serviceResponse;
         }
 
+
+        public async Task<ServiceResponse<List<Room>>> SearchRooms(string query)
+        {
+            var serviceResponse = new ServiceResponse<List<Room>>();
+            var listRoom = await _roomRepository.SearchRoom(query);
+            serviceResponse.Data = listRoom;
+            return serviceResponse;
+        }
+
     }
 }

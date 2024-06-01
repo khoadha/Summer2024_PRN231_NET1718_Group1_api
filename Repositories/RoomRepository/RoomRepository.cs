@@ -95,5 +95,16 @@ namespace Repositories.RoomRepository
                 .Include(r => r.RoomFurniture)
                  .FirstOrDefaultAsync(r => r.Id == id);
         }
+
+        public async Task<List<Room>> SearchRoom(string query)
+        {
+            var listProducts = await _context.Rooms
+                .Include(r => r.Category)
+                .Include(r => r.RoomImages)
+                .Include(r => r.RoomFurniture)
+                .Where(r => r.Name.Contains(query))
+                .ToListAsync();
+            return listProducts;
+        }
     }
 }

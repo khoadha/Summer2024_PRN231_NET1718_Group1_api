@@ -10,5 +10,6 @@ namespace HostelandAuthorization.Services.RoomService
         Task<ServiceResponse<Room>> AddRoom(AddRoomDTO room);
 
         Task<ServiceResponse<Room>> GetRoomById(int id);
+        Task<ServiceResponse<List<Room>>> SearchRooms(string query);
     }
 }
