@@ -78,5 +78,13 @@ namespace HostelandAuthorization.Services.RoomService
             return serviceResponse;
         }
 
+        public async Task<ServiceResponse<Room>> GetRoomById(int id)
+        {
+            var serviceResponse = new ServiceResponse<Room>();
+            var room = await _roomRepository.FindRoomById(id);
+            serviceResponse.Data = room;
+            return serviceResponse;
+        }
+
     }
 }

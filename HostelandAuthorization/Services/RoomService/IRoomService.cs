@@ -8,5 +8,7 @@ namespace HostelandAuthorization.Services.RoomService
     {
         Task<ServiceResponse<List<Room>>> GetRooms();
         Task<ServiceResponse<Room>> AddRoom(AddRoomDTO room);
+
+        Task<ServiceResponse<Room>> GetRoomById(int id);
     }
 }

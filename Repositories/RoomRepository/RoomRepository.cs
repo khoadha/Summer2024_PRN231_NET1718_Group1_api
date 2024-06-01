@@ -90,11 +90,10 @@ namespace Repositories.RoomRepository
         public async Task<Room> FindRoomById(int id)
         {
             return await _context.Rooms
-                .Include(r => r.Category)
-                .Include(r => r.RoomFurniture)
-                    .ThenInclude(rf => rf.Furniture)
+            .Include(r => r.Category)
                 .Include(r => r.RoomImages)
-                .FirstOrDefaultAsync(r => r.Id == id);
+                .Include(r => r.RoomFurniture)
+                 .FirstOrDefaultAsync(r => r.Id == id);
         }
     }
 }
