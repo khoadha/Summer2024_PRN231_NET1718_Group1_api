@@ -5,12 +5,11 @@ namespace BusinessObjects.Entities {
     public class Order : BaseEntity {
         public string? UserId { get; set; }
         public int RoomId { get; set; }
-        public int ContractId { get; set; }
         public DateTime? OrderDate { get; set; }
         public DateTime? CancelDate { get; set; }
         public OrderStatus Status { get; set; }
         public virtual Room? Room { get; set; }
-        public virtual ICollection<Contract>? Contracts { get; set; }
+        public virtual ICollection<Contract>? Contracts { get; set; } = new List<Contract>();
         public virtual ApplicationUser? User { get; set; }
         public virtual ICollection<RoomService>? RoomServices { get; set; }
         public virtual ICollection<Fee>? Fees { get; set; }

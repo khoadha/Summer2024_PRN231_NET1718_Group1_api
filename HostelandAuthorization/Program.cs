@@ -44,7 +44,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => {
     options.User.AllowedUserNameCharacters = null;
     options.User.RequireUniqueEmail = true;
-    options.SignIn.RequireConfirmedAccount = true;
+    options.SignIn.RequireConfirmedAccount = false;
     options.Lockout.AllowedForNewUsers = true;
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
     options.Lockout.MaxFailedAccessAttempts = 5;

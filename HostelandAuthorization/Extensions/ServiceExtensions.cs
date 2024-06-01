@@ -1,13 +1,16 @@
 ﻿using HostelandAuthorization.Services.ApplicationUserService;
 using HostelandAuthorization.Services.EmailService;
+using HostelandAuthorization.Services.OrderService;
 using HostelandAuthorization.Services.RoomService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Repositories.ApplicationUserRepositories;
+using Repositories.OrderRepository;
 using Repositories.RoomRepository;
 
-namespace HostelandAuthorization.Extensions {
+namespace HostelandAuthorization.Extensions
+{
     public static class ServiceExtensions {
 
         public static void ConfigureDILifeTime(this IServiceCollection services) {
@@ -15,6 +18,8 @@ namespace HostelandAuthorization.Extensions {
 
             services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
             services.AddScoped<IRoomService, RoomService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IRoomRepository, RoomRepository>();
             services.AddScoped<IBlobService, BlobService>();
             services.AddScoped<IEmailService, EmailService>();
