@@ -10,7 +10,7 @@ namespace Repositories.RoomRepository
     public interface IRoomRepository
     {
         Task<List<Room>> GetRoom();
-        Task<Room> AddRoom(Room room);
+        Task<Room> AddRoom(Room room, List<RoomImage> images, List<RoomFurniture> roomFurnitures);
         Task<Room> EditRoom(Room room);
         Task<bool> DeleteRoom(int roomId);
         Task<Room> FindRoomById(int id);

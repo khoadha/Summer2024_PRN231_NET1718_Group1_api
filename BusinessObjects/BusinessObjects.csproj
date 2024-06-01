@@ -8,8 +8,11 @@
 
   <ItemGroup>
     <Compile Remove="DTO\**" />
+    <Compile Remove="EmailTemplate\**" />
     <EmbeddedResource Remove="DTO\**" />
+    <EmbeddedResource Remove="EmailTemplate\**" />
     <None Remove="DTO\**" />
+    <None Remove="EmailTemplate\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,10 +32,6 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
     <PackageReference Include="MimeKit" Version="4.5.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="EmailTemplate\" />
   </ItemGroup>
 
 </Project>

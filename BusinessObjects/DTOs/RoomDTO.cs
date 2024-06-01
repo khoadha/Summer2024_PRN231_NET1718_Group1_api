@@ -1,5 +1,8 @@
-﻿using System;
+﻿using BusinessObjects.Entities;
+using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -20,27 +23,11 @@ namespace BusinessObjects.DTOs
         public bool IsAvailable { get; set; }
     }
 
-    public class FurnitureDTO
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
-    }
-
-    public class RoomFurnitureDTO
-    {
-        public int FurnitureId { get; set; }
-        public int RoomId { get; set; }
-        public FurnitureDTO Furniture { get; set; }
-        public int Quantity { get; set; } 
-    }
-
     public class ImageDTO
     {
         public int Id { get; set; }
         public string ImgPath { get; set; } = string.Empty;
     }
-
 
     public class GetRoomDetailDTO
     {
@@ -56,4 +43,32 @@ namespace BusinessObjects.DTOs
         public List<RoomFurnitureDTO> RoomFurniture { get; set; } = new List<RoomFurnitureDTO>();
         public List<ImageDTO> RoomImages { get; set; } = new List<ImageDTO>();
     }
+
+    public class AddRoomDTO
+    {
+        [Required]
+        public string? Name { get; set; }
+
+        [Range(1, int.MaxValue, ErrorMessage = "Room size must be greater than 0")]
+        public int RoomSize { get; set; }
+
+        [Range(1, double.MaxValue, ErrorMessage = "Room area must be greater than 0")]
+        public double RoomArea { get; set; }
+
+        [Required]
+        public string RoomDescription { get; set; } = string.Empty;
+
+        [Required]
+        [Range(0, double.MaxValue, ErrorMessage = "Cost per day must be non-negative")]
+        public double CostPerDay { get; set; }
+
+        public string? Location { get; set; }
+
+        [Required]
+        public int CategoryId { get; set; }
+        public List<RoomFurnitureDTO> Furnitures { get; set; } = new List<RoomFurnitureDTO>();
+
+        public List<IFormFile> Files { get; set; } = new List<IFormFile>();
+    }
+
 }
