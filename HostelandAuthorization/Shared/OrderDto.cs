@@ -1,11 +1,17 @@
-﻿namespace HostelandAuthorization.Shared
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace HostelandAuthorization.Shared
 {
     public class CreateOrderDto
     {
-        public string? UserId { get; set; }
+        [Required]
+        public string UserId { get; set; }
+        [Required]
         public double Cost { get; set; }
         public List<GuestDto> Guests { get; set; }
+        [Required]
         public DateTime? StartDate { get; set; }
+        [Required]
         public DateTime? EndDate { get; set; }
     }
     public class GuestDto
