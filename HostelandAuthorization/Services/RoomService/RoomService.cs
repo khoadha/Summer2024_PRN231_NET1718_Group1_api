@@ -3,6 +3,7 @@ using AutoMapper;
 using BusinessObjects.ConfigurationModels;
 using BusinessObjects.DTOs;
 using BusinessObjects.Entities;
+using Repositories.RoomCategoryRepository;
 using Repositories.RoomRepository;
 
 namespace HostelandAuthorization.Services.RoomService
@@ -12,12 +13,14 @@ namespace HostelandAuthorization.Services.RoomService
         private readonly IRoomRepository _roomRepository;
         private readonly IBlobService _blobService;
         private readonly IMapper _mapper;
+        private readonly IRoomCategoryRepository _roomCategoryRepository;
 
-        public RoomService(IRoomRepository roomRepo, IMapper mapper, IBlobService blobService)
+        public RoomService(IRoomRepository roomRepo, IMapper mapper, IBlobService blobService, IRoomCategoryRepository roomCategoryRepository)
         {
             _roomRepository = roomRepo;
             _mapper = mapper;
             _blobService = blobService;
+            _roomCategoryRepository = roomCategoryRepository;
         }
 
         public async Task<ServiceResponse<List<Room>>> GetRooms() {
@@ -43,8 +46,18 @@ namespace HostelandAuthorization.Services.RoomService
                     roomImages.Add(roomImage);
                 }
 
+                // Fetch the Category entity based on the CategoryId
+                var category = await _roomCategoryRepository.GetRoomCategoryById(roomDto.CategoryId);
+                if (category == null)
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "Category not found";
+                    return serviceResponse;
+                }
+
                 // Convert AddRoomDTO to Room entity
                 var room = _mapper.Map<Room>(roomDto);
+                room.Category = category;
 
                 // Call repository method
                 serviceResponse.Data = await _roomRepository.AddRoom(room, roomImages);
@@ -81,7 +94,6 @@ namespace HostelandAuthorization.Services.RoomService
                     }
                     else
                     {
-                        // If furniture does not exist in the room, add it
                         var newFurniture = new RoomFurniture
                         {
                             FurnitureId = furnitureDto.FurnitureId,
@@ -134,6 +146,16 @@ namespace HostelandAuthorization.Services.RoomService
                 if (updateRoomDto.CategoryId != default)
                     roomToUpdate.CategoryId = updateRoomDto.CategoryId;
 
+                // Fetch the Category entity based on the CategoryId
+                var category = await _roomCategoryRepository.GetRoomCategoryById(roomToUpdate.CategoryId);
+                if (category == null)
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "Category not found";
+                    return serviceResponse;
+                }
+
+                roomToUpdate.Category = category;
                 await _roomRepository.EditRoom(roomToUpdate);
 
                 serviceResponse.Data = roomToUpdate;

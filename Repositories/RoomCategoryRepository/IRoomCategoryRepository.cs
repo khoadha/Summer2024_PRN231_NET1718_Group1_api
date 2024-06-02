@@ -10,6 +10,7 @@ namespace Repositories.RoomCategoryRepository
     public interface IRoomCategoryRepository
     {
         Task<List<RoomCategory>> GetRoomCategories();
+        Task<RoomCategory> GetRoomCategoryById(int id);
         Task<RoomCategory> AddRoomCategory(RoomCategory RoomCategory);
         Task<bool> SaveAsync();
 

@@ -44,6 +44,20 @@ namespace Repositories.RoomCategoryRepository
             }
             return result;
         }
+        
+        public async Task<RoomCategory> GetRoomCategoryById(int id)
+        {
+            RoomCategory result = new RoomCategory();
+            try
+            {
+                result = await _context.RoomCategories.FirstOrDefaultAsync(c => c.Id.Equals(id));
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return result;
+        }
 
         public async Task<bool> SaveAsync()
         {
