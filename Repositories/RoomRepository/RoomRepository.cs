@@ -34,7 +34,6 @@ namespace Repositories.RoomRepository
 
             try
             {
-                // create room in room tbl
                 room.IsAvailable = true;
                 room.RoomImages = images;
 
@@ -49,29 +48,17 @@ namespace Repositories.RoomRepository
             return room;
         }
 
-        public async Task AddFurnitureToRoom(List<RoomFurniture> roomFurnitures)
-        {
-            await _context.RoomFurniture.AddRangeAsync(roomFurnitures);
-            await _context.SaveChangesAsync();
-        }
-
         public async Task<Room> EditRoom(Room room)
         {
             var existingRoom = await _context.Rooms.FindAsync(room.Id);
             if (existingRoom != null)
-            {
-                existingRoom.Name = room.Name;
-                existingRoom.RoomSize = room.RoomSize;
-                existingRoom.CostPerDay = room.CostPerDay;
-                existingRoom.Location = room.Location;
-                existingRoom.CategoryId = room.CategoryId;
-                existingRoom.IsAvailable = room.IsAvailable;
-                //  RoomFurniture and RoomImages chua add
-
+            {                
+                _context.Rooms.Update(room);
                 await _context.SaveChangesAsync();
             }
             return existingRoom;
         }
+
         public async Task<bool> DeleteRoom(int roomId)
         {
             var room = await _context.Rooms.FindAsync(roomId);

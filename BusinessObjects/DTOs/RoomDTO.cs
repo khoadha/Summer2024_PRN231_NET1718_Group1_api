@@ -70,4 +70,24 @@ namespace BusinessObjects.DTOs
         public List<IFormFile> Files { get; set; } = new List<IFormFile>();
     }
 
+    public class UpdateRoomDTO
+    {
+        public int RoomId { get; set; }
+        public string Name { get; set; }
+
+        [Range(1, int.MaxValue, ErrorMessage = "Room size must be greater than 0")]
+        public int RoomSize { get; set; }
+
+        [Range(1, double.MaxValue, ErrorMessage = "Room area must be greater than 0")]
+        public double RoomArea { get; set; }
+
+        public string RoomDescription { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessage = "Cost per day must be non-negative")]
+        public double CostPerDay { get; set; }
+        public string? Location { get; set; }
+
+        public int CategoryId { get; set; }
+    }
+
 }

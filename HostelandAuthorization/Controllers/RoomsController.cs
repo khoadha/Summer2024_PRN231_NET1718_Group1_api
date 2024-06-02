@@ -81,33 +81,23 @@ namespace HostelandAuthorization.Controllers
         }
 
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutRoom([FromRoute]int id, [FromBody] Room room)
+        [HttpPut]
+        [Route("update-room")]
+        public async Task<IActionResult> UpdateRoom([FromBody] UpdateRoomDTO updateRoomDto)
         {
-            //if (id != room.Id)
-            //{
-            //    return BadRequest();
-            //}
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { Result = false, Message = "Invalid data" });
+            }
 
-            //_context.Entry(room).State = EntityState.Modified;
+            var serviceResponse = await _roomService.UpdateRoom(updateRoomDto);
+            if (!serviceResponse.Success)
+            {
+                return BadRequest(new { Result = false, Message = serviceResponse.Message });
+            }
 
-            //try
-            //{
-            //    await _context.SaveChangesAsync();
-            //}
-            //catch (DbUpdateConcurrencyException)
-            //{
-            //    if (!RoomExists(id))
-            //    {
-            //        return NotFound();
-            //    }
-            //    else
-            //    {
-            //        throw;
-            //    }
-            //}
-
-            return NoContent();
+            var response = _mapper.Map<GetRoomDetailDTO>(serviceResponse.Data);
+            return Ok(response);
         }
     }
 }

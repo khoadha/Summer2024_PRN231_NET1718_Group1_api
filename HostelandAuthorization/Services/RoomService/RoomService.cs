@@ -70,14 +70,29 @@ namespace HostelandAuthorization.Services.RoomService
                     return serviceResponse;
                 }
 
-                var newFurnitures = addFurnitureToRoomDto.Furnitures.Select(f => new RoomFurniture
+                foreach (var furnitureDto in addFurnitureToRoomDto.Furnitures)
                 {
-                    FurnitureId = f.FurnitureId,
-                    RoomId = addFurnitureToRoomDto.RoomId,
-                    Quantity = f.Quantity
-                }).ToList();
+                    // Check if the furniture already exists in the room
+                    var existingFurniture = room.RoomFurniture.FirstOrDefault(f => f.FurnitureId == furnitureDto.FurnitureId);
+                    if (existingFurniture != null)
+                    {
+                        // If furniture exists in the room, update the quantity
+                        existingFurniture.Quantity += furnitureDto.Quantity;
+                    }
+                    else
+                    {
+                        // If furniture does not exist in the room, add it
+                        var newFurniture = new RoomFurniture
+                        {
+                            FurnitureId = furnitureDto.FurnitureId,
+                            RoomId = addFurnitureToRoomDto.RoomId,
+                            Quantity = furnitureDto.Quantity
+                        };
+                        room.RoomFurniture.Add(newFurniture);
+                    }
+                }
 
-                await _roomRepository.AddFurnitureToRoom(newFurnitures);
+                await _roomRepository.EditRoom(room);
 
                 serviceResponse.Data = room;
             }
@@ -87,6 +102,47 @@ namespace HostelandAuthorization.Services.RoomService
                 serviceResponse.Message = ex.Message;
             }
 
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<Room>> UpdateRoom(UpdateRoomDTO updateRoomDto)
+        {
+            var serviceResponse = new ServiceResponse<Room>();
+            try
+            {
+                var roomToUpdate = await _roomRepository.FindRoomById(updateRoomDto.RoomId);
+                if (roomToUpdate == null)
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "Room not found";
+                    return serviceResponse;
+                }
+
+                // Update room properties if provided in the DTO
+                if (!string.IsNullOrEmpty(updateRoomDto.Name))
+                    roomToUpdate.Name = updateRoomDto.Name;
+                if (updateRoomDto.RoomSize != default)
+                    roomToUpdate.RoomSize = updateRoomDto.RoomSize;
+                if (updateRoomDto.RoomArea != default)
+                    roomToUpdate.RoomArea = updateRoomDto.RoomArea;
+                if (!string.IsNullOrEmpty(updateRoomDto.RoomDescription))
+                    roomToUpdate.RoomDescription = updateRoomDto.RoomDescription;
+                if (updateRoomDto.CostPerDay != default)
+                    roomToUpdate.CostPerDay = updateRoomDto.CostPerDay;
+                if (!string.IsNullOrEmpty(updateRoomDto.Location))
+                    roomToUpdate.Location = updateRoomDto.Location;
+                if (updateRoomDto.CategoryId != default)
+                    roomToUpdate.CategoryId = updateRoomDto.CategoryId;
+
+                await _roomRepository.EditRoom(roomToUpdate);
+
+                serviceResponse.Data = roomToUpdate;
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
             return serviceResponse;
         }
 

@@ -18,6 +18,7 @@ namespace HostelandAuthorization.Helper {
             CreateMap<RoomFurnitureDTO, RoomFurniture>();
 
             CreateMap<Furniture, FurnitureDTO>();
+
             CreateMap<AddFurnitureDTO, Furniture>();
 
             // ROOM IMAGE
@@ -39,6 +40,7 @@ namespace HostelandAuthorization.Helper {
                 .ForMember(des => des.RoomFurniture, act => act.MapFrom(src => src.RoomFurniture));
 
             CreateMap<AddRoomDTO, Room>();
+            CreateMap<UpdateRoomDTO, Room>();
 
             //CreateMap<UpdateProductDto, Product>();
             //CreateMap<Product, UpdateProductImageDto>();
