@@ -43,32 +43,11 @@ namespace HostelandAuthorization.Services.RoomService
                     roomImages.Add(roomImage);
                 }
 
-                // Convert Furnitures from DTO to RoomFurniture entities
-                var rfs = new List<RoomFurniture>();
-                foreach(var rf in roomDto.Furnitures)
-                {
-                    RoomFurniture roomFurniture = new RoomFurniture
-                    {
-                        FurnitureId = rf.FurnitureId,
-                        Quantity = rf.Quantity,
-                    };
-                    rfs.Add(roomFurniture);
-                }
-
                 // Convert AddRoomDTO to Room entity
-                var room = new Room
-                {
-                    Name = roomDto.Name,
-                    RoomSize = roomDto.RoomSize,
-                    RoomArea = roomDto.RoomArea,
-                    RoomDescription = roomDto.RoomDescription,
-                    CostPerDay = roomDto.CostPerDay,
-                    Location = roomDto.Location,
-                    CategoryId = roomDto.CategoryId,
-                };
+                var room = _mapper.Map<Room>(roomDto);
 
                 // Call repository method
-                serviceResponse.Data = await _roomRepository.AddRoom(room, roomImages, rfs);
+                serviceResponse.Data = await _roomRepository.AddRoom(room, roomImages);
             }
             catch (Exception ex)
             {
@@ -77,6 +56,40 @@ namespace HostelandAuthorization.Services.RoomService
             }
             return serviceResponse;
         }
+
+        public async Task<ServiceResponse<Room>> AddFurnitureToRoom(AddFurnitureToRoomDTO addFurnitureToRoomDto)
+        {
+            var serviceResponse = new ServiceResponse<Room>();
+            try
+            {
+                var room = await _roomRepository.FindRoomById(addFurnitureToRoomDto.RoomId);
+                if (room == null)
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "Room not found";
+                    return serviceResponse;
+                }
+
+                var newFurnitures = addFurnitureToRoomDto.Furnitures.Select(f => new RoomFurniture
+                {
+                    FurnitureId = f.FurnitureId,
+                    RoomId = addFurnitureToRoomDto.RoomId,
+                    Quantity = f.Quantity
+                }).ToList();
+
+                await _roomRepository.AddFurnitureToRoom(newFurnitures);
+
+                serviceResponse.Data = room;
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+
+            return serviceResponse;
+        }
+
 
         public async Task<ServiceResponse<Room>> GetRoomById(int id)
         {

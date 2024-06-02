@@ -47,11 +47,9 @@ namespace HostelandAuthorization.Controllers
         }
 
         [HttpPost]
-        [Route("add")]
+        [Route("add-room")]
         public async Task<IActionResult> AddRoom([FromForm] AddRoomDTO roomDto)
         {
-            //var room = _mapper.Map<Room>(roomDto);
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(new { Result = false, Message = "Invalid data" });
@@ -62,6 +60,26 @@ namespace HostelandAuthorization.Controllers
             return Ok(response);
 
         }
+
+        [HttpPost]
+        [Route("add-furniture-to-room")]
+        public async Task<IActionResult> AddFurnitureToRoom([FromBody] AddFurnitureToRoomDTO addFurnitureToRoomDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { Result = false, Message = "Invalid data" });
+            }
+
+            var serviceResponse = await _roomService.AddFurnitureToRoom(addFurnitureToRoomDto);
+            if (!serviceResponse.Success)
+            {
+                return BadRequest(new { Result = false, Message = serviceResponse.Message });
+            }
+
+            var response = _mapper.Map<GetRoomDetailDTO>(serviceResponse.Data);
+            return Ok(response);
+        }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRoom([FromRoute]int id, [FromBody] Room room)

@@ -15,6 +15,12 @@ namespace BusinessObjects.DTOs
         public double Cost { get; set; }
     }
 
+    public class AddFurnitureToRoomDTO
+    {
+        public int RoomId { get; set; }
+        public List<RoomFurnitureDTO> Furnitures { get; set; } = new List<RoomFurnitureDTO>();
+    }
+
     public class RoomFurnitureDTO
     {
         [Required]

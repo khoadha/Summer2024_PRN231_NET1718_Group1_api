@@ -39,11 +39,6 @@ namespace HostelandAuthorization.Helper {
                 .ForMember(des => des.RoomFurniture, act => act.MapFrom(src => src.RoomFurniture));
 
             CreateMap<AddRoomDTO, Room>();
-                //.ForMember(dest => dest.RoomFurniture, opt => opt.MapFrom(src => src.Furnitures.Select(f => new RoomFurniture
-                //{
-                //    FurnitureId = f.FurnitureId,
-                //    Quantity = f.Quantity
-                //})));
 
             //CreateMap<UpdateProductDto, Product>();
             //CreateMap<Product, UpdateProductImageDto>();

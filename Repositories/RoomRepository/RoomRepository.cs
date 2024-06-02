@@ -29,7 +29,7 @@ namespace Repositories.RoomRepository
             return list;
         }
 
-        public async Task<Room> AddRoom(Room room, List<RoomImage> images, List<RoomFurniture> roomFurnitures)
+        public async Task<Room> AddRoom(Room room, List<RoomImage> images)
         {
 
             try
@@ -38,15 +38,7 @@ namespace Repositories.RoomRepository
                 room.IsAvailable = true;
                 room.RoomImages = images;
 
-                // add furniture to room
-                foreach (var r in roomFurnitures)
-                {
-                    r.RoomId = room.Id;
-                }
-                room.RoomFurniture = roomFurnitures;
-
                 _context.Rooms.Add(room);
-                await _context.RoomFurniture.AddRangeAsync(roomFurnitures);
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -57,6 +49,11 @@ namespace Repositories.RoomRepository
             return room;
         }
 
+        public async Task AddFurnitureToRoom(List<RoomFurniture> roomFurnitures)
+        {
+            await _context.RoomFurniture.AddRangeAsync(roomFurnitures);
+            await _context.SaveChangesAsync();
+        }
 
         public async Task<Room> EditRoom(Room room)
         {

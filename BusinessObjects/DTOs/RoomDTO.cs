@@ -66,7 +66,6 @@ namespace BusinessObjects.DTOs
 
         [Required]
         public int CategoryId { get; set; }
-        public List<RoomFurnitureDTO> Furnitures { get; set; } = new List<RoomFurnitureDTO>();
 
         public List<IFormFile> Files { get; set; } = new List<IFormFile>();
     }
