@@ -44,7 +44,7 @@ namespace HostelandAuthorization.Controllers
                 return Unauthorized(new AuthResult
                 {
                     Result = false,
-                    Errors = new List<string> { "Vui lòng đăng nhập." }
+                    Errors = new List<string> { "PLease sign in." }
                 });
             }
 
@@ -60,7 +60,7 @@ namespace HostelandAuthorization.Controllers
                 return BadRequest(new AuthResult
                 {
                     Result = false,
-                    Errors = new List<string> { "Không tìm thấy người dùng." }
+                    Errors = new List<string> { "User not found." }
                 });
             }
             var response = _mapper.Map<GetPersonalUserDto>(user.Data);
@@ -78,7 +78,7 @@ namespace HostelandAuthorization.Controllers
                 return Unauthorized(new AuthResult
                 {
                     Result = false,
-                    Errors = new List<string> { "Vui lòng đăng nhập." }
+                    Errors = new List<string> { "Please sign in." }
                 });
             }
 
@@ -95,7 +95,7 @@ namespace HostelandAuthorization.Controllers
                 return BadRequest(new AuthResult
                 {
                     Result = false,
-                    Errors = new List<string> { "Không tìm thấy người dùng." }
+                    Errors = new List<string> { "User not found." }
                 });
             }
             var appUser = await _userManager.FindByIdAsync(userId);
@@ -129,7 +129,7 @@ namespace HostelandAuthorization.Controllers
                 return Unauthorized(new AuthResult
                 {
                     Result = false,
-                    Errors = new List<string> { "Vui lòng đăng nhập." }
+                    Errors = new List<string> { "PLease sign in." }
                 });
             }
 
@@ -146,7 +146,7 @@ namespace HostelandAuthorization.Controllers
                 return BadRequest(new AuthResult
                 {
                     Result = false,
-                    Errors = new List<string> { "Không tìm thấy người dùng." }
+                    Errors = new List<string> { "User not found." }
                 });
             }
             var appUser = await _userManager.FindByIdAsync(userId);
@@ -162,7 +162,7 @@ namespace HostelandAuthorization.Controllers
                 });
             }
 
-            return Ok(new { Result = true, Message = "Đổi mật khẩu thành công!" });
+            return Ok(new { Result = true, Message = "Password changed!" });
         }
 
         [HttpPut("update-username/{userId}")]
@@ -182,7 +182,7 @@ namespace HostelandAuthorization.Controllers
                 return Unauthorized(new AuthResult
                 {
                     Result = false,
-                    Errors = new List<string> { "Vui lòng đăng nhập." }
+                    Errors = new List<string> { "Please sign in." }
                 });
             }
 
@@ -196,7 +196,7 @@ namespace HostelandAuthorization.Controllers
 
             if (user == null)
             {
-                return NotFound(new { message = "Không tìm thấy người dùng." });
+                return NotFound(new { message = "User not found." });
             }
 
             user.UserName = model.Username;
@@ -204,11 +204,11 @@ namespace HostelandAuthorization.Controllers
 
             if (result.Succeeded)
             {
-                return Ok(new { message = "Đổi tên người dùng thành công!" });
+                return Ok(new { message = "Name changedd!" });
             }
             else
             {
-                return BadRequest(new { message = "Đổi tên người dùng thất bại!" });
+                return BadRequest(new { message = "Changing name failed!" });
             }
         }
 
@@ -229,7 +229,7 @@ namespace HostelandAuthorization.Controllers
                 return Unauthorized(new AuthResult
                 {
                     Result = false,
-                    Errors = new List<string> { "Vui lòng đăng nhập." }
+                    Errors = new List<string> { "Please sign in." }
                 });
             }
 
@@ -242,12 +242,12 @@ namespace HostelandAuthorization.Controllers
 
             if (user == null)
             {
-                return NotFound(new { message = "Không tìm thấy người dùng." });
+                return NotFound(new { message = "User not found." });
             }
 
             if (avatar == null || avatar.Length == 0)
             {
-                return BadRequest(new { message = "Yêu cầu file ảnh." });
+                return BadRequest(new { message = "Image required." });
             }
 
             var isDeleted = await _blobService.DeleteBlobsByUrlAsync(user.ImgPath);
@@ -262,11 +262,11 @@ namespace HostelandAuthorization.Controllers
 
             if (result.Succeeded)
             {
-                return Ok(new { message = "Đổi avatar thành công!" });
+                return Ok(new { message = "Avatar changed!" });
             }
             else
             {
-                return BadRequest(new { message = "Đổi avatar thất bại!" });
+                return BadRequest(new { message = "Changing avatar failed!" });
             }
         }
 
@@ -280,7 +280,7 @@ namespace HostelandAuthorization.Controllers
                 return BadRequest(new AuthResult
                 {
                     Result = false,
-                    Errors = new List<string> { "Không tìm thấy người dùng." }
+                    Errors = new List<string> { "User not found." }
                 });
             }
             var response = _mapper.Map<GetPersonalUserDto>(user.Data);
