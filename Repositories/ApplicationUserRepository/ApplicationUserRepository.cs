@@ -19,6 +19,12 @@ namespace Repositories.ApplicationUserRepositories {
             var user = await _context.Users.FirstOrDefaultAsync(a => a.NormalizedEmail == email.ToUpper());
             return user;
         }
+      
+        public async Task<ApplicationUser> GetUserById(string id)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(a => a.Id == id);
+            return user;
+        }
 
         public async Task<bool> IsUserExist(string id) {
             var result = await _context.Users.AnyAsync(a => a.Id == id);

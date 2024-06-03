@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using BusinessObjects.Entities;
 using HostelandAuthorization.Services.OrderService;
-using HostelandAuthorization.Services.OrderService;
 using HostelandAuthorization.Shared;
 using Humanizer;
 using Microsoft.AspNetCore.Mvc;
@@ -12,12 +11,12 @@ namespace HostelandAuthorization.Controllers
     [ApiController]
     [Route("api/v1/")]
 
-    public class OrderController : ControllerBase
+    public class OrdersController : ControllerBase
     {
         private readonly IMapper _mapper;
         private readonly IOrderService _orderService;
 
-        public OrderController (IMapper mapper, IOrderService orderService)
+        public OrdersController (IMapper mapper, IOrderService orderService)
         {
             _mapper = mapper;
             _orderService = orderService;

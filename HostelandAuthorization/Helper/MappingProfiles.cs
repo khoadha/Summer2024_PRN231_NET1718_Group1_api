@@ -8,6 +8,8 @@ namespace HostelandAuthorization.Helper {
         public MappingProfiles() {
             // AUTH
             CreateMap<UserLoginRequestDto, ApplicationUser>();
+            CreateMap<GetPersonalUserDto, ApplicationUser>();
+            CreateMap<ApplicationUser, GetPersonalUserDto>();
 
             // ROOM CATEGORY
             CreateMap<RoomCategory, GetRoomCategoryDto>();

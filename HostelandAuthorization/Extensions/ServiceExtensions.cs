@@ -12,6 +12,7 @@ using Repositories.FurnitureRepository;
 using Repositories.RoomCategoryRepository;
 using Repositories.OrderRepository;
 using Repositories.RoomRepository;
+using HostelandAuthorization.Context;
 
 namespace HostelandAuthorization.Extensions
 {
@@ -21,6 +22,7 @@ namespace HostelandAuthorization.Extensions
             // SERVICE
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IBlobService, BlobService>();
+            services.AddScoped<IUserContext, UserContext>();
 
             services.AddScoped<IApplicationUserService, ApplicationUserService>();
             services.AddScoped<IRoomService, RoomService>();

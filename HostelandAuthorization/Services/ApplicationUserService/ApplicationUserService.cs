@@ -25,6 +25,22 @@ namespace HostelandAuthorization.Services.ApplicationUserService {
             return serviceResponse;
         }
 
+        public async Task<ServiceResponse<ApplicationUser>> GetUserById(string id)
+        {
+            var serviceResponse = new ServiceResponse<ApplicationUser>();
+            try
+            {
+                var user = await _userRepo.GetUserById(id);
+                serviceResponse.Data = user;
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+            return serviceResponse;
+        }
+
         public async Task<ServiceResponse<bool>> IsUserExist(string id) {
             var serviceResponse = new ServiceResponse<bool>();
             var result = await _userRepo.IsUserExist(id);
