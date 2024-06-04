@@ -13,6 +13,8 @@ using Repositories.RoomCategoryRepository;
 using Repositories.OrderRepository;
 using Repositories.RoomRepository;
 using HostelandAuthorization.Context;
+using HostelandAuthorization.Services.ServiceService;
+using Repositories.ServiceRepository;
 
 namespace HostelandAuthorization.Extensions
 {
@@ -25,18 +27,19 @@ namespace HostelandAuthorization.Extensions
             services.AddScoped<IUserContext, UserContext>();
 
             services.AddScoped<IApplicationUserService, ApplicationUserService>();
+            services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IRoomService, RoomService>();
             services.AddScoped<IRoomCategoryService, RoomCategoryService>();
             services.AddScoped<IFurnitureService, FurnitureService>();
+            services.AddScoped<IServiceService, ServiceService>();
 
             // REPOSITORY
             services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
-            services.AddScoped<IRoomService, RoomService>();
-            services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IRoomRepository, RoomRepository>();
             services.AddScoped<IRoomCategoryRepository, RoomCategoryRepository>();
             services.AddScoped<IFurnitureRepository, FurnitureRepository>();
+            services.AddScoped<IServiceRepository, ServiceRepository>();
         }
 
         public static void ConfigureCors(this IServiceCollection services) {

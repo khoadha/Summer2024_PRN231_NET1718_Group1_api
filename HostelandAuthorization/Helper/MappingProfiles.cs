@@ -15,6 +15,15 @@ namespace HostelandAuthorization.Helper {
             CreateMap<RoomCategory, GetRoomCategoryDto>();
             CreateMap<AddRoomCategoryDto, RoomCategory>();
 
+            // SERVICE
+            CreateMap<Service, GetServiceDto>();
+            CreateMap<AddServiceDto, Service>();
+
+            CreateMap<ServicePrice, ServicePriceDto>();
+
+            CreateMap<AddServicePriceDto, ServicePrice>();
+
+
             // FURNITURE
             CreateMap<RoomFurniture, RoomFurnitureDTO>();
             CreateMap<RoomFurnitureDTO, RoomFurniture>();
