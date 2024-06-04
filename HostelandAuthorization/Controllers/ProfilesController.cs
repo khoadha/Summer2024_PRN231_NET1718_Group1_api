@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HostelandAuthorization.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [Authorize]
     [ApiController]
     public class ProfilesController : ControllerBase
@@ -36,7 +36,7 @@ namespace HostelandAuthorization.Controllers
         }
 
         [HttpGet]
-        [Route("profile/{userId}")]
+        [Route("{userId}")]
         public async Task<IActionResult> GetUserProfile(string userId)
         {
             if (string.IsNullOrEmpty(userId))
@@ -49,13 +49,13 @@ namespace HostelandAuthorization.Controllers
             }
 
             var requestUser = _userContext.GetCurrentUser(HttpContext);
-            if (requestUser.UserId != userId)
+            if (requestUser == null || requestUser.UserId != userId)
             {
                 return Forbid();
             }
 
             var user = await _applicationUserService.GetUserById(userId);
-            if (user == null)
+            if (user.Data == null)
             {
                 return BadRequest(new AuthResult
                 {
@@ -83,14 +83,14 @@ namespace HostelandAuthorization.Controllers
             }
 
             var requestUser = _userContext.GetCurrentUser(HttpContext);
-            if (requestUser.UserId != userId)
+            if (requestUser == null || requestUser.UserId != userId)
             {
                 return Forbid();
             }
 
             var user = await _applicationUserService.GetUserById(userId);
 
-            if (user == null)
+            if (user.Data == null)
             {
                 return BadRequest(new AuthResult
                 {
@@ -134,14 +134,14 @@ namespace HostelandAuthorization.Controllers
             }
 
             var requestUser = _userContext.GetCurrentUser(HttpContext);
-            if (requestUser.UserId != userId)
+            if (requestUser == null || requestUser.UserId != userId)
             {
                 return Forbid();
             }
 
             var user = await _applicationUserService.GetUserById(userId);
 
-            if (user == null)
+            if (user.Data == null)
             {
                 return BadRequest(new AuthResult
                 {
@@ -187,7 +187,7 @@ namespace HostelandAuthorization.Controllers
             }
 
             var requestUser = _userContext.GetCurrentUser(HttpContext);
-            if (requestUser.UserId != userId)
+            if (requestUser == null || requestUser.UserId != userId)
             {
                 return Forbid();
             }
@@ -234,10 +234,11 @@ namespace HostelandAuthorization.Controllers
             }
 
             var requestUser = _userContext.GetCurrentUser(HttpContext);
-            if (requestUser.UserId != userId)
+            if (requestUser == null || requestUser.UserId != userId)
             {
                 return Forbid();
             }
+
             var user = await _userManager.FindByIdAsync(userId);
 
             if (user == null)
