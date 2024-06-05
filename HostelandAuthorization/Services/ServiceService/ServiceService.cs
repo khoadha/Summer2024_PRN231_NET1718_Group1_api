@@ -34,7 +34,7 @@ namespace HostelandAuthorization.Services.ServiceService
             var serviceResponse = new ServiceResponse<ServicePrice>();
             try
             {
-                var serviceExist = _repo.GetServiceById(servicePrice.ServiceId);
+                var serviceExist = await _repo.GetServiceById(servicePrice.ServiceId);
                 if(serviceExist == null)
                 {
                     serviceResponse.Success = false;
@@ -74,7 +74,7 @@ namespace HostelandAuthorization.Services.ServiceService
             var serviceResponse = new ServiceResponse<List<ServicePrice>>();
             try
             {
-                var serviceExist = _repo.GetServiceById(id);
+                var serviceExist = await _repo.GetServiceById(id);
                 if (serviceExist == null)
                 {
                     serviceResponse.Success = false;
