@@ -49,6 +49,8 @@ namespace HostelandAuthorization.Helper {
                 .ForMember(des => des.CategoryName, act => act.MapFrom(src => src.Category.CategoryName != null ? src.Category.CategoryName : string.Empty))
                 .ForMember(des => des.RoomImages, act => act.MapFrom(src => src.RoomImages))
                 .ForMember(des => des.RoomFurniture, act => act.MapFrom(src => src.RoomFurniture));
+            CreateMap<RoomFurniture, RoomFurnitureDTO>()
+                .ForMember(dest => dest.FurnitureName, opt => opt.MapFrom(src => src.Furniture.Name));
 
             CreateMap<AddRoomDTO, Room>();
             CreateMap<UpdateRoomDTO, Room>();
