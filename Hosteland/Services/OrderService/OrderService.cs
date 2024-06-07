@@ -3,7 +3,7 @@ using BusinessObjects.ConfigurationModels;
 using BusinessObjects.Entities;
 using Repositories.OrderRepository;
 
-namespace HostelandAuthorization.Services.OrderService
+namespace Hosteland.Services.OrderService
 {
     public class OrderService : IOrderService
     {

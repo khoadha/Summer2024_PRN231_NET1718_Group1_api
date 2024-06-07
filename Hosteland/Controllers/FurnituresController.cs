@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
 using BusinessObjects.DTOs;
 using BusinessObjects.Entities;
-using HostelandAuthorization.Services.FurnitureService;
-using HostelandAuthorization.Services.RoomCategoryService;
+using Hosteland.Services.FurnitureService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HostelandAuthorization.Controllers
+namespace Hosteland.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]

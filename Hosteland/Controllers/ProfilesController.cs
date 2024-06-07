@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
 using BusinessObjects.DTOs;
 using BusinessObjects.Entities;
-using HostelandAuthorization.Context;
-using HostelandAuthorization.Services.ApplicationUserService;
+using Hosteland.Context;
+using Hosteland.Services.ApplicationUserService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HostelandAuthorization.Controllers
+namespace Hosteland.Controllers
 {
     [Route("api/v1/[controller]")]
     [Authorize]

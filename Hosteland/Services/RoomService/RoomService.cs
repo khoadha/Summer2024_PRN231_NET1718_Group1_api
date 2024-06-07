@@ -6,7 +6,7 @@ using BusinessObjects.Entities;
 using Repositories.RoomCategoryRepository;
 using Repositories.RoomRepository;
 
-namespace HostelandAuthorization.Services.RoomService
+namespace Hosteland.Services.RoomService
 {
     public class RoomService : IRoomService
     {

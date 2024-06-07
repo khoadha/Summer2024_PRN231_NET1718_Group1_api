@@ -1,25 +1,25 @@
 ﻿using BusinessObjects.ConfigurationModels;
 using BusinessObjects.Entities;
-using Repositories.FurnitureRepository;
+using Repositories.RoomCategoryRepository;
 
-namespace HostelandAuthorization.Services.FurnitureService
+namespace Hosteland.Services.RoomCategoryService
 {
-    public class FurnitureService : IFurnitureService
+    public class RoomCategoryService : IRoomCategoryService
     {
-        private readonly IFurnitureRepository _repo;
+        private readonly IRoomCategoryRepository _repo;
 
-        public FurnitureService(IFurnitureRepository repo)
+        public RoomCategoryService(IRoomCategoryRepository repo)
         {
             _repo = repo;
         }
 
-        public async Task<ServiceResponse<Furniture>> AddFurniture(Furniture furniture)
+        public async Task<ServiceResponse<RoomCategory>> AddRoomCategory(RoomCategory RoomCategory)
         {
-            var serviceResponse = new ServiceResponse<Furniture>();
+            var serviceResponse = new ServiceResponse<RoomCategory>();
             try
             {
-                var addedFurniture = await _repo.AddFurniture(furniture);
-                serviceResponse.Data = addedFurniture;
+                var addedCate = await _repo.AddRoomCategory(RoomCategory);
+                serviceResponse.Data = addedCate;
             }
             catch (Exception ex)
             {
@@ -29,13 +29,14 @@ namespace HostelandAuthorization.Services.FurnitureService
             return serviceResponse;
         }
 
+ 
 
-        public async Task<ServiceResponse<List<Furniture>>> GetFurnitures()
+        public async Task<ServiceResponse<List<RoomCategory>>> GetRoomCategories()
         {
-            var serviceResponse = new ServiceResponse<List<Furniture>>();
+            var serviceResponse = new ServiceResponse<List<RoomCategory>>();
             try
             {
-                var list = await _repo.GetFurnitures();
+                var list = await _repo.GetRoomCategories();
                 serviceResponse.Data = list;
             }
             catch (Exception ex)

@@ -2,7 +2,7 @@
 using BusinessObjects.DTOs;
 using BusinessObjects.Entities;
 
-namespace HostelandAuthorization.Services.RoomService
+namespace Hosteland.Services.RoomService
 {
     public interface IRoomService
     {
