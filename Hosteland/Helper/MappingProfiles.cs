@@ -1,14 +1,12 @@
 ﻿using BusinessObjects.Entities;
 using AutoMapper;
 using BusinessObjects.DTOs;
-using HostelandAuthorization.Shared;
 
-namespace HostelandAuthorization.Helper {
+namespace Hosteland.Helper {
     public class MappingProfiles : Profile {
         public MappingProfiles() {
-            // AUTH
-            CreateMap<UserLoginRequestDto, ApplicationUser>();
-            CreateMap<ApplicationUser, GetPersonalUserDto>();
+            // PROFILE
+            CreateMap<GetPersonalUserDto, ApplicationUser>();
 
             // ROOM CATEGORY
             CreateMap<RoomCategory, GetRoomCategoryDto>();
@@ -16,8 +14,6 @@ namespace HostelandAuthorization.Helper {
 
             // SERVICE
             CreateMap<Service, GetServiceDto>();
-            CreateMap<Service, GetServiceNewewstPriceDto>()
-                .ForMember(dest => dest.ServicePriceNumber, opt => opt.MapFrom(src => src.ServicePrice.OrderByDescending(sp => sp.EndDate).FirstOrDefault().Amount));
             CreateMap<AddServiceDto, Service>();
 
             CreateMap<ServicePrice, ServicePriceDto>();

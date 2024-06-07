@@ -6,6 +6,7 @@ using BusinessObjects.ConfigurationModels;
 using BusinessObjects.Entities;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.OData.Edm;
+using Hosteland.Extensions;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,9 @@ var emailConfig = builder.Configuration
         .Get<EmailConfiguration>();
 builder.Services.AddSingleton(emailConfig);
 
+builder.Services.ConfigureDILifeTime();
+builder.Services.ConfigureCors();
+builder.Services.ConfigureSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddLogging();
 builder.Services.AddHttpClient();

@@ -1,12 +1,22 @@
-﻿using HostelandAuthorization.Services.ApplicationUserService;
-using HostelandAuthorization.Services.EmailService;
+﻿using Hosteland.Services.ApplicationUserService;
+using Hosteland.Services.EmailService;
+using Hosteland.Services.FurnitureService;
+using Hosteland.Services.RoomCategoryService;
+using Hosteland.Services.OrderService;
+using Hosteland.Services.RoomService;
+using Hosteland.Services.ServiceService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Repositories.ApplicationUserRepositories;
-using HostelandAuthorization.Context;
+using Repositories.FurnitureRepository;
+using Repositories.RoomCategoryRepository;
+using Repositories.OrderRepository;
+using Repositories.RoomRepository;
+using Hosteland.Context;
+using Repositories.ServiceRepository;
 
-namespace HostelandAuthorization.Extensions
+namespace Hosteland.Extensions
 {
     public static class ServiceExtensions {
 
@@ -17,9 +27,19 @@ namespace HostelandAuthorization.Extensions
             services.AddScoped<IUserContext, UserContext>();
 
             services.AddScoped<IApplicationUserService, ApplicationUserService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IRoomService, RoomService>();
+            services.AddScoped<IRoomCategoryService, RoomCategoryService>();
+            services.AddScoped<IFurnitureService, FurnitureService>();
+            services.AddScoped<IServiceService, ServiceService>();
 
             // REPOSITORY
             services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IRoomRepository, RoomRepository>();
+            services.AddScoped<IRoomCategoryRepository, RoomCategoryRepository>();
+            services.AddScoped<IFurnitureRepository, FurnitureRepository>();
+            services.AddScoped<IServiceRepository, ServiceRepository>();
         }
 
         public static void ConfigureCors(this IServiceCollection services) {
@@ -35,15 +55,15 @@ namespace HostelandAuthorization.Extensions
 
         public static void ConfigureSwaggerGen(this IServiceCollection services) {
             services.AddSwaggerGen(c => {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Hosteland Authorization Server", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Hosteland  Server", Version = "v1" });
                 //c.EnableAnnotations();
                 c.AddSecurityDefinition("BearerAuth", new OpenApiSecurityScheme {
                     Type = SecuritySchemeType.Http,
                     Scheme = JwtBearerDefaults.AuthenticationScheme.ToLowerInvariant(),
                     In = ParameterLocation.Header,
-                    Name = "Authorization",
+                    Name = "",
                     BearerFormat = "JWT",
-                    Description = "JWT Authorization header using the Bearer scheme."
+                    Description = "JWT  header using the Bearer scheme."
                 });
 
             });

@@ -7,11 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Context\" />
-    <Folder Include="EmailTemplate\" />
-    <Folder Include="Helper\" />
-    <Folder Include="Extensions\" />
-    <Folder Include="Services\BlobService\" />
+    <Compile Remove="EmailTemplate\**" />
+    <Content Remove="EmailTemplate\**" />
+    <EmbeddedResource Remove="EmailTemplate\**" />
+    <None Remove="EmailTemplate\**" />
   </ItemGroup>
 
   <ItemGroup>
