@@ -67,12 +67,24 @@ namespace HostelandAuthorization.Controllers {
             if (ModelState.IsValid) {
 
                 var userExists = await _userManager.FindByEmailAsync(model.Email);
+                var isUsernameExist = await _userManager.Users.AnyAsync(a => a.UserName == model.Username);
 
                 if (userExists != null) {
                     return BadRequest(new AuthResult() {
                         Result = false,
                         Errors = new List<string>() {
-                            "Email đã được sử dụng cho một tài khoản khác!"
+                            "Duplicate Email!"
+                        }
+                    });
+                }
+
+                if (isUsernameExist)
+                {
+                    return BadRequest(new AuthResult()
+                    {
+                        Result = false,
+                        Errors = new List<string>() {
+                            "Duplicate username!"
                         }
                     });
                 }
