@@ -34,7 +34,7 @@ namespace Hosteland.Controllers
         public async Task<ActionResult<List<Service>>> GetServicesWithNewestPrice()
         {
             var cates = await _serviceService.GetServices();
-            var response = _mapper.Map<List<GetServiceNewewstPriceDto>>(cates.Data);
+            var response = _mapper.Map<List<GetServiceNewestPriceDto>>(cates.Data);
             return Ok(response);
         }
         [HttpGet]

@@ -14,6 +14,9 @@ namespace Hosteland.Helper {
 
             // SERVICE
             CreateMap<Service, GetServiceDto>();
+            CreateMap<Service, GetServiceNewestPriceDto>()
+                .ForMember(dest => dest.ServicePriceNumber, opt => opt.MapFrom(src => src.ServicePrice.OrderByDescending(sp => sp.EndDate).FirstOrDefault().Amount));
+
             CreateMap<AddServiceDto, Service>();
 
             CreateMap<ServicePrice, ServicePriceDto>();
