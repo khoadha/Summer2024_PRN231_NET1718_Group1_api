@@ -11,5 +11,8 @@ namespace Repositories.OrderRepository
         Task<Order> EditOrder(Order order);
         Task<bool> DeleteOrder(int orderId);
         Task<Order> FindOrderById(int id);
+
+        Task<Order> GetOrderById(int id);
+
     }
 }

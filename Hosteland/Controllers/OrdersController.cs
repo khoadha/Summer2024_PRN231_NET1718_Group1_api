@@ -29,6 +29,14 @@ namespace Hosteland.Controllers
             return Ok(orders);
         }
 
+        [HttpGet]
+        [Route("order/get-order/{id}")]
+        public async Task<ActionResult<Order>> GetOrderById([FromRoute] int id)
+        {
+            var orders = await _orderService.GetOrderById(id);
+            return Ok(orders);
+        }
+
         [HttpPost]
         [Route("order/add")]
         public async Task<IActionResult> AddOrder([FromBody] Order order)
