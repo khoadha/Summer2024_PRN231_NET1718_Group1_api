@@ -51,7 +51,7 @@ namespace Repositories.ServiceRepository
             List<Service> result = new List<Service>();
             try
             {
-                result = await _context.Services.ToListAsync();
+                result = await _context.Services.Include(s => s.ServicePrice).ToListAsync();
             }
             catch (Exception ex)
             {

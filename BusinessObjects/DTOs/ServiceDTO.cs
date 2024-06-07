@@ -13,6 +13,13 @@ namespace BusinessObjects.DTOs
         public string? Name { get; set; }
         public string? Description { get; set; }
     }
+    public class GetServiceNewewstPriceDto
+    {
+        public int Id { get; set; }
+        public string? Name { get; set; }
+        public string? Description { get; set; }
+        public int? ServicePriceNumber { get; set; }
+    }
     public class AddServiceDto
     {
         [Required]

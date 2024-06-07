@@ -78,6 +78,7 @@ namespace Repositories.RoomRepository
             .Include(r => r.Category)
                 .Include(r => r.RoomImages)
                 .Include(r => r.RoomFurniture)
+                .ThenInclude(rf => rf.Furniture)
                  .FirstOrDefaultAsync(r => r.Id == id);
         }
 
