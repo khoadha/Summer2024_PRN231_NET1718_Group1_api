@@ -27,7 +27,16 @@ namespace Hosteland.Controllers
             var response = _mapper.Map<List<GetServiceDto>>(cates.Data);
             return Ok(response);
         }
-        
+
+
+        [HttpGet]
+        [Route("get-service-newest-price")]
+        public async Task<ActionResult<List<Service>>> GetServicesWithNewestPrice()
+        {
+            var cates = await _serviceService.GetServices();
+            var response = _mapper.Map<List<GetServiceNewewstPriceDto>>(cates.Data);
+            return Ok(response);
+        }
         [HttpGet]
         [Route("prices/get-price/{serviceId}")]
         public async Task<ActionResult<List<ServicePrice>>> GetServicePricesByServiceId([FromRoute] int serviceId)

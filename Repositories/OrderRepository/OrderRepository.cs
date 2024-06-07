@@ -25,6 +25,14 @@ namespace Repositories.OrderRepository
                 .Include(o => o.Guests).ToListAsync();
             return list;
         }
+        
+        public async Task<List<Order>> GetOrdersByRoomId(int roomId)
+        {
+            var list = await _context.Order.Where(o => o.RoomId == roomId)
+                .Include(o => o.Contracts)
+                .Include(o => o.Guests).ToListAsync();
+            return list;
+        }
 
         public async Task<Order> AddOrder(Order order)
         {
@@ -36,10 +44,14 @@ namespace Repositories.OrderRepository
         {
             order.Status = OrderStatus.Processing;
             order.OrderDate = DateTime.Now;
-            order.RoomId = 2;
             contract.OrderId = order.Id;
             order.Contracts.Add(contract);
             _context.Order.Add(order);
+            /*
+            //Update ROom Status
+            var _room = _context.Rooms.FirstOrDefault(r => r.Id.Equals(order.Id));
+            _room.IsAvailable = false;
+            */
             await _context.SaveChangesAsync();
             return order;
         }

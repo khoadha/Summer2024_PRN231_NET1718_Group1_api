@@ -35,7 +35,8 @@ namespace Hosteland.Controllers
         public async Task<ActionResult<Room>> GetRoomById([FromRoute] int id)
         {
             var rooms = await _roomService.GetRoomById(id);
-            return Ok(rooms);
+            var response = _mapper.Map<GetRoomDetailDTO>(rooms.Data);
+            return Ok(response);
         }
         [HttpGet]
         [Route("search-room/{query}")]
