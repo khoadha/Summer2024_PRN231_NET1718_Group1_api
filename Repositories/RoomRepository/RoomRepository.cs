@@ -24,7 +24,8 @@ namespace Repositories.RoomRepository
             var list = await _context.Rooms
                 .Include(r => r.Category)
                 .Include(r => r.RoomImages) 
-                .Include(r => r.RoomFurniture) 
+                .Include(r => r.RoomFurniture)
+                .ThenInclude(rf => rf.Furniture)
                 .ToListAsync();
             return list;
         }
