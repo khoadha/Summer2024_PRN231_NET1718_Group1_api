@@ -4,7 +4,7 @@ using BusinessObjects.Entities;
 using Hosteland.Services.ServiceService;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Hosteland.Controllers.Services
+namespace Hosteland.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]

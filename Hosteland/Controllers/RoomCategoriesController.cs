@@ -5,7 +5,7 @@ using BusinessObjects.DTOs;
 using Hosteland.Services.RoomCategoryService;
 using Microsoft.AspNetCore.OData.Query;
 
-namespace Hosteland.Controllers.RoomCategories
+namespace Hosteland.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
