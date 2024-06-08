@@ -26,7 +26,8 @@ namespace Hosteland.Controllers
         public async Task<ActionResult<List<Order>>> GetOrders()
         {
             var orders = await _orderService.GetOrders();
-            return Ok(orders);
+            var response = _mapper.Map<List<GetOrderDto>>(orders.Data);
+            return Ok(response);
         }
 
         [HttpGet]

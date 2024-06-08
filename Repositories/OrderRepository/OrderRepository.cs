@@ -22,6 +22,8 @@ namespace Repositories.OrderRepository
         {
             var list = await _context.Order
                 .Include(o => o.Contracts)
+                .Include(o => o.User)
+                .Include(o => o.Room)
                 .Include(o => o.Guests).ToListAsync();
             return list;
         }

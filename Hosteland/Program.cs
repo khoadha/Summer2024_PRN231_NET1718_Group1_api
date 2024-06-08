@@ -4,10 +4,10 @@ using System.Text;
 using Microsoft.AspNetCore.Http.Features;
 using BusinessObjects.ConfigurationModels;
 using BusinessObjects.Entities;
-using Microsoft.AspNet.OData.Builder;
 using Microsoft.OData.Edm;
 using Hosteland.Extensions;
-
+using Microsoft.AspNetCore.OData;
+using Microsoft.OData.ModelBuilder;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +22,18 @@ var emailConfig = builder.Configuration
         .GetSection("EmailConfiguration")
         .Get<EmailConfiguration>();
 builder.Services.AddSingleton(emailConfig);
+builder.Services.AddControllers()
+    .AddOData(opt => opt
+        .Select()
+        .Filter()
+        .Expand()
+        .OrderBy()
+        .Count()
+        .SetMaxTop(100)
+        .AddRouteComponents("odata", GetEdmModel()));
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 builder.Services.ConfigureDILifeTime();
 builder.Services.ConfigureCors();
 builder.Services.ConfigureSwaggerGen();
@@ -78,7 +89,13 @@ app.MapControllers();
 app.Run();
 
 
-static IEdmModel GetEdmModel() {
-    ODataConventionModelBuilder builder = new();
+static IEdmModel GetEdmModel()
+{
+    var builder = new ODataConventionModelBuilder();
+    //builder.EntitySet<RoomCategory>("RoomCategories");
+    //builder.EntitySet<Furniture>("Furnitures");
+    //builder.EntitySet<Room>("Rooms");
+    //builder.EntitySet<Order>("Orders");
+    builder.EntitySet<Service>("Services");
     return builder.GetEdmModel();
 }
