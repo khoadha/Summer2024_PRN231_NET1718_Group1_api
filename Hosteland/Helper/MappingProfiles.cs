@@ -42,7 +42,7 @@ namespace Hosteland.Helper {
 
             // ROOM
             CreateMap<Room, GetRoomDTO>()
-                .ForMember(des => des.ImgPath, act => act.MapFrom(src => src.RoomImages.First().Url))
+                .ForMember(des => des.ImgPath, act => act.MapFrom(src => src.RoomImages.Count() > 0 ? src.RoomImages.First().Url : string.Empty))
                 .ForMember(des => des.CategoryName, act => act.MapFrom(src => src.Category.CategoryName != null ? src.Category.CategoryName : string.Empty))
                 .ForMember(des => des.RoomFurniture, act => act.MapFrom(src => src.RoomFurniture));
 
