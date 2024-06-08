@@ -15,9 +15,14 @@ using Repositories.OrderRepository;
 using Repositories.RoomRepository;
 using Hosteland.Context;
 using Repositories.ServiceRepository;
+using BusinessObjects.Entities;
+using Microsoft.OData.Edm;
+using RoomService = Hosteland.Services.RoomService.RoomService;
+using Microsoft.AspNetCore.OData;
+using Microsoft.OData.ModelBuilder;
+using BusinessObjects.DTOs;
 
-namespace Hosteland.Extensions
-{
+namespace Hosteland.Extensions {
     public static class ServiceExtensions {
 
         public static void ConfigureDILifeTime(this IServiceCollection services) {
@@ -40,6 +45,26 @@ namespace Hosteland.Extensions
             services.AddScoped<IRoomCategoryRepository, RoomCategoryRepository>();
             services.AddScoped<IFurnitureRepository, FurnitureRepository>();
             services.AddScoped<IServiceRepository, ServiceRepository>();
+        }
+
+        public static void ConfigureControllers(this IServiceCollection services) {
+            services.AddControllers()
+                //.AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+                .AddOData(opt => opt
+                    .Select()
+                    .Filter()
+                    .Expand()
+                    .OrderBy()
+                    .Count()
+                    .SetMaxTop(100)
+                    .AddRouteComponents("odata", GetEdmModel()));
+        }
+
+        private static IEdmModel GetEdmModel() {
+            var builder = new ODataConventionModelBuilder();
+            builder.EntitySet<GetRoomCategoryDto>("RoomCategories");
+            builder.EntitySet<GetServiceDto>("Services");
+            return builder.GetEdmModel();
         }
 
         public static void ConfigureCors(this IServiceCollection services) {

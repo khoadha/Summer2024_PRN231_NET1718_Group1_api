@@ -1,16 +1,13 @@
 ﻿using AutoMapper;
 using BusinessObjects.DTOs;
-using BusinessObjects.Entities;
 using Hosteland.Services.ServiceService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
-using System.Drawing.Printing;
 
-namespace Hosteland.Controllers
+namespace Hosteland.Controllers.OServices
 {
-    [Route("api/v1/[controller]")]
-    [ApiController]
+    [Route("odata/ServicesController")]
     public class OServicesController : ODataController
     {
         private readonly IMapper _mapper;
@@ -21,13 +18,14 @@ namespace Hosteland.Controllers
             _mapper = mapper;
             _serviceService = serviceService;
         }
+
         [HttpGet]
-        [EnableQuery(PageSize = 3)]
-        public IQueryable<GetServiceDto> GetServices()
+        [EnableQuery]
+        public async Task<IActionResult> GetServices()
         {
-            var cates = _serviceService.GetServices().Result.Data;
-            var response = _mapper.Map<List<GetServiceDto>>(cates);
-            return response.AsQueryable();
+            var cates = await _serviceService.GetServices();
+            var response = _mapper.Map<List<GetServiceDto>>(cates.Data);
+            return Ok(response.AsQueryable());
         }
     }
 }
