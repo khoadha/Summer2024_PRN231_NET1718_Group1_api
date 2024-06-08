@@ -22,6 +22,15 @@ namespace Hosteland.Controllers
         }
 
         [HttpGet]
+        [Route("get-room-display")]
+        public async Task<ActionResult<List<Room>>> GetRoomsDisplay()
+        {
+            var rooms = await _roomService.GetRooms();
+            var response = _mapper.Map<List<GetRoomDTO>>(rooms.Data);
+            return Ok(response);
+        }
+        
+        [HttpGet]
         [Route("get-room")]
         public async Task<ActionResult<List<Room>>> GetRooms()
         {

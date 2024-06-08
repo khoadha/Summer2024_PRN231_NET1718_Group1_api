@@ -21,6 +21,8 @@ namespace BusinessObjects.DTOs
         public string? Location { get; set; } = string.Empty;
         public string CategoryName { get; set; } = string.Empty;
         public bool IsAvailable { get; set; }
+        public List<RoomFurnitureDTO> RoomFurniture { get; set; } = new List<RoomFurnitureDTO>();
+
     }
 
     public class ImageDTO
