@@ -33,6 +33,8 @@ namespace Repositories.OrderRepository
             var order = await _context.Order
                 .Include(o => o.Contracts)
                 .Include(o => o.Guests)
+                .Include(o => o.User)
+                .Include(o => o.Room)
                  .FirstOrDefaultAsync(o => o.Id == id);
 
             return order;
