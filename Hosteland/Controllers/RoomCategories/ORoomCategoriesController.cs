@@ -19,7 +19,7 @@ namespace Hosteland.Controllers.ORoomCategories {
             _roomCategoryService = roomCategoryService;
         }
 
-        //Test: https://localhost:7267/odata/RoomCategories?$select=CategoryName (Select only name)
+        //Test: https://localhost:7267/odata/RoomCategories?$select=CategoryName (Select only name) 
         [HttpGet("RoomCategories")]
         [EnableQuery]
         public async Task<IActionResult> GetRoomCategories() {

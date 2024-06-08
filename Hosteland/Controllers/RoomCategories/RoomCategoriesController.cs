@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.OData.Query;
 
 namespace Hosteland.Controllers.RoomCategories
 {
-    [Route("[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class RoomCategoriesController : ControllerBase
     {
