@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace Hosteland.Controllers
 {
     [Route("api/v1/[controller]")]
-    [Authorize]
     [ApiController]
     public class ProfilesController : ControllerBase
     {

@@ -7,6 +7,7 @@ namespace Hosteland.Helper {
         public MappingProfiles() {
             // PROFILE
             CreateMap<GetPersonalUserDto, ApplicationUser>();
+            CreateMap<ApplicationUser, GetPersonalUserDto>();
 
             // ROOM CATEGORY
             CreateMap<RoomCategory, GetRoomCategoryDto>();
