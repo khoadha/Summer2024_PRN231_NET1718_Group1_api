@@ -74,7 +74,7 @@ namespace Hosteland.Controllers
                 });
             }
             var createdOrder = await _orderService.CreateOrder(order,contract);
-            return Ok(createdOrder);
+            return Ok(true);
         }
     }
 }
