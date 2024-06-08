@@ -4,7 +4,7 @@ using BusinessObjects.Entities;
 using Hosteland.Services.ServiceService;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Hosteland.Controllers
+namespace Hosteland.Controllers.Services
 {
     [Route("api/v1/[controller]")]
     [ApiController]
@@ -57,7 +57,7 @@ namespace Hosteland.Controllers
 
             return Ok(response);
         }
-        
+
         [HttpPost]
         [Route("prices/add-price")]
         public async Task<ActionResult<Service>> AddServicePrice(AddServicePriceDto addServicePriceDto)

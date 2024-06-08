@@ -4,36 +4,17 @@ using System.Text;
 using Microsoft.AspNetCore.Http.Features;
 using BusinessObjects.ConfigurationModels;
 using BusinessObjects.Entities;
-using Microsoft.OData.Edm;
 using Hosteland.Extensions;
-using Microsoft.AspNetCore.OData;
-using Microsoft.OData.ModelBuilder;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
-builder.Services.AddControllers()
-    .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-var emailConfig = builder.Configuration
-        .GetSection("EmailConfiguration")
-        .Get<EmailConfiguration>();
+var emailConfig = builder.Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
 builder.Services.AddSingleton(emailConfig);
-builder.Services.AddControllers()
-    .AddOData(opt => opt
-        .Select()
-        .Filter()
-        .Expand()
-        .OrderBy()
-        .Count()
-        .SetMaxTop(100)
-        .AddRouteComponents("odata", GetEdmModel()));
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.ConfigureControllers(); // Include OData setup
 builder.Services.ConfigureDILifeTime();
 builder.Services.ConfigureCors();
 builder.Services.ConfigureSwaggerGen();
@@ -44,13 +25,8 @@ builder.Services.Configure<FormOptions>(options => {
     options.MultipartBodyLengthLimit = long.MaxValue;
 });
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-//=====================  DATABASE  ==========================
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(
-   builder.Configuration.GetConnectionString("DefaultConnection")
+    builder.Configuration.GetConnectionString("DefaultConnection")
 ));
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => {
@@ -65,6 +41,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => {
 .AddEntityFrameworkStores<AppDbContext>();
 
 var key = Encoding.ASCII.GetBytes(builder.Configuration.GetSection("JWT:Secret").Value);
+builder.Services.ConfigureAuthentication(key);
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
@@ -73,29 +50,18 @@ app.UseSwagger();
 
 if (app.Environment.IsDevelopment()) {
     app.UseSwaggerUI(c => {
-        c.SwaggerEndpoint("v1/swagger.json", "V1 Docs");
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "V1 Docs");
         c.DisplayRequestDuration();
     });
 }
 
 app.UseHttpsRedirection();
 app.UseCors("CorsPolicy");
-
 app.UseAuthentication();
+app.UseRouting();
 app.UseAuthorization();
+app.UseEndpoints(endpoints => endpoints.MapControllers());
 app.UseCookiePolicy();
 app.MapControllers();
 
 app.Run();
-
-
-static IEdmModel GetEdmModel()
-{
-    var builder = new ODataConventionModelBuilder();
-    //builder.EntitySet<RoomCategory>("RoomCategories");
-    //builder.EntitySet<Furniture>("Furnitures");
-    //builder.EntitySet<Room>("Rooms");
-    //builder.EntitySet<Order>("Orders");
-    builder.EntitySet<Service>("Services");
-    return builder.GetEdmModel();
-}

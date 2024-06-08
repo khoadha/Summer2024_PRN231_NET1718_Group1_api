@@ -3,7 +3,7 @@ using BusinessObjects.DTOs;
 using BusinessObjects.Entities;
 using Hosteland.Services.OrderService;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+
 
 namespace Hosteland.Controllers
 {
@@ -35,7 +35,10 @@ namespace Hosteland.Controllers
         public async Task<ActionResult<Order>> GetOrderById([FromRoute] int id)
         {
             var orders = await _orderService.GetOrderById(id);
-            return Ok(orders);
+
+            var response = _mapper.Map<GetOrderDto>(orders.Data);
+
+            return Ok(response);
         }
 
         [HttpPost]
