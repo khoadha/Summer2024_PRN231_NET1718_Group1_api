@@ -49,7 +49,7 @@ namespace Hosteland.Extensions {
 
         public static void ConfigureControllers(this IServiceCollection services) {
             services.AddControllers()
-                //.AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+                .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
                 .AddOData(opt => opt
                     .Select()
                     .Filter()
@@ -62,8 +62,10 @@ namespace Hosteland.Extensions {
 
         private static IEdmModel GetEdmModel() {
             var builder = new ODataConventionModelBuilder();
-            builder.EntitySet<GetRoomCategoryDto>("RoomCategories");
-            builder.EntitySet<GetServiceDto>("Services");
+            builder.EntitySet<GetRoomCategoryDto>("ORoomCategories");
+            builder.EntitySet<GetServiceDto>("OServices");
+            builder.EntitySet<GetRoomDTO>("ORooms");
+            builder.EnableLowerCamelCase();
             return builder.GetEdmModel();
         }
 
