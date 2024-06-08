@@ -20,6 +20,15 @@ namespace Hosteland.Controllers.RoomCategories
             _roomCategoryService = roomCategoryService;
         }
 
+        [HttpGet]
+        [Route("get-category")]
+        public async Task<ActionResult<List<RoomCategory>>> GetRoomCategories()
+        {
+            var cates = await _roomCategoryService.GetRoomCategories();
+            var resonse = _mapper.Map<List<GetRoomCategoryDto>>(cates.Data);
+            return Ok(resonse);
+        }
+
         [HttpPost]
         [Route("add-category")]
         public async Task<ActionResult<RoomCategory>> AddRoomCategory(AddRoomCategoryDto roomCategoryDto)
