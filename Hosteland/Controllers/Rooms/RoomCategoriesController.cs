@@ -5,7 +5,7 @@ using BusinessObjects.DTOs;
 using Hosteland.Services.RoomCategoryService;
 using Microsoft.AspNetCore.OData.Query;
 
-namespace Hosteland.Controllers
+namespace Hosteland.Controllers.Rooms
 {
     [Route("api/v1/[controller]")]
     [ApiController]
@@ -18,15 +18,6 @@ namespace Hosteland.Controllers
         {
             _mapper = mapper;
             _roomCategoryService = roomCategoryService;
-        }
-
-        [HttpGet]
-        [Route("get-category")]
-        public async Task<ActionResult<List<RoomCategory>>> GetRoomCategories()
-        {
-            var cates = await _roomCategoryService.GetRoomCategories();
-            var resonse = _mapper.Map<List<GetRoomCategoryDto>>(cates.Data);
-            return Ok(resonse);
         }
 
         [HttpPost]

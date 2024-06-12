@@ -4,8 +4,6 @@ using BusinessObjects.Constants;
 using BusinessObjects.DTOs;
 using BusinessObjects.Entities;
 using Google.Apis.Auth;
-using Microsoft.AspNetCore.Cors.Infrastructure;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Hosteland.Controllers
+namespace Hosteland.Controllers.Profiles
 {
     [Route("api/v1/[controller]")]
     [ApiController]

@@ -5,7 +5,7 @@ using Hosteland.Services.FurnitureService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Hosteland.Controllers
+namespace Hosteland.Controllers.Furnitures
 {
     [Route("api/v1/[controller]")]
     [ApiController]
@@ -18,15 +18,6 @@ namespace Hosteland.Controllers
         {
             _mapper = mapper;
             _furnitureService = furnitureService;
-        }
-
-        [HttpGet]
-        [Route("get-furniture")]
-        public async Task<ActionResult<List<RoomCategory>>> GetFurnitures()
-        {
-            var furn = await _furnitureService.GetFurnitures();
-            var resonse = _mapper.Map<List<FurnitureDTO>>(furn.Data);
-            return Ok(resonse);
         }
 
         [HttpPost]

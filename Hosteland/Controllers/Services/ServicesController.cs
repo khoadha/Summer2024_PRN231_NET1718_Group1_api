@@ -4,7 +4,7 @@ using BusinessObjects.Entities;
 using Hosteland.Services.ServiceService;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Hosteland.Controllers
+namespace Hosteland.Controllers.Services
 {
     [Route("api/v1/[controller]")]
     [ApiController]
@@ -17,33 +17,6 @@ namespace Hosteland.Controllers
         {
             _mapper = mapper;
             _serviceService = serviceService;
-        }
-
-        [HttpGet]
-        [Route("get-service")]
-        public async Task<ActionResult<List<Service>>> GetServices()
-        {
-            var cates = await _serviceService.GetServices();
-            var response = _mapper.Map<List<GetServiceDto>>(cates.Data);
-            return Ok(response);
-        }
-
-
-        [HttpGet]
-        [Route("get-service-newest-price")]
-        public async Task<ActionResult<List<Service>>> GetServicesWithNewestPrice()
-        {
-            var cates = await _serviceService.GetServices();
-            var response = _mapper.Map<List<GetServiceNewestPriceDto>>(cates.Data);
-            return Ok(response);
-        }
-        [HttpGet]
-        [Route("prices/get-price/{serviceId}")]
-        public async Task<ActionResult<List<ServicePrice>>> GetServicePricesByServiceId([FromRoute] int serviceId)
-        {
-            var cates = await _serviceService.GetServicePricesByServiceId(serviceId);
-            var response = _mapper.Map<List<ServicePriceDto>>(cates.Data);
-            return Ok(response);
         }
 
         [HttpPost]

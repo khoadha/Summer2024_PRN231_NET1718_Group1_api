@@ -62,9 +62,22 @@ namespace Hosteland.Extensions {
 
         private static IEdmModel GetEdmModel() {
             var builder = new ODataConventionModelBuilder();
+
             builder.EntitySet<GetRoomCategoryDto>("ORoomCategories");
+
             builder.EntitySet<GetServiceDto>("OServices");
-            builder.EntitySet<GetRoomDTO>("ORooms");
+
+            builder.EntitySet<GetRoomDTO>("ORoomDisplays");
+            builder.EntitySet<GetRoomDetailDTO>("ORooms");
+            builder.EntitySet<GetRoomDetailDTO>("ORoomDetails");
+
+            builder.EntitySet<FurnitureDTO>("OFurnitures");
+
+            builder.EntitySet<GetOrderDto>("OOrders");
+
+            builder.EntitySet<GetServiceNewestPriceDto>("OServices/NewestPrice");
+            builder.EntitySet<GetServiceDto>("OServices");
+
             builder.EnableLowerCamelCase();
             return builder.GetEdmModel();
         }

@@ -5,7 +5,7 @@ using Hosteland.Services.OrderService;
 using Microsoft.AspNetCore.Mvc;
 
 
-namespace Hosteland.Controllers
+namespace Hosteland.Controllers.Orders
 {
     [ApiController]
     [Route("api/v1/")]
@@ -15,30 +15,10 @@ namespace Hosteland.Controllers
         private readonly IMapper _mapper;
         private readonly IOrderService _orderService;
 
-        public OrdersController (IMapper mapper, IOrderService orderService)
+        public OrdersController(IMapper mapper, IOrderService orderService)
         {
             _mapper = mapper;
             _orderService = orderService;
-        }
-
-        [HttpGet]
-        [Route("order/get-order")]
-        public async Task<ActionResult<List<Order>>> GetOrders()
-        {
-            var orders = await _orderService.GetOrders();
-            var response = _mapper.Map<List<GetOrderDto>>(orders.Data);
-            return Ok(response);
-        }
-
-        [HttpGet]
-        [Route("order/get-order/{id}")]
-        public async Task<ActionResult<Order>> GetOrderById([FromRoute] int id)
-        {
-            var orders = await _orderService.GetOrderById(id);
-
-            var response = _mapper.Map<GetOrderDto>(orders.Data);
-
-            return Ok(response);
         }
 
         [HttpPost]
@@ -73,7 +53,7 @@ namespace Hosteland.Controllers
                     Result = false
                 });
             }
-            var createdOrder = await _orderService.CreateOrder(order,contract);
+            var createdOrder = await _orderService.CreateOrder(order, contract);
             return Ok(true);
         }
     }
