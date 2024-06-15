@@ -15,6 +15,7 @@ namespace BusinessObjects.Entities {
         public virtual ICollection<Order>? Orders { get; set; }
         public virtual ICollection<Notice>? Notices { get; set; }
         public virtual ICollection<Report>? Reports { get; set; }
+        public virtual ICollection<PaymentTransaction>? Transactions { get; set; }
     }
 
     public class Response {
