@@ -23,6 +23,8 @@ using Microsoft.OData.ModelBuilder;
 using BusinessObjects.DTOs;
 using Repositories.PaymentTransactionRepository;
 using Hosteland.Services.VnPayService;
+using Hosteland.Services.GlobalRateService;
+using Repositories.GlobalRateRepository;
 
 namespace Hosteland.Extensions {
     public static class ServiceExtensions {
@@ -40,6 +42,7 @@ namespace Hosteland.Extensions {
             services.AddScoped<IFurnitureService, FurnitureService>();
             services.AddScoped<IServiceService, ServiceService>();
             services.AddScoped<IVnPayService, VnPayService>();
+            services.AddScoped<IGlobalRateService, GlobalRateService>();
 
             // REPOSITORY
             services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
@@ -49,6 +52,7 @@ namespace Hosteland.Extensions {
             services.AddScoped<IFurnitureRepository, FurnitureRepository>();
             services.AddScoped<IServiceRepository, ServiceRepository>();
             services.AddScoped<IPaymentTransactionRepository, PaymentTransactionRepository>();
+            services.AddScoped<IGlobalRateRepository, GlobalRateRepository>();
         }
 
         public static void ConfigureControllers(this IServiceCollection services) {

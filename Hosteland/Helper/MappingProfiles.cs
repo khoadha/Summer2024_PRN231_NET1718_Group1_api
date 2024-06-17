@@ -79,6 +79,12 @@ namespace Hosteland.Helper {
 
             //CreateMap<UpdateProductDto, Product>();
             //CreateMap<Product, UpdateProductImageDto>();
+
+
+            // GLOBAL RATE
+            CreateMap<GlobalRate, GlobalRateDTO>();
+            CreateMap<AddGlobalRateDTO, GlobalRate>();
+            
         }
     }
 }
