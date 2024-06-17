@@ -1,5 +1,6 @@
 ﻿using BusinessObjects.ConfigurationModels;
 using BusinessObjects.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BusinessObjects.Entities {
     public class Order : BaseEntity {
@@ -8,6 +9,7 @@ namespace BusinessObjects.Entities {
         public DateTime? OrderDate { get; set; }
         public DateTime? CancelDate { get; set; }
         public OrderStatus Status { get; set; }
+        public RefundStatus RefundStatus {  get; set; }
         public virtual Room? Room { get; set; }
         public virtual ICollection<Contract>? Contracts { get; set; } = new List<Contract>();
         public virtual ApplicationUser? User { get; set; }
@@ -40,10 +42,19 @@ namespace BusinessObjects.Entities {
 
     public class Contract : BaseEntity {
         public int OrderId { get; set; }
+        [ForeignKey("ContractId")]
+        public int ContractId { get; set; }
         public double Cost { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public Order Order { get; set; }
+        public virtual ContractType? Type { get; set; }
+
+    }
+
+    public class ContractType : BaseEntity
+    {
+        public string? ContractName { get; set; }
     }
 
     public class Guest : BaseEntity {
@@ -67,6 +78,13 @@ namespace BusinessObjects.Entities {
 
     public class FeeCategory : BaseEntity {
         public string? Name { get; set; }
+    }
+
+    public class GlobalRate : BaseEntity
+    {
+        public float? Deposit { get; set; }
+        public float? Refund { get; set; }
+        public DateTime UpdatedTime { get; set; }
     }
 
 }

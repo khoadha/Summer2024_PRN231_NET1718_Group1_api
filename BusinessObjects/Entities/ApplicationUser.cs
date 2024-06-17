@@ -12,6 +12,8 @@ namespace BusinessObjects.Entities {
         public string? RefreshToken { get; set; }
         public DateTime RefreshTokenExpiryTime { get; set; }
         public decimal? AccountBalance { get; set; }
+        public string? BankName { get; set; }
+        public string? BankAccountNumber { get; set; }
         public virtual ICollection<Order>? Orders { get; set; }
         public virtual ICollection<Notice>? Notices { get; set; }
         public virtual ICollection<Report>? Reports { get; set; }

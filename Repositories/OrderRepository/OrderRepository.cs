@@ -57,6 +57,7 @@ namespace Repositories.OrderRepository
         public async Task<Order> CreateOrder(Order order, Contract contract)
         {
             order.Status = OrderStatus.Processing;
+            order.RefundStatus = RefundStatus.None;
             order.OrderDate = DateTime.Now;
             contract.OrderId = order.Id;
             order.Contracts.Add(contract);

@@ -53,7 +53,7 @@ namespace Hosteland.Controllers.Payment
             {
                 OrderType = "Fee",
                 Amount = paymentRequestModel.PaymentAmount,
-                OrderDescription = paymentRequestModel.Description,
+                OrderDescription = paymentRequestModel.Description != null ? paymentRequestModel.Description : string.Empty,
                 Name = "",
             };
 
