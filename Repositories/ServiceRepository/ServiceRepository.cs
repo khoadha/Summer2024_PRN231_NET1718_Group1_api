@@ -35,6 +35,18 @@ namespace Repositories.ServiceRepository
         {
             try
             {
+                // Update the end date of the latest ServicePrice
+                var latestServicePrice = await _context.ServicePrices
+                   .Where(sp => sp.ServiceId == servicePrice.ServiceId)
+                   .OrderByDescending(sp => sp.StartDate)
+                   .FirstOrDefaultAsync();
+
+                if (latestServicePrice != null && latestServicePrice.EndDate == null)
+                {
+                    latestServicePrice.EndDate = DateTime.Now;
+                    _context.ServicePrices.Update(latestServicePrice);
+                }
+
                 await _context.ServicePrices.AddAsync(servicePrice);
                 await SaveAsync();
             }

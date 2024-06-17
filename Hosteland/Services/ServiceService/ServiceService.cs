@@ -41,6 +41,7 @@ namespace Hosteland.Services.ServiceService
                     serviceResponse.Message = "Service not found";
                     return serviceResponse;
                 }
+                servicePrice.StartDate = DateTime.Now;
 
                 var added = await _repo.CreateServicePrice(servicePrice);
                 serviceResponse.Data = added;

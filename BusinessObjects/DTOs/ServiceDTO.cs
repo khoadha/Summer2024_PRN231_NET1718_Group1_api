@@ -44,8 +44,8 @@ namespace BusinessObjects.DTOs
     {
         public int ServiceId { get; set; }
         public double Amount { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
+        //public DateTime StartDate { get; set; } start date  = now
+        //public DateTime? EndDate { get; set; } khong can enddate
     }
 
 

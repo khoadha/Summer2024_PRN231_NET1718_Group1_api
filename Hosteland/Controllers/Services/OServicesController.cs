@@ -4,11 +4,13 @@ using BusinessObjects.Entities;
 using Hosteland.Services.ServiceService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
+using Microsoft.AspNetCore.OData.Routing.Controllers;
 
 namespace Hosteland.Controllers.Services {
 
     [Route("odata/")]
-    public class OServicesController : ControllerBase {
+    public class OServicesController : ODataController
+    {
         private readonly IMapper _mapper;
         private readonly IServiceService _serviceService;
 

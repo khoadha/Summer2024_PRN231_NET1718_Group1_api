@@ -84,7 +84,8 @@ namespace BusinessObjects.Entities {
     {
         public float? Deposit { get; set; }
         public float? Refund { get; set; }
-        public DateTime UpdatedTime { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
     }
 
 }
