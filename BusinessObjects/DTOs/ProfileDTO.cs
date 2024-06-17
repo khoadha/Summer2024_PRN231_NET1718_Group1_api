@@ -31,4 +31,13 @@ namespace BusinessObjects.DTOs
         [Required]
         public string Username { get; set; }
     }
+    
+    public class UpdateBankDto
+    {
+        [Required]
+        public string BankName { get; set; }
+        
+        [Required]
+        public string BankAccountNumber { get; set; }
+    }
 }

@@ -210,6 +210,55 @@ namespace Hosteland.Controllers.Profiles
                 return BadRequest(new { message = "Changing name failed!" });
             }
         }
+        
+        [HttpPut("update-bank/{userId}")]
+        public async Task<IActionResult> UpdateBank([FromBody] UpdateBankDto model, string userId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new AuthResult
+                {
+                    Result = false,
+                    Errors = new List<string> { "Invalid model state." }
+                });
+            }
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized(new AuthResult
+                {
+                    Result = false,
+                    Errors = new List<string> { "Please sign in." }
+                });
+            }
+
+            var requestUser = _userContext.GetCurrentUser(HttpContext);
+            if (requestUser == null || requestUser.UserId != userId)
+            {
+                return Forbid();
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found." });
+            }
+
+            user.BankName = model.BankName;
+            user.BankAccountNumber = model.BankAccountNumber;
+
+            var result = await _userManager.UpdateAsync(user);
+
+            if (result.Succeeded)
+            {
+                return Ok(new { message = "Bank info changedd!" });
+            }
+            else
+            {
+                return BadRequest(new { message = "Changing Bank info failed!" });
+            }
+        }
 
         [HttpPut("update-avatar/{userId}")]
         public async Task<IActionResult> UpdateAvatar([FromForm] IFormFile avatar, string userId)
