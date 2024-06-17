@@ -21,6 +21,8 @@ using RoomService = Hosteland.Services.RoomService.RoomService;
 using Microsoft.AspNetCore.OData;
 using Microsoft.OData.ModelBuilder;
 using BusinessObjects.DTOs;
+using Repositories.PaymentTransactionRepository;
+using Hosteland.Services.VnPayService;
 
 namespace Hosteland.Extensions {
     public static class ServiceExtensions {
@@ -37,6 +39,7 @@ namespace Hosteland.Extensions {
             services.AddScoped<IRoomCategoryService, RoomCategoryService>();
             services.AddScoped<IFurnitureService, FurnitureService>();
             services.AddScoped<IServiceService, ServiceService>();
+            services.AddScoped<IVnPayService, VnPayService>();
 
             // REPOSITORY
             services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
@@ -45,6 +48,7 @@ namespace Hosteland.Extensions {
             services.AddScoped<IRoomCategoryRepository, RoomCategoryRepository>();
             services.AddScoped<IFurnitureRepository, FurnitureRepository>();
             services.AddScoped<IServiceRepository, ServiceRepository>();
+            services.AddScoped<IPaymentTransactionRepository, PaymentTransactionRepository>();
         }
 
         public static void ConfigureControllers(this IServiceCollection services) {

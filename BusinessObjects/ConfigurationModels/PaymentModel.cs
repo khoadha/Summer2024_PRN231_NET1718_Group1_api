@@ -6,6 +6,13 @@ using System.Text;
 using Microsoft.AspNetCore.Http;
 
 namespace BusinessObjects.ConfigurationModels {
+
+    public class PaymentRequestModel
+    {
+        public double PaymentAmount { get; set; }
+        public string? Description { get; set; }
+    }
+
     public class PaymentInformationModel {
         public string OrderType { get; set; }
         public double Amount { get; set; }
