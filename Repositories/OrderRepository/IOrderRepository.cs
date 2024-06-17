@@ -11,8 +11,12 @@ namespace Repositories.OrderRepository
         Task<Order> EditOrder(Order order);
         Task<bool> DeleteOrder(int orderId);
         Task<Order> FindOrderById(int id);
-
         Task<Order> GetOrderById(int id);
+
+        Task<List<ContractType>> GetContractTypes();
+        Task<ContractType> AddContractType(ContractType type);
+        Task<bool> SaveAsync();
+
 
     }
 }

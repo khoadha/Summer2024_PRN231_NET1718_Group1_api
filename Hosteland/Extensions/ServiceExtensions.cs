@@ -15,9 +15,7 @@ using Repositories.OrderRepository;
 using Repositories.RoomRepository;
 using Hosteland.Context;
 using Repositories.ServiceRepository;
-using BusinessObjects.Entities;
 using Microsoft.OData.Edm;
-using RoomService = Hosteland.Services.RoomService.RoomService;
 using Microsoft.AspNetCore.OData;
 using Microsoft.OData.ModelBuilder;
 using BusinessObjects.DTOs;
@@ -83,8 +81,13 @@ namespace Hosteland.Extensions {
 
             builder.EntitySet<GetOrderDto>("OOrders");
 
+            builder.EntitySet<GetContractTypeDto>("OOrders/ContractTypes");
+
             builder.EntitySet<GetServiceNewestPriceDto>("OServices/NewestPrice");
             builder.EntitySet<GetServiceDto>("OServices");
+
+            builder.EntitySet<GlobalRateDTO>("OGlobalRates");
+            builder.EntitySet<GlobalRateDTO>("OGlobalRates/NewestRate");
 
             builder.EnableLowerCamelCase();
             return builder.GetEdmModel();

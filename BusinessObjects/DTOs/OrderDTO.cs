@@ -37,4 +37,15 @@ namespace BusinessObjects.DTOs
         public string? Email { get; set; }
         public DateTime? Birthday { get; set; }
     }
+
+    public class GetContractTypeDto
+    {
+        public int Id { get; set; }
+        public string ContractName { get; set; }
+    }
+    public class AddContractTypeDto
+    {
+        [Required]
+        public string ContractName { get; set; }
+    }
 }

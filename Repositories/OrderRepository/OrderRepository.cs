@@ -100,5 +100,30 @@ namespace Repositories.OrderRepository
             return await _context.Order
                 .FirstOrDefaultAsync(r => r.Id == id);
         }
+
+        public async Task<List<ContractType>> GetContractTypes()
+        {
+            return await _context.ContractTypes.ToListAsync();
+        }
+
+        public async Task<ContractType> AddContractType(ContractType order)
+        {
+            try
+            {
+                await _context.ContractTypes.AddAsync(order);
+                await SaveAsync();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return order;
+        }
+
+        public async Task<bool> SaveAsync()
+        {
+            return await _context.SaveChangesAsync() > 0;
+
+        }
     }
 }

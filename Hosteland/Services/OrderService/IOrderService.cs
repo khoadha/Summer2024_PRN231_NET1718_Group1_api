@@ -10,5 +10,9 @@ namespace Hosteland.Services.OrderService
         Task<ServiceResponse<List<Order>>> GetOrdersByRoomId(int roomId);
         Task<ServiceResponse<Order>> AddOrder(Order order);
         Task<ServiceResponse<Order>> CreateOrder(Order order, Contract contract);
+        Task<ServiceResponse<List<ContractType>>> GetContractTypes();
+        Task<ServiceResponse<ContractType>> AddContractType(ContractType type);
+        Task<ServiceResponse<bool>> SaveAsync();
+
     }
 }

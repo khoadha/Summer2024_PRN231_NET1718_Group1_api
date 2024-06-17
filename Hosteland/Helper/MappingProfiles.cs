@@ -74,6 +74,10 @@ namespace Hosteland.Helper {
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))
                 .ForMember(dest => dest.RoomName, opt => opt.MapFrom(src => src.Room.Name));
 
+            // CONTRACT TYPE
+            CreateMap<ContractType, GetContractTypeDto>();
+            CreateMap<AddContractTypeDto, ContractType>();
+
 
             //CreateMap<AddProductDto, Product>();
 

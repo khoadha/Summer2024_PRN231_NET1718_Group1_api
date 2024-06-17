@@ -33,6 +33,7 @@ namespace Hosteland.Controllers.Orders
             var createdOrder = await _orderService.AddOrder(order);
             return Ok(createdOrder);
         }
+
         [HttpPost]
         [Route("order/create")]
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto orderDto)
@@ -55,6 +56,18 @@ namespace Hosteland.Controllers.Orders
             }
             var createdOrder = await _orderService.CreateOrder(order, contract);
             return Ok(true);
+        }
+
+        [HttpPost]
+        [Route("add-contracttype")]
+        public async Task<ActionResult<RoomCategory>> AddContractType(AddContractTypeDto roomCategoryDto)
+        {
+            var cate = _mapper.Map<ContractType>(roomCategoryDto);
+
+            var serviceResponse = await _orderService.AddContractType(cate);
+            var response = _mapper.Map<GetContractTypeDto>(serviceResponse.Data);
+
+            return Ok(response);
         }
     }
 }
