@@ -2,6 +2,7 @@
 using BusinessObjects.DTOs;
 using BusinessObjects.Entities;
 using Hosteland.Services.OrderService;
+using Hosteland.Services.ServiceService;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -14,11 +15,13 @@ namespace Hosteland.Controllers.Orders
     {
         private readonly IMapper _mapper;
         private readonly IOrderService _orderService;
+        private readonly IServiceService _serviceService;
 
-        public OrdersController(IMapper mapper, IOrderService orderService)
+        public OrdersController(IMapper mapper, IOrderService orderService, IServiceService serviceService)
         {
             _mapper = mapper;
             _orderService = orderService;
+            _serviceService = serviceService;
         }
 
         [HttpPost]
@@ -38,13 +41,59 @@ namespace Hosteland.Controllers.Orders
         [Route("order/create")]
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto orderDto)
         {
+            // check model
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { Result = false, Message = "Invalid data" });
+            }
+
+            // create list service contract 
+            if (orderDto.RoomServices.Count > 0)
+            {
+                List<Contract> serviceContractList = new List<Contract>();
+                var contractTypes = _orderService.GetContractTypes().Result.Data;
+
+                // init contract type for 1st time
+                if (contractTypes == null)
+                {
+                    AddContractTypeDto typeDto = new AddContractTypeDto();
+                    typeDto.ContractName = "Room Contract";
+                    var type = _mapper.Map<ContractType>(typeDto);
+
+                    await _orderService.AddContractType(type);
+
+                    AddContractTypeDto typeDto2 = new AddContractTypeDto();
+                    typeDto.ContractName = "Service Contract";
+                    var type2 = _mapper.Map<ContractType>(typeDto2);
+
+                    await _orderService.AddContractType(type2);
+                }
+
+                // create contract for each service
+                for (int i=0; i<orderDto.RoomServices.Count; i++)
+                {
+                    Contract serviceContract = new Contract();
+
+                    serviceContract.ContractTypeId = contractTypes.FirstOrDefault(c => c.Id == 2).Id;
+                    serviceContract.Type = contractTypes.FirstOrDefault(c => c.Id == 2);
+                    var servId = orderDto.RoomServices[i].ServiceId;
+                    //_serviceService.g
+                    //serviceContract.Cost =
+
+                    serviceContractList.Add(serviceContract);
+                }           
+            }
+
+            // create 1 room contract
+            var roomContract = _mapper.Map<CreateOrderDto, Contract>(orderDto);
+
+            //create order 
             var order = _mapper.Map<CreateOrderDto, Order>(orderDto);
-            var contract = _mapper.Map<CreateOrderDto, Contract>(orderDto);
 
             var allOrders = _orderService.GetOrdersByRoomId(orderDto.RoomId).Result.Data;
             var overlapFlag = false;
             overlapFlag = allOrders.Any(order =>
-                order.Contracts.Any(c => c.EndDate >= contract.StartDate && c.StartDate <= contract.StartDate)
+                order.Contracts.Any(c => c.EndDate >= roomContract.StartDate && c.StartDate <= roomContract.StartDate)
             );
             if (overlapFlag)
             {
@@ -54,7 +103,7 @@ namespace Hosteland.Controllers.Orders
                     Result = false
                 });
             }
-            var createdOrder = await _orderService.CreateOrder(order, contract);
+            var createdOrder = await _orderService.CreateOrder(order, roomContract);
             return Ok(true);
         }
 
@@ -62,6 +111,11 @@ namespace Hosteland.Controllers.Orders
         [Route("add-contracttype")]
         public async Task<ActionResult<RoomCategory>> AddContractType(AddContractTypeDto roomCategoryDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { Result = false, Message = "Invalid data" });
+            }
+
             var cate = _mapper.Map<ContractType>(roomCategoryDto);
 
             var serviceResponse = await _orderService.AddContractType(cate);

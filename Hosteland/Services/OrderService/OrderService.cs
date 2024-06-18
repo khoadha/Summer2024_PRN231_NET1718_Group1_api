@@ -47,7 +47,7 @@ namespace Hosteland.Services.OrderService
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<ContractType>> AddRoomCategory(ContractType RoomCategory)
+        public async Task<ServiceResponse<ContractType>> AddContractType(ContractType RoomCategory)
         {
             var serviceResponse = new ServiceResponse<ContractType>();
             try

@@ -1,7 +1,9 @@
-﻿using BusinessObjects.ConfigurationModels;
+﻿using AutoMapper.Configuration.Annotations;
+using BusinessObjects.ConfigurationModels;
 using BusinessObjects.Entities;
 using BusinessObjects.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BusinessObjects.DTOs
 {
@@ -31,6 +33,7 @@ namespace BusinessObjects.DTOs
         [Required]
         public DateTime? EndDate { get; set; }
     }
+
     public class GuestDto
     {
         public string? Fullname { get; set; }

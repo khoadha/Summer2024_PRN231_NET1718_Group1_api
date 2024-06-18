@@ -43,5 +43,13 @@ namespace Hosteland.Controllers.Services {
             var response = _mapper.Map<List<ServicePriceDto>>(cates.Data);
             return Ok(response.AsQueryable());
         }
+        
+        //[HttpGet("OServicePrices/NewestPrice({serviceId})")]
+        //[EnableQuery]
+        //public async Task<IActionResult> GetServiceWithNewestPriceByServiceId([FromRoute] int serviceId) {
+        //    var cates = await _serviceService.GetServicePricesByServiceId(serviceId);
+        //    var response = _mapper.Map<List<ServicePriceDto>>(cates.Data);
+        //    return Ok(response.AsQueryable());
+        //}
     }
 }

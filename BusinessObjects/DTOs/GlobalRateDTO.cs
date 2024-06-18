@@ -8,6 +8,7 @@ namespace BusinessObjects.DTOs
 {
     public class GlobalRateDTO
     {
+        public int Id { get; set; }
         public float? Deposit { get; set; }
         public float? Refund { get; set; }
         public DateTime? StartDate { get; set; }

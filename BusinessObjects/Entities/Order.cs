@@ -42,12 +42,13 @@ namespace BusinessObjects.Entities {
 
     public class Contract : BaseEntity {
         public int OrderId { get; set; }
-        [ForeignKey("ContractId")]
-        public int ContractId { get; set; }
         public double Cost { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public Order Order { get; set; }
+
+        [ForeignKey("ContractTypeId")]
+        public int ContractTypeId { get; set; }
         public virtual ContractType? Type { get; set; }
 
     }
