@@ -65,6 +65,7 @@ namespace Hosteland.Controllers.Orders
                 var type2 = _mapper.Map<ContractType>(typeDto2);
 
                 await _orderService.AddContractType(type2);
+                contractTypes = _orderService.GetContractTypes().Result.Data;
             }
 
             List<Contract> allContract = new List<Contract>();

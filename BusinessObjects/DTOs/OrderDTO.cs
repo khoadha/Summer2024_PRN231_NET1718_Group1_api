@@ -27,7 +27,7 @@ namespace BusinessObjects.DTOs
         [Required]
         public double Cost { get; set; }
         public List<GuestDto> Guests { get; set; }
-        public List<RoomService> RoomServices { get; set; }
+        public List<RoomServiceDto> RoomServices { get; set; }
         [Required]
         public DateTime? StartDate { get; set; }
         [Required]
@@ -39,6 +39,11 @@ namespace BusinessObjects.DTOs
         public string? Fullname { get; set; }
         public string? Email { get; set; }
         public DateTime? Birthday { get; set; }
+    }
+
+    public class RoomServiceDto
+    {
+        public int ServiceId { get; set; }
     }
 
     public class GetContractTypeDto
