@@ -2,7 +2,7 @@
 using AutoMapper;
 using BusinessObjects.DTOs;
 
-namespace Hosteland.Helper {
+namespace HostelandOData.Helper {
     public class MappingProfiles : Profile {
         public MappingProfiles() {
             // PROFILE

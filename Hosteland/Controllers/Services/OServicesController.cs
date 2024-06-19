@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using BusinessObjects.DTOs;
 using BusinessObjects.Entities;
-using Hosteland.Services.ServiceService;
+using HostelandOData.Services.ServiceService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 
-namespace Hosteland.Controllers.Services {
+namespace HostelandOData.Controllers.Services {
 
     [Route("odata/")]
     public class OServicesController : ODataController

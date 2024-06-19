@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using BusinessObjects.DTOs;
 using BusinessObjects.Entities;
-using Hosteland.Context;
-using Hosteland.Services.ApplicationUserService;
+using HostelandAuthorization.Context;
+using HostelandAuthorization.Services.ApplicationUserService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

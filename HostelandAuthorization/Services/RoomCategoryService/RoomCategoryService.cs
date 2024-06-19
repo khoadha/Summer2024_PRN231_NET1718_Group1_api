@@ -2,7 +2,7 @@
 using BusinessObjects.Entities;
 using Repositories.RoomCategoryRepository;
 
-namespace HostelandOData.Services.RoomCategoryService
+namespace Hosteland.Services.RoomCategoryService
 {
     public class RoomCategoryService : IRoomCategoryService
     {
