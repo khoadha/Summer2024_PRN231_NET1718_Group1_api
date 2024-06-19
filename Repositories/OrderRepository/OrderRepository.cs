@@ -54,13 +54,24 @@ namespace Repositories.OrderRepository
             await _context.SaveChangesAsync();
             return order;
         }
-        public async Task<Order> CreateOrder(Order order, Contract contract)
+        public async Task<Order> CreateOrder(Order order, List<Contract> contract)
         {
             order.Status = OrderStatus.Processing;
             order.RefundStatus = RefundStatus.None;
             order.OrderDate = DateTime.Now;
-            contract.OrderId = order.Id;
-            order.Contracts.Add(contract);
+            var orderId = order.Id;
+            for(var i = 0; i < contract.Count; i++)
+            {
+                contract[i].OrderId = orderId;
+                try
+                { 
+                    order.Contracts.Add(contract[i]);
+                }
+                catch
+                {
+                    throw new Exception("Add contract failed");
+                }
+            }
             _context.Order.Add(order);
             /*
             //Update ROom Status

@@ -9,6 +9,7 @@ namespace Hosteland.Services.ServiceService
         Task<ServiceResponse<Service>> AddService(Service service);
         Task<ServiceResponse<ServicePrice>> CreateServicePrice(ServicePrice servicePrice);
         Task<ServiceResponse<List<ServicePrice>>> GetServicePricesByServiceId(int id);
+        Task<ServiceResponse<ServicePrice>> GetServiceNewestPricesByServiceId(int id);
         Task<ServiceResponse<bool>> SaveAsync();
     }
 }

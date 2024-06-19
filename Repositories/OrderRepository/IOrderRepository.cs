@@ -7,7 +7,7 @@ namespace Repositories.OrderRepository
         Task<List<Order>> GetOrders();
         Task<List<Order>> GetOrdersByRoomId(int roomId);
         Task<Order> AddOrder(Order order);
-        Task<Order> CreateOrder(Order order, Contract contract);
+        Task<Order> CreateOrder(Order order, List<Contract> contract);
         Task<Order> EditOrder(Order order);
         Task<bool> DeleteOrder(int orderId);
         Task<Order> FindOrderById(int id);

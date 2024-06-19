@@ -92,6 +92,29 @@ namespace Hosteland.Services.ServiceService
             }
             return serviceResponse;
         }
+        
+        public async Task<ServiceResponse<ServicePrice>> GetServiceNewestPricesByServiceId(int id)
+        {
+            var serviceResponse = new ServiceResponse<ServicePrice>();
+            try
+            {
+                var serviceExist = await _repo.GetServiceById(id);
+                if (serviceExist == null)
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "Service not found";
+                    return serviceResponse;
+                }
+                var per = _repo.GetServicePricesByServiceId(id).Result.OrderByDescending(a => a.StartDate).FirstOrDefault();
+                serviceResponse.Data = per;
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+            return serviceResponse;
+        }
 
         public async Task<ServiceResponse<bool>> SaveAsync()
         {
