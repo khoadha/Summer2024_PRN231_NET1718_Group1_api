@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 
-
 namespace HostelandOData.Controllers.Furnitures {
 
     [Route("odata/")]
@@ -26,14 +25,6 @@ namespace HostelandOData.Controllers.Furnitures {
             var response = _mapper.Map<List<FurnitureDTO>>(furn.Data);
             return Ok(response.AsQueryable());
         }
-
-        [HttpGet("OFurnitures({id})")]
-        [EnableQuery]
-        public async Task<ActionResult<List<RoomCategory>>> GetFurnitures([FromRoute] int id) {
-            var furns = await _furnitureService.GetFurnitures();
-            var furn = furns.Data.FirstOrDefault(a=>a.Id==id);
-            var response = _mapper.Map<FurnitureDTO>(furn);
-            return Ok(response);
-        }
     }
+}
 }

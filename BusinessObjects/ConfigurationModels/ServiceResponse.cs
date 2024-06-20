@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BusinessObjects.Entities;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +11,11 @@ namespace BusinessObjects.ConfigurationModels {
         public T? Data { get; set; }
         public bool Success { get; set; } = true;
         public string Message { get; set; } = string.Empty;
+    }
+
+    public class ODataCollectionResponse {
+        [JsonProperty("@odata.context")]
+        public string ODataContext { get; set; }
+        public dynamic Value { get; set; }
     }
 }
