@@ -2,7 +2,7 @@
 using BusinessObjects.Entities;
 using Repositories.FurnitureRepository;
 
-namespace Hosteland.Services.FurnitureService
+namespace HostelandOData.Services.FurnitureService
 {
     public class FurnitureService : IFurnitureService
     {

@@ -3,7 +3,6 @@ using BusinessObjects.Entities;
 using AutoMapper;
 using BusinessObjects.DTOs;
 using Hosteland.Services.RoomCategoryService;
-using Microsoft.AspNetCore.OData.Query;
 
 namespace Hosteland.Controllers.Rooms
 {

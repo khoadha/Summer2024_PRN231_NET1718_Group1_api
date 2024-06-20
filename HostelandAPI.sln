@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessObjects", "DataAc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repositories", "Repositories\Repositories.csproj", "{9F09145E-F799-4E6A-B97F-B5EA1111596F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hosteland", "Hosteland\Hosteland.csproj", "{430A864B-B5CC-460C-8BEF-7C896ED74EC7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HostelandOData", "Hosteland\HostelandOData.csproj", "{430A864B-B5CC-460C-8BEF-7C896ED74EC7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HostelandAuthorization", "HostelandAuthorization\HostelandAuthorization.csproj", "{FA90A1AB-9286-48AD-BB60-F5EB989BB6C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hosteland", "HostelandAuthorization\Hosteland.csproj", "{FA90A1AB-9286-48AD-BB60-F5EB989BB6C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

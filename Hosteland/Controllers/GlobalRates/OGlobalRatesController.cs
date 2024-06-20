@@ -1,15 +1,15 @@
 ﻿using AutoMapper;
 using BusinessObjects.DTOs;
 using BusinessObjects.Entities;
-using Hosteland.Services.GlobalRateService;
-using Hosteland.Services.RoomCategoryService;
-using Hosteland.Services.RoomService;
+using HostelandOData.Services.GlobalRateService;
+using HostelandOData.Services.RoomCategoryService;
+using HostelandOData.Services.RoomService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 
-namespace Hosteland.Controllers.GlobalRates
+namespace HostelandOData.Controllers.GlobalRates
 {
     [Route("odata/")]
     public class OGlobalRatesController : ODataController

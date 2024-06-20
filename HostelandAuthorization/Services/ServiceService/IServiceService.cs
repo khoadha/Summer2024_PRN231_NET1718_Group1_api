@@ -1,7 +1,7 @@
 ﻿using BusinessObjects.ConfigurationModels;
 using BusinessObjects.Entities;
 
-namespace HostelandOData.Services.ServiceService
+namespace Hosteland.Services.ServiceService
 {
     public interface IServiceService
     {

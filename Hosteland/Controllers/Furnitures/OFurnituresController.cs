@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using BusinessObjects.DTOs;
 using BusinessObjects.Entities;
-using Hosteland.Services.FurnitureService;
+using HostelandOData.Services.FurnitureService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 
 
-namespace Hosteland.Controllers.Furnitures {
+namespace HostelandOData.Controllers.Furnitures {
 
     [Route("odata/")]
     public class OFurnituresController : ODataController {

@@ -1,8 +1,8 @@
 ﻿using BusinessObjects.ConfigurationModels;
 using BusinessObjects.Constants;
-using Hosteland.Context;
-using Hosteland.Services.ApplicationUserService;
 using Hosteland.Services.VnPayService;
+using HostelandAuthorization.Context;
+using HostelandAuthorization.Services.ApplicationUserService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
