@@ -15,6 +15,8 @@ namespace Repositories.OrderRepository
 
         Task<List<ContractType>> GetContractTypes();
         Task<ContractType> AddContractType(ContractType type);
+        Task<List<FeeCategory>> GetFeeCates();
+        Task<FeeCategory> AddFeeCate(FeeCategory type);
         Task<bool> SaveAsync();
 
 

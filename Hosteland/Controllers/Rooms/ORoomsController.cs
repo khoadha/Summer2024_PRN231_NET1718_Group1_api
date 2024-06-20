@@ -25,7 +25,7 @@ namespace HostelandOData.Controllers.ORoomCategories {
         [EnableQuery]
         public async Task<IActionResult> GetRoomsDisplay() {
             var rooms = await _roomService.GetRooms();
-            var response = _mapper.Map<List<GetRoomDTO>>(rooms.Data);
+            var response = _mapper.Map<List<GetRoomDisplayDTO>>(rooms.Data);
             return Ok(response.AsQueryable());
         }
 

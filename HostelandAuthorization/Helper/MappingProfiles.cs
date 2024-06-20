@@ -78,6 +78,10 @@ namespace HostelandAuthorization.Helper {
             // CONTRACT TYPE
             CreateMap<ContractType, GetContractTypeDto>();
             CreateMap<AddContractTypeDto, ContractType>();
+            
+            // FEE CATEGORY
+            CreateMap<FeeCategory, GetFeeCateDto>();
+            CreateMap<AddFeeCateDto, FeeCategory>();
 
 
             //CreateMap<AddProductDto, Product>();

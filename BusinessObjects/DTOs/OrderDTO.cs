@@ -56,4 +56,15 @@ namespace BusinessObjects.DTOs
         [Required]
         public string ContractName { get; set; }
     }
+    
+    public class GetFeeCateDto
+    {
+        public int Id { get; set; }
+        public string FeeName { get; set; }
+    }
+    public class AddFeeCateDto
+    {
+        [Required]
+        public string FeeName { get; set; }
+    }
 }

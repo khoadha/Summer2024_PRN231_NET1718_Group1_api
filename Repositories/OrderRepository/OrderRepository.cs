@@ -130,6 +130,25 @@ namespace Repositories.OrderRepository
             }
             return order;
         }
+        
+        public async Task<List<FeeCategory>> GetFeeCates()
+        {
+            return await _context.FeeCategories.ToListAsync();
+        }
+
+        public async Task<FeeCategory> AddFeeCate(FeeCategory order)
+        {
+            try
+            {
+                await _context.FeeCategories.AddAsync(order);
+                await SaveAsync();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return order;
+        }
 
         public async Task<bool> SaveAsync()
         {
