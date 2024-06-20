@@ -24,6 +24,16 @@ namespace BusinessObjects.DTOs
         public List<RoomFurnitureDTO> RoomFurniture { get; set; } = new List<RoomFurnitureDTO>();
 
     }
+    
+    public class GetRoomDisplayDTO
+    {
+        public int Id { get; set; }
+        public string? Name { get; set; } = string.Empty;
+        public string ImgPath { get; set; } = string.Empty;
+        public double RoomArea { get; set; }
+        public double CostPerDay { get; set; }
+        public List<RoomFurnitureDTO> RoomFurniture { get; set; } = new List<RoomFurnitureDTO>();
+    }
 
     public class ImageDTO
     {
