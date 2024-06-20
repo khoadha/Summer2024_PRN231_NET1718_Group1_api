@@ -5,6 +5,7 @@ using Hosteland.Services.OrderService;
 using Hosteland.Services.RoomService;
 using Hosteland.Services.ServiceService;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime.CompilerServices;
 
 
 namespace Hosteland.Controllers.Orders
@@ -51,22 +52,8 @@ namespace Hosteland.Controllers.Orders
             }
 
             // init contract type for 1st time
-            var contractTypes = _orderService.GetContractTypes().Result.Data;
-            if (!contractTypes.Any())
-            {
-                AddContractTypeDto typeDto = new AddContractTypeDto();
-                typeDto.ContractName = "Room Contract";
-                var type = _mapper.Map<ContractType>(typeDto);
-
-                await _orderService.AddContractType(type);
-
-                AddContractTypeDto typeDto2 = new AddContractTypeDto();
-                typeDto2.ContractName = "Service Contract";
-                var type2 = _mapper.Map<ContractType>(typeDto2);
-
-                await _orderService.AddContractType(type2);
-                contractTypes = _orderService.GetContractTypes().Result.Data;
-            }
+            InitContractType();
+            var contractTypes = _orderService.GetContractTypes().Result.Data;       
 
             List<Contract> allContract = new List<Contract>();
 
@@ -137,6 +124,27 @@ namespace Hosteland.Controllers.Orders
             var response = _mapper.Map<GetContractTypeDto>(serviceResponse.Data);
 
             return Ok(response);
+        }
+
+        private async void InitContractType()
+        {
+            var contractTypes = _orderService.GetContractTypes().Result.Data;
+
+            if (!contractTypes.Any() || contractTypes == null)
+            {
+                AddContractTypeDto typeDto = new AddContractTypeDto();
+                typeDto.ContractName = "Room Contract";
+                var type = _mapper.Map<ContractType>(typeDto);
+
+                await _orderService.AddContractType(type);
+
+                AddContractTypeDto typeDto2 = new AddContractTypeDto();
+                typeDto2.ContractName = "Service Contract";
+                var type2 = _mapper.Map<ContractType>(typeDto2);
+
+                await _orderService.AddContractType(type2);
+                contractTypes = _orderService.GetContractTypes().Result.Data;
+            }
         }
     }
 }

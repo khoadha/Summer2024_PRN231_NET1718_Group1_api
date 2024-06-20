@@ -74,6 +74,7 @@ namespace Hosteland.Extensions {
             builder.EntitySet<GetServiceDto>("OServices");
 
             builder.EntitySet<GetRoomDTO>("ORoomDisplays");
+            //builder.EntitySet<GetRoomDisplayDTO>("ORoomDisplays");
             builder.EntitySet<GetRoomDetailDTO>("ORooms");
             builder.EntitySet<GetRoomDetailDTO>("ORoomDetails");
 
