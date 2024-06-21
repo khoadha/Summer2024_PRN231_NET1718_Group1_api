@@ -81,13 +81,14 @@ namespace Hosteland.Extensions {
 
             builder.EntitySet<GetOrderDto>("OOrders");
 
-            builder.EntitySet<GetContractTypeDto>("OOrders/ContractTypes");
-
-            builder.EntitySet<GetServiceNewestPriceDto>("OServices/NewestPrice");
             builder.EntitySet<GetServiceDto>("OServices");
 
             builder.EntitySet<GlobalRateDTO>("OGlobalRates");
-            builder.EntitySet<GlobalRateDTO>("OGlobalRates/NewestRate");
+
+            builder.EntityType<GetServiceDto>().Collection.Function("NewestPrice").ReturnsCollection<GetServiceNewestPriceDto>();
+            builder.EntityType<GlobalRateDTO>().Collection.Function("NewestRate").ReturnsCollection<GlobalRateDTO>();
+            builder.EntityType<GetOrderDto>().Collection.Function("ContractTypes").ReturnsCollection<GetContractTypeDto>();
+
 
             builder.EnableLowerCamelCase();
             return builder.GetEdmModel();
