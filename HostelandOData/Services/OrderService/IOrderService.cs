@@ -13,6 +13,7 @@ namespace HostelandOData.Services.OrderService
         Task<ServiceResponse<List<ContractType>>> GetContractTypes();
         //Task<ServiceResponse<ContractType>> AddContractType(ContractType type);
         Task<ServiceResponse<List<Fee>>> GetFeesByOrderId(int orderId);
+        Task<ServiceResponse<List<FeeCategory>>> GetFeeCategories();
         Task<ServiceResponse<bool>> SaveAsync();
 
     }

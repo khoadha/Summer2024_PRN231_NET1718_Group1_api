@@ -35,5 +35,14 @@ namespace HostelandOData.Controllers.Orders {
             var response = _mapper.Map<List<GetContractTypeDto>>(orders.Data);
             return Ok(response.AsQueryable());
         }
+        
+        [HttpGet("OOrders/FeeCategories")]
+        [EnableQuery]
+        public async Task<IActionResult> GetFeeCategories()
+        {
+            var orders = await _orderService.GetFeeCategories();
+            var response = _mapper.Map<List<GetFeeCateDto>>(orders.Data);
+            return Ok(response.AsQueryable());
+        }
     }
 }

@@ -14,7 +14,7 @@ namespace BusinessObjects.Entities {
         public virtual ICollection<Contract>? Contracts { get; set; } = new List<Contract>();
         public virtual ApplicationUser? User { get; set; }
         public virtual ICollection<RoomService>? RoomServices { get; set; }
-        public virtual ICollection<Fee>? Fees { get; set; }
+        public virtual ICollection<Fee>? Fees { get; set; } = new List<Fee>();
         public virtual ICollection<Guest>? Guests { get; set; }
     }
 

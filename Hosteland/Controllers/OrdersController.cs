@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BusinessObjects.ConfigurationModels;
 using BusinessObjects.DTOs;
 using BusinessObjects.Entities;
 using BusinessObjects.Enums;
@@ -6,6 +7,7 @@ using Hosteland.Services.GlobalRateService;
 using Hosteland.Services.OrderService;
 using Hosteland.Services.RoomService;
 using Hosteland.Services.ServiceService;
+using HostelandAuthorization.Context;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hosteland.Controllers.Orders
@@ -20,19 +22,22 @@ namespace Hosteland.Controllers.Orders
         private readonly IServiceService _serviceService;
         private readonly IRoomService _roomService;
         private readonly IGlobalRateService _globalRateService;
+        private readonly IUserContext _userContext;
 
         public OrdersController(
             IMapper mapper,
             IOrderService orderService,
             IServiceService serviceService,
             IRoomService roomService,
-            IGlobalRateService globalRateService)
+            IGlobalRateService globalRateService,
+            IUserContext userContext)
         {
             _mapper = mapper;
             _orderService = orderService;
             _serviceService = serviceService;
             _roomService = roomService;
             _globalRateService = globalRateService;
+            _userContext = userContext;
         }
 
         [HttpPost]
@@ -49,11 +54,26 @@ namespace Hosteland.Controllers.Orders
         }
 
         [HttpGet]
-        [Route("order/get-fee/{id}")]
-        public async Task<ActionResult<List<Fee>>> GetFeesByOrderId([FromRoute] int orderId)
+        [Route("order/get-fee/{orderId}")]
+        public async Task<ActionResult<List<Fee>>> GetFeesByOrderId([FromRoute] int orderId, string userId)
         {
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized(new AuthResult
+                {
+                    Result = false,
+                    Errors = new List<string> { "Please sign in." }
+                });
+            }
+
+            //var requestUser = _userContext.GetCurrentUser(HttpContext);
+            //if (requestUser == null || requestUser.UserId != userId)
+            //{
+            //    return Forbid();
+            //}
+
             var list = await _orderService.GetFeesByOrderId(orderId);
-            var res = _mapper.Map<GetFeeDto>(list);
+            var res = _mapper.Map<List<GetFeeDto>>(list.Data);
             return Ok(res);
         }
 
@@ -132,17 +152,11 @@ namespace Hosteland.Controllers.Orders
 
             // create FEE deposit
             var globalServiceRes = _globalRateService.GetNewestGlobalRate().Result;
-            if (!globalServiceRes.Success)
-            {
-                return BadRequest(new AuthResult()
-                {
-                    Errors = new List<string>() {
-                        "Internal Server Error"
-                    },
-                    Result = false
-                });
-            }
             var rate = globalServiceRes.Data;
+            if (!globalServiceRes.Success || rate == null)
+            {
+                return NotFound("Rate not found");
+            }
             var totalCost = roomCost;
             foreach (var fee in allFee)
             {
@@ -164,13 +178,7 @@ namespace Hosteland.Controllers.Orders
             var orderServiceRes = _orderService.GetOrdersByRoomId(orderDto.RoomId).Result;
             if (!orderServiceRes.Success)
             {
-                return BadRequest(new AuthResult()
-                {
-                    Errors = new List<string>() {
-                        "Internal Server Error"
-                    },
-                    Result = false
-                });
+                return BadRequest("Order not found");
             }
             var allOrders = _orderService.GetOrdersByRoomId(orderDto.RoomId).Result.Data;
             var overlapFlag = false;

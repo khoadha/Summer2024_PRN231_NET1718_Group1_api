@@ -96,6 +96,22 @@ namespace HostelandOData.Services.OrderService
             }
             return serviceResponse;
         }
+        
+        public async Task<ServiceResponse<List<FeeCategory>>> GetFeeCategories()
+        {
+            var serviceResponse = new ServiceResponse<List<FeeCategory>>();
+            try
+            {
+                var list = await _orderRepository.GetFeeCates();
+                serviceResponse.Data = list;
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+            return serviceResponse;
+        }
 
         public async Task<ServiceResponse<bool>> SaveAsync()
         {
