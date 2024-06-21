@@ -58,10 +58,6 @@ namespace HostelandAuthorization.Helper {
             CreateMap<AddRoomDTO, Room>();
             CreateMap<UpdateRoomDTO, Room>();
 
-            //CreateMap<UpdateProductDto, Product>();
-            //CreateMap<Product, UpdateProductImageDto>();
-
-
             // ORDER
             CreateMap<GuestDto, Guest>();
             CreateMap<CreateOrderDto, Order>()
@@ -69,7 +65,6 @@ namespace HostelandAuthorization.Helper {
             CreateMap<RoomServiceDto, RoomService>();
             CreateMap<GetOrderDto, Order>();
             CreateMap<CreateOrderDto, Contract>();
-            //.ForMember(dest => dest.ContractTypeId, opt => opt.MapFrom(src => src.RoomServices.Count > 0 ? 2 : 1));
 
             CreateMap<Order, GetOrderDto>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))
@@ -82,6 +77,10 @@ namespace HostelandAuthorization.Helper {
             // FEE CATEGORY
             CreateMap<FeeCategory, GetFeeCateDto>();
             CreateMap<AddFeeCateDto, FeeCategory>();
+
+            // FEE
+            CreateMap<Fee, GetFeeDto>()
+                .ForMember(dest => dest.FeeCategoryName, opt => opt.MapFrom(src => src.FeeCategory.Name != null ? src.FeeCategory.Name : string.Empty));
 
 
             // GLOBAL RATE

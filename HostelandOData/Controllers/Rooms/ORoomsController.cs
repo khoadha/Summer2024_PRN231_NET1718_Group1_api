@@ -1,21 +1,23 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using AutoMapper;
+﻿using AutoMapper;
 using BusinessObjects.DTOs;
 using HostelandOData.Services.RoomCategoryService;
+using HostelandOData.Services.RoomService;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
-using HostelandOData.Services.RoomService;
 
-namespace HostelandOData.Controllers.ORoomCategories {
-
+namespace HostelandOData.Controllers.Rooms
+{
     [Route("odata/")]
-    public class ORoomsController : ODataController {
+    public class ORoomsController : ODataController
+    {
 
         private readonly IMapper _mapper;
         private readonly IRoomCategoryService _roomCategoryService;
         private readonly IRoomService _roomService;
 
-        public ORoomsController(IMapper mapper, IRoomCategoryService roomCategoryService, IRoomService roomService) {
+        public ORoomsController(IMapper mapper, IRoomCategoryService roomCategoryService, IRoomService roomService)
+        {
             _mapper = mapper;
             _roomCategoryService = roomCategoryService;
             _roomService = roomService;
@@ -23,15 +25,17 @@ namespace HostelandOData.Controllers.ORoomCategories {
 
         [HttpGet("ORoomDisplays")]
         [EnableQuery]
-        public async Task<IActionResult> GetRoomsDisplay() {
+        public async Task<IActionResult> GetRoomsDisplay()
+        {
             var rooms = await _roomService.GetRooms();
-            var response = _mapper.Map<List<GetRoomDTO>>(rooms.Data);
+            var response = _mapper.Map<List<GetRoomDisplayDTO>>(rooms.Data);
             return Ok(response.AsQueryable());
         }
 
         [HttpGet("ORooms")]
         [EnableQuery]
-        public async Task<IActionResult> GetRooms() {
+        public async Task<IActionResult> GetRooms()
+        {
             var rooms = await _roomService.GetRooms();
             var response = _mapper.Map<List<GetRoomDetailDTO>>(rooms.Data);
             return Ok(response.AsQueryable());
@@ -39,7 +43,8 @@ namespace HostelandOData.Controllers.ORoomCategories {
 
         [HttpGet("ORoomDetails({id})")]
         [EnableQuery]
-        public async Task<IActionResult> GetRoomById([FromRoute] int id) {
+        public async Task<IActionResult> GetRoomById([FromRoute] int id)
+        {
             var rooms = await _roomService.GetRoomById(id);
             var response = _mapper.Map<GetRoomDetailDTO>(rooms.Data);
             return Ok(response);
@@ -48,7 +53,8 @@ namespace HostelandOData.Controllers.ORoomCategories {
         //Test: https://localhost:7267/odata/ORoomCategories?$select=CategoryName (Select only name) 
         [HttpGet("ORoomCategories")]
         [EnableQuery]
-        public async Task<IActionResult> GetRoomCategories() {
+        public async Task<IActionResult> GetRoomCategories()
+        {
 
             var cates = await _roomCategoryService.GetRoomCategories();
 
@@ -61,7 +67,8 @@ namespace HostelandOData.Controllers.ORoomCategories {
 
         [HttpGet("ORoomCategories({id})")]
         [EnableQuery]
-        public async Task<IActionResult> GetRoomCategoryById([FromRoute] int id) {
+        public async Task<IActionResult> GetRoomCategoryById([FromRoute] int id)
+        {
 
             var cates = await _roomCategoryService.GetRoomCategories();
 
