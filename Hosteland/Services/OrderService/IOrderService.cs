@@ -12,6 +12,8 @@ namespace Hosteland.Services.OrderService
         Task<ServiceResponse<Order>> CreateOrder(Order order, List<Contract> contract);
         Task<ServiceResponse<List<ContractType>>> GetContractTypes();
         Task<ServiceResponse<ContractType>> AddContractType(ContractType type);
+        Task<ServiceResponse<List<FeeCategory>>> GetFeeCates();
+        Task<ServiceResponse<FeeCategory>> AddFeeCate(FeeCategory type);
         Task<ServiceResponse<bool>> SaveAsync();
 
     }

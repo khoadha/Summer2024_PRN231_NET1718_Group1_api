@@ -79,11 +79,9 @@ namespace HostelandAuthorization.Helper {
             CreateMap<ContractType, GetContractTypeDto>();
             CreateMap<AddContractTypeDto, ContractType>();
 
-
-            //CreateMap<AddProductDto, Product>();
-
-            //CreateMap<UpdateProductDto, Product>();
-            //CreateMap<Product, UpdateProductImageDto>();
+            // FEE CATEGORY
+            CreateMap<FeeCategory, GetFeeCateDto>();
+            CreateMap<AddFeeCateDto, FeeCategory>();
 
 
             // GLOBAL RATE

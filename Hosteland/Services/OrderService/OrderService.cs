@@ -30,8 +30,16 @@ namespace Hosteland.Services.OrderService
         public async Task<ServiceResponse<List<Order>>> GetOrdersByRoomId(int roomId)
         {
             var serviceResponse = new ServiceResponse<List<Order>>();
-            var listOrder = await _orderRepository.GetOrdersByRoomId(roomId);
-            serviceResponse.Data = listOrder;
+            try
+            {
+                var listOrder = await _orderRepository.GetOrdersByRoomId(roomId);
+                serviceResponse.Data = listOrder;
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
             return serviceResponse;
         }
         public async Task<ServiceResponse<Order>> AddOrder(Order order)
@@ -43,7 +51,7 @@ namespace Hosteland.Services.OrderService
         public async Task<ServiceResponse<Order>> CreateOrder(Order order, List<Contract> contract)
         {
             var serviceResponse = new ServiceResponse<Order>();
-            serviceResponse.Data = await _orderRepository.CreateOrder(order,contract);
+            serviceResponse.Data = await _orderRepository.CreateOrder(order, contract);
             return serviceResponse;
         }
 
@@ -63,14 +71,44 @@ namespace Hosteland.Services.OrderService
             return serviceResponse;
         }
 
-
-
         public async Task<ServiceResponse<List<ContractType>>> GetContractTypes()
         {
             var serviceResponse = new ServiceResponse<List<ContractType>>();
             try
             {
                 var list = await _orderRepository.GetContractTypes();
+                serviceResponse.Data = list;
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<FeeCategory>> AddFeeCate(FeeCategory cate)
+        {
+            var serviceResponse = new ServiceResponse<FeeCategory>();
+            try
+            {
+                var addedCate = await _orderRepository.AddFeeCate(cate);
+                serviceResponse.Data = addedCate;
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<List<FeeCategory>>> GetFeeCates()
+        {
+            var serviceResponse = new ServiceResponse<List<FeeCategory>>();
+            try
+            {
+                var list = await _orderRepository.GetFeeCates();
                 serviceResponse.Data = list;
             }
             catch (Exception ex)
