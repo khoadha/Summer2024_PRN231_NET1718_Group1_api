@@ -32,7 +32,7 @@ namespace Hosteland.Controllers.Payment
         }
 
         [HttpGet("transactions")]
-        [Authorize(Roles = AppRole.ADMIN)]
+        //[Authorize(Roles = AppRole.ADMIN)]
         public async Task<IActionResult> GetAllTransactions([FromQuery] int? count)
         {
 
@@ -41,7 +41,7 @@ namespace Hosteland.Controllers.Payment
         }
 
         [HttpPost("create/{userId}")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> CreatePaymentUrl([FromBody] PaymentRequestModel paymentRequestModel, [FromRoute] string userId)
         {
             if (!ModelState.IsValid)
@@ -64,7 +64,7 @@ namespace Hosteland.Controllers.Payment
 
             var host = Request.Headers.Referer;
 
-            if(paymentRequestModel.FeeIds.Count <= 0)
+            if (paymentRequestModel.FeeIds.Count <= 0)
             {
                 return BadRequest("Should have fee");
             }
@@ -96,7 +96,7 @@ namespace Hosteland.Controllers.Payment
                 OrderType = "Pay Fees",
                 Amount = totalAmount,
                 OrderDescription = paymentRequestModel.Description ?? string.Empty,
-                Name = requestUser.UserName,
+                Name = "",
             };
 
             var url = await _vnPayService.CreatePaymentUrl(paymentModel, userId, HttpContext, host, allFee);
@@ -107,7 +107,7 @@ namespace Hosteland.Controllers.Payment
 
 
         [HttpPut("payment-success/{txnRef}/{userId}")]
-        [Authorize]
+        //[Authorize]
         public IActionResult HandlePaymentSuccess([FromRoute] string txnRef, [FromRoute] string userId)
         {
             //txnRef = transactionId
