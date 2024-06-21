@@ -63,6 +63,7 @@ namespace HostelandOData.Helper {
 
             // ORDER
             CreateMap<GuestDto, Guest>();
+            CreateMap<Guest, GuestDto>();
             CreateMap<CreateOrderDto, Order>()
                 .ForMember(dest => dest.Guests, opt => opt.MapFrom(src => src.Guests));
             CreateMap<RoomServiceDto, RoomService>();
@@ -72,6 +73,10 @@ namespace HostelandOData.Helper {
             CreateMap<Order, GetOrderDto>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))
                 .ForMember(dest => dest.RoomName, opt => opt.MapFrom(src => src.Room.Name));
+            CreateMap<Contract, ContractDto>()
+                .ForMember(dest => dest.ContractTypeName, opt => opt.MapFrom(src => src.Type.ContractName));
+            CreateMap<RoomService, GetRoomServiceDto>()
+                .ForMember(dest => dest.ServiceName, opt => opt.MapFrom(src => src.Service.Name));
 
             // CONTRACT TYPE
             CreateMap<ContractType, GetContractTypeDto>();

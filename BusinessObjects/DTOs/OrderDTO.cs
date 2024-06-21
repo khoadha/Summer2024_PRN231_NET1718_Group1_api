@@ -15,8 +15,24 @@ namespace BusinessObjects.DTOs
         public DateTime? OrderDate { get; set; }
         public DateTime? CancelDate { get; set; }
         public OrderStatus Status { get; set; }
+        public List<GetRoomServiceDto> RoomServices { get; set; }
+        public List<ContractDto> Contracts { get; set; }
+        public List<GuestDto> Guests { get; set; }
         public string UserName { get; set; }
         public string RoomName { get; set; }
+    }
+    public class ContractDto
+    {
+        public double Cost { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public int ContractTypeId { get; set; }
+        public string ContractTypeName { get; set; }
+
+    }
+    public class GetRoomServiceDto
+    {
+        public string ServiceName { get; set; }
     }
     public class CreateOrderDto
     {
