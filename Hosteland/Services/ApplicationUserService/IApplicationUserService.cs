@@ -1,7 +1,7 @@
 ﻿using BusinessObjects.ConfigurationModels;
 using BusinessObjects.Entities;
 
-namespace Hosteland.Services.ApplicationUserService {
+namespace HostelandAuthorization.Services.ApplicationUserService {
     public interface IApplicationUserService {
         Task<ServiceResponse<List<ApplicationUser>>> GetUsers();
         Task<ServiceResponse<ApplicationUser>> GetUserByEmail(string email);

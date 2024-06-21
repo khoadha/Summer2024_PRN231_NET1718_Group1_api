@@ -1,5 +1,5 @@
 ﻿using BusinessObjects.DTOs;
-namespace Hosteland.Context
+namespace HostelandAuthorization.Context
 {
     public interface IUserContext
     {

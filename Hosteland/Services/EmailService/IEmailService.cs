@@ -1,6 +1,6 @@
 ﻿using BusinessObjects.ConfigurationModels;
 
-namespace Hosteland.Services.EmailService {
+namespace HostelandAuthorization.Services.EmailService {
     public interface IEmailService {
        void SendEmail(Message message);
     }

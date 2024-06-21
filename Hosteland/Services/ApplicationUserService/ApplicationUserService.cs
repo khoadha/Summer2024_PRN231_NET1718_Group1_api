@@ -2,7 +2,7 @@
 using BusinessObjects.Entities;
 using Repositories.ApplicationUserRepositories;
 
-namespace Hosteland.Services.ApplicationUserService {
+namespace HostelandAuthorization.Services.ApplicationUserService {
     public class ApplicationUserService : IApplicationUserService {
 
         private readonly IApplicationUserRepository _userRepo;

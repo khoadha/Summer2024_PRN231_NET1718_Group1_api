@@ -1,7 +1,7 @@
 ﻿using BusinessObjects.DTOs;
 using System.IdentityModel.Tokens.Jwt;
 
-namespace Hosteland.Context
+namespace HostelandAuthorization.Context
 {
     public class UserContext : IUserContext
     {
