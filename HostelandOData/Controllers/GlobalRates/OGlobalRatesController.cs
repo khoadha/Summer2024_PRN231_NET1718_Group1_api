@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
 using BusinessObjects.DTOs;
-using BusinessObjects.Entities;
 using HostelandOData.Services.GlobalRateService;
-using HostelandOData.Services.RoomCategoryService;
-using HostelandOData.Services.RoomService;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
