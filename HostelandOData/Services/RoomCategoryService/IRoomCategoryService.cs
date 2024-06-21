@@ -1,7 +1,7 @@
 ﻿using BusinessObjects.ConfigurationModels;
 using BusinessObjects.Entities;
 
-namespace Hosteland.Services.RoomCategoryService
+namespace HostelandOData.Services.RoomCategoryService
 {
     public interface IRoomCategoryService
     {

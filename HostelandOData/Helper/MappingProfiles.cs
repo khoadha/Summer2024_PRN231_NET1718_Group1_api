@@ -2,11 +2,10 @@
 using AutoMapper;
 using BusinessObjects.DTOs;
 
-namespace HostelandAuthorization.Helper {
+namespace HostelandOData.Helper {
     public class MappingProfiles : Profile {
         public MappingProfiles() {
-            // AUTH
-            CreateMap<UserLoginRequestDto, ApplicationUser>();
+            // PROFILE
             CreateMap<GetPersonalUserDto, ApplicationUser>();
             CreateMap<ApplicationUser, GetPersonalUserDto>();
 
@@ -47,6 +46,10 @@ namespace HostelandAuthorization.Helper {
                 .ForMember(des => des.ImgPath, act => act.MapFrom(src => src.RoomImages.Count() > 0 ? src.RoomImages.First().Url : string.Empty))
                 .ForMember(des => des.CategoryName, act => act.MapFrom(src => src.Category.CategoryName != null ? src.Category.CategoryName : string.Empty))
                 .ForMember(des => des.RoomFurniture, act => act.MapFrom(src => src.RoomFurniture));
+            
+            CreateMap<Room, GetRoomDisplayDTO>()
+                .ForMember(des => des.ImgPath, act => act.MapFrom(src => src.RoomImages.Count() > 0 ? src.RoomImages.First().Url : string.Empty))
+                .ForMember(des => des.RoomFurniture, act => act.MapFrom(src => src.RoomFurniture));
 
             CreateMap<Room, GetRoomDetailDTO>()
                 .ForMember(des => des.CategoryName, act => act.MapFrom(src => src.Category.CategoryName != null ? src.Category.CategoryName : string.Empty))
@@ -62,6 +65,9 @@ namespace HostelandAuthorization.Helper {
             //CreateMap<Product, UpdateProductImageDto>();
 
 
+            
+
+            
             // ORDER
             CreateMap<GuestDto, Guest>();
             CreateMap<CreateOrderDto, Order>()
@@ -69,7 +75,7 @@ namespace HostelandAuthorization.Helper {
             CreateMap<RoomServiceDto, RoomService>();
             CreateMap<GetOrderDto, Order>();
             CreateMap<CreateOrderDto, Contract>();
-            //.ForMember(dest => dest.ContractTypeId, opt => opt.MapFrom(src => src.RoomServices.Count > 0 ? 2 : 1));
+                //.ForMember(dest => dest.ContractTypeId, opt => opt.MapFrom(src => src.RoomServices.Count > 0 ? 2 : 1));
 
             CreateMap<Order, GetOrderDto>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))
@@ -89,7 +95,7 @@ namespace HostelandAuthorization.Helper {
             // GLOBAL RATE
             CreateMap<GlobalRate, GlobalRateDTO>();
             CreateMap<AddGlobalRateDTO, GlobalRate>();
-
+            
         }
     }
 }

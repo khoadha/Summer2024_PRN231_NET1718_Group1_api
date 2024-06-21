@@ -1,53 +1,85 @@
-﻿using HostelandAuthorization.Services.ApplicationUserService;
-using HostelandAuthorization.Services.EmailService;
+﻿using HostelandOData.Services.FurnitureService;
+using HostelandOData.Services.RoomCategoryService;
+using HostelandOData.Services.OrderService;
+using HostelandOData.Services.RoomService;
+using HostelandOData.Services.ServiceService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Repositories.ApplicationUserRepositories;
-using HostelandAuthorization.Context;
-using Hosteland.Services.FurnitureService;
-using Hosteland.Services.GlobalRateService;
-using Hosteland.Services.OrderService;
-using Hosteland.Services.RoomCategoryService;
-using Hosteland.Services.RoomService;
-using Hosteland.Services.ServiceService;
-using Hosteland.Services.VnPayService;
 using Repositories.FurnitureRepository;
-using Repositories.GlobalRateRepository;
-using Repositories.OrderRepository;
-using Repositories.PaymentTransactionRepository;
 using Repositories.RoomCategoryRepository;
+using Repositories.OrderRepository;
 using Repositories.RoomRepository;
 using Repositories.ServiceRepository;
+using Microsoft.OData.Edm;
+using Microsoft.AspNetCore.OData;
+using Microsoft.OData.ModelBuilder;
+using BusinessObjects.DTOs;
+using HostelandOData.Services.GlobalRateService;
+using Repositories.GlobalRateRepository;
 
-namespace HostelandAuthorization.Extensions
-{
+namespace HostelandOData.Extensions {
     public static class ServiceExtensions {
 
         public static void ConfigureDILifeTime(this IServiceCollection services) {
             // SERVICE
-            services.AddScoped<IEmailService, EmailService>();
-            services.AddScoped<IBlobService, BlobService>();
-            services.AddScoped<IUserContext, UserContext>();
 
-            services.AddScoped<IApplicationUserService, ApplicationUserService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IRoomService, RoomService>();
             services.AddScoped<IRoomCategoryService, RoomCategoryService>();
             services.AddScoped<IFurnitureService, FurnitureService>();
             services.AddScoped<IServiceService, ServiceService>();
-            services.AddScoped<IVnPayService, VnPayService>();
             services.AddScoped<IGlobalRateService, GlobalRateService>();
 
             // REPOSITORY
-            services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IRoomRepository, RoomRepository>();
             services.AddScoped<IRoomCategoryRepository, RoomCategoryRepository>();
             services.AddScoped<IFurnitureRepository, FurnitureRepository>();
             services.AddScoped<IServiceRepository, ServiceRepository>();
-            services.AddScoped<IPaymentTransactionRepository, PaymentTransactionRepository>();
             services.AddScoped<IGlobalRateRepository, GlobalRateRepository>();
+        }
+
+        public static void ConfigureControllers(this IServiceCollection services) {
+            services.AddControllers()
+                .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+                .AddOData(opt => opt
+                    .Select()
+                    .Filter()
+                    .Expand()
+                    .OrderBy()
+                    .Count()
+                    .SetMaxTop(100)
+                    .AddRouteComponents("odata", GetEdmModel()));
+        }
+
+        private static IEdmModel GetEdmModel() {
+            var builder = new ODataConventionModelBuilder();
+
+            builder.EntitySet<GetRoomCategoryDto>("ORoomCategories");
+
+            builder.EntitySet<GetServiceDto>("OServices");
+
+            builder.EntitySet<GetRoomDTO>("ORoomDisplays");
+            //builder.EntitySet<GetRoomDisplayDTO>("ORoomDisplays");
+            builder.EntitySet<GetRoomDetailDTO>("ORooms");
+            builder.EntitySet<GetRoomDetailDTO>("ORoomDetails");
+
+            builder.EntitySet<FurnitureDTO>("OFurnitures");
+
+            builder.EntitySet<GetOrderDto>("OOrders");
+
+            builder.EntitySet<GetContractTypeDto>("OOrders/ContractTypes");
+
+            builder.EntitySet<GetServiceNewestPriceDto>("OServices/NewestPrice");
+            builder.EntitySet<GetServiceDto>("OServices");
+
+            builder.EntitySet<GlobalRateDTO>("OGlobalRates");
+            builder.EntitySet<GlobalRateDTO>("OGlobalRates/NewestRate");
+
+            builder.EnableLowerCamelCase();
+            return builder.GetEdmModel();
         }
 
         public static void ConfigureCors(this IServiceCollection services) {
@@ -63,15 +95,15 @@ namespace HostelandAuthorization.Extensions
 
         public static void ConfigureSwaggerGen(this IServiceCollection services) {
             services.AddSwaggerGen(c => {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Hosteland API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Hosteland OData", Version = "v1" });
                 //c.EnableAnnotations();
                 c.AddSecurityDefinition("BearerAuth", new OpenApiSecurityScheme {
                     Type = SecuritySchemeType.Http,
                     Scheme = JwtBearerDefaults.AuthenticationScheme.ToLowerInvariant(),
                     In = ParameterLocation.Header,
-                    Name = "Authorization",
+                    Name = "",
                     BearerFormat = "JWT",
-                    Description = "JWT Authorization header using the Bearer scheme."
+                    Description = "JWT  header using the Bearer scheme."
                 });
 
             });
@@ -95,7 +127,6 @@ namespace HostelandAuthorization.Extensions
                         jwt.TokenValidationParameters = tokenValidationParams;
                     });
         }
-
 
     }
 }

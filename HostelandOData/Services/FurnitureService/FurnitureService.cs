@@ -1,25 +1,25 @@
 ﻿using BusinessObjects.ConfigurationModels;
 using BusinessObjects.Entities;
-using Repositories.RoomCategoryRepository;
+using Repositories.FurnitureRepository;
 
-namespace Hosteland.Services.RoomCategoryService
+namespace HostelandOData.Services.FurnitureService
 {
-    public class RoomCategoryService : IRoomCategoryService
+    public class FurnitureService : IFurnitureService
     {
-        private readonly IRoomCategoryRepository _repo;
+        private readonly IFurnitureRepository _repo;
 
-        public RoomCategoryService(IRoomCategoryRepository repo)
+        public FurnitureService(IFurnitureRepository repo)
         {
             _repo = repo;
         }
 
-        public async Task<ServiceResponse<RoomCategory>> AddRoomCategory(RoomCategory RoomCategory)
+        public async Task<ServiceResponse<Furniture>> AddFurniture(Furniture furniture)
         {
-            var serviceResponse = new ServiceResponse<RoomCategory>();
+            var serviceResponse = new ServiceResponse<Furniture>();
             try
             {
-                var addedCate = await _repo.AddRoomCategory(RoomCategory);
-                serviceResponse.Data = addedCate;
+                var addedFurniture = await _repo.AddFurniture(furniture);
+                serviceResponse.Data = addedFurniture;
             }
             catch (Exception ex)
             {
@@ -29,14 +29,13 @@ namespace Hosteland.Services.RoomCategoryService
             return serviceResponse;
         }
 
- 
 
-        public async Task<ServiceResponse<List<RoomCategory>>> GetRoomCategories()
+        public async Task<ServiceResponse<List<Furniture>>> GetFurnitures()
         {
-            var serviceResponse = new ServiceResponse<List<RoomCategory>>();
+            var serviceResponse = new ServiceResponse<List<Furniture>>();
             try
             {
-                var list = await _repo.GetRoomCategories();
+                var list = await _repo.GetFurnitures();
                 serviceResponse.Data = list;
             }
             catch (Exception ex)

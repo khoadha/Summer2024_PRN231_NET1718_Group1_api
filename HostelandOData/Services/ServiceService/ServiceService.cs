@@ -2,7 +2,7 @@
 using BusinessObjects.Entities;
 using Repositories.ServiceRepository;
 
-namespace Hosteland.Services.ServiceService
+namespace HostelandOData.Services.ServiceService
 {
     public class ServiceService : IServiceService
     {

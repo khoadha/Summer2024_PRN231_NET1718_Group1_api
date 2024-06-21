@@ -1,7 +1,7 @@
 ﻿using BusinessObjects.ConfigurationModels;
 using BusinessObjects.Entities;
 
-namespace Hosteland.Services.GlobalRateService
+namespace HostelandOData.Services.GlobalRateService
 {
     public interface IGlobalRateService
     {

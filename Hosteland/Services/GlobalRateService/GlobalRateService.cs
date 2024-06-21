@@ -2,7 +2,7 @@
 using BusinessObjects.Entities;
 using Repositories.GlobalRateRepository;
 
-namespace HostelandOData.Services.GlobalRateService
+namespace Hosteland.Services.GlobalRateService
 {
     public class GlobalRateService : IGlobalRateService
     {

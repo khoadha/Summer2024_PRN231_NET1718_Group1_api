@@ -1,7 +1,7 @@
 ﻿using BusinessObjects.ConfigurationModels;
 using BusinessObjects.Entities;
 
-namespace Hosteland.Services.FurnitureService
+namespace HostelandOData.Services.FurnitureService
 {
     public interface IFurnitureService
     {
