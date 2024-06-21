@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 using HostelandOData.Services.RoomService;
 
-namespace HostelandOData.Controllers.ORoomCategories {
+namespace HostelandOData.Controllers.Rooms 
+{
 
     [Route("odata/")]
-    public class ORoomsController : ODataController {
+    public class ORoomsController : ControllerBase
+    {
 
         private readonly IMapper _mapper;
         private readonly IRoomCategoryService _roomCategoryService;

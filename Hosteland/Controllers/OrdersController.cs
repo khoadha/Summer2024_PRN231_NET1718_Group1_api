@@ -147,6 +147,8 @@ namespace Hosteland.Controllers.Orders
             depositFee.PaymentDate = orderDto.StartDate;
             depositFee.Amount = (double)(totalCost * rate.Deposit);
 
+            allFee.Add(depositFee);
+
             //create order 
             var order = _mapper.Map<CreateOrderDto, Order>(orderDto);
 
@@ -174,7 +176,7 @@ namespace Hosteland.Controllers.Orders
                     Result = false
                 });
             }
-            var createdOrder = await _orderService.CreateOrder(order, allContract);
+            var createdOrder = await _orderService.CreateOrder(order, allContract, allFee);
 
             return Ok(true);
         }

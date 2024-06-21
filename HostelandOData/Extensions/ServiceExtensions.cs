@@ -6,7 +6,6 @@ using HostelandOData.Services.ServiceService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Repositories.ApplicationUserRepositories;
 using Repositories.FurnitureRepository;
 using Repositories.RoomCategoryRepository;
 using Repositories.OrderRepository;
@@ -24,7 +23,6 @@ namespace HostelandOData.Extensions {
 
         public static void ConfigureDILifeTime(this IServiceCollection services) {
             // SERVICE
-
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IRoomService, RoomService>();
             services.AddScoped<IRoomCategoryService, RoomCategoryService>();

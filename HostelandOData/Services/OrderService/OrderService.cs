@@ -34,26 +34,14 @@ namespace HostelandOData.Services.OrderService
             serviceResponse.Data = listOrder;
             return serviceResponse;
         }
-        public async Task<ServiceResponse<Order>> AddOrder(Order order)
+        
+        public async Task<ServiceResponse<List<Fee>>> GetFeesByOrderId(int orderId)
         {
-            var serviceResponse = new ServiceResponse<Order>();
-            serviceResponse.Data = await _orderRepository.AddOrder(order);
-            return serviceResponse;
-        }
-        public async Task<ServiceResponse<Order>> CreateOrder(Order order, List<Contract> contract)
-        {
-            var serviceResponse = new ServiceResponse<Order>();
-            serviceResponse.Data = await _orderRepository.CreateOrder(order,contract);
-            return serviceResponse;
-        }
-
-        public async Task<ServiceResponse<ContractType>> AddContractType(ContractType RoomCategory)
-        {
-            var serviceResponse = new ServiceResponse<ContractType>();
+            var serviceResponse = new ServiceResponse<List<Fee>>();
             try
             {
-                var addedCate = await _orderRepository.AddContractType(RoomCategory);
-                serviceResponse.Data = addedCate;
+                var list = await _orderRepository.GetFeesByOrderId(orderId);
+                serviceResponse.Data = list;
             }
             catch (Exception ex)
             {
@@ -62,6 +50,34 @@ namespace HostelandOData.Services.OrderService
             }
             return serviceResponse;
         }
+        //public async Task<ServiceResponse<Order>> AddOrder(Order order)
+        //{
+        //    var serviceResponse = new ServiceResponse<Order>();
+        //    serviceResponse.Data = await _orderRepository.AddOrder(order);
+        //    return serviceResponse;
+        //}
+        //public async Task<ServiceResponse<Order>> CreateOrder(Order order, List<Contract> contract)
+        //{
+        //    var serviceResponse = new ServiceResponse<Order>();
+        //    serviceResponse.Data = await _orderRepository.CreateOrder(order,contract);
+        //    return serviceResponse;
+        //}
+
+        //public async Task<ServiceResponse<ContractType>> AddContractType(ContractType RoomCategory)
+        //{
+        //    var serviceResponse = new ServiceResponse<ContractType>();
+        //    try
+        //    {
+        //        var addedCate = await _orderRepository.AddContractType(RoomCategory);
+        //        serviceResponse.Data = addedCate;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        serviceResponse.Success = false;
+        //        serviceResponse.Message = ex.Message;
+        //    }
+        //    return serviceResponse;
+        //}
 
 
 

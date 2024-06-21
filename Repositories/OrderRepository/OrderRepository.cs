@@ -24,7 +24,9 @@ namespace Repositories.OrderRepository
                 .Include(o => o.Contracts)
                 .Include(o => o.User)
                 .Include(o => o.Room)
-                .Include(o => o.Guests).ToListAsync();
+                .Include(o => o.Guests)
+                .Include(o =>o.Fees)
+                .ToListAsync();
             return list;
         }
 
@@ -35,7 +37,8 @@ namespace Repositories.OrderRepository
                 .Include(o => o.Guests)
                 .Include(o => o.User)
                 .Include(o => o.Room)
-                 .FirstOrDefaultAsync(o => o.Id == id);
+                .Include(o => o.Fees)
+                .FirstOrDefaultAsync(o => o.Id == id);
 
             return order;
         }
@@ -54,12 +57,13 @@ namespace Repositories.OrderRepository
             await _context.SaveChangesAsync();
             return order;
         }
-        public async Task<Order> CreateOrder(Order order, List<Contract> contract)
+        public async Task<Order> CreateOrder(Order order, List<Contract> contract, List<Fee> fee)
         {
             order.Status = OrderStatus.Processing;
             order.RefundStatus = RefundStatus.None;
             order.OrderDate = DateTime.Now;
             var orderId = order.Id;
+
             for(var i = 0; i < contract.Count; i++)
             {
                 contract[i].OrderId = orderId;
@@ -70,6 +74,19 @@ namespace Repositories.OrderRepository
                 catch
                 {
                     throw new Exception("Add contract failed");
+                }
+            }
+            
+            for(var i = 0; i < fee.Count; i++)
+            {
+                fee[i].OrderId = orderId;
+                try
+                { 
+                    order.Fees.Add(fee[i]);
+                }
+                catch
+                {
+                    throw new Exception("Add fee failed");
                 }
             }
             _context.Order.Add(order);
@@ -148,6 +165,21 @@ namespace Repositories.OrderRepository
                 throw;
             }
             return order;
+        }
+
+        public async Task<List<Fee>> GetFees()
+        {
+            return await _context.Fees
+                .Include(f => f.FeeCategory)
+                .ToListAsync();
+        }
+        
+        public async Task<List<Fee>> GetFeesByOrderId(int orderId)
+        {
+            return await _context.Fees
+                .Include(f=> f.FeeCategory)
+                .Where(f => f.OrderId == orderId)
+                .ToListAsync();
         }
 
         public async Task<bool> SaveAsync()

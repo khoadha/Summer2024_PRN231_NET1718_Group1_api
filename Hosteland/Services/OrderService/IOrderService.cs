@@ -9,7 +9,7 @@ namespace Hosteland.Services.OrderService
         Task<ServiceResponse<Order>> GetOrderById(int id);
         Task<ServiceResponse<List<Order>>> GetOrdersByRoomId(int roomId);
         Task<ServiceResponse<Order>> AddOrder(Order order);
-        Task<ServiceResponse<Order>> CreateOrder(Order order, List<Contract> contract);
+        Task<ServiceResponse<Order>> CreateOrder(Order order, List<Contract> contract, List<Fee> fee);
         Task<ServiceResponse<List<ContractType>>> GetContractTypes();
         Task<ServiceResponse<ContractType>> AddContractType(ContractType type);
         Task<ServiceResponse<List<FeeCategory>>> GetFeeCates();

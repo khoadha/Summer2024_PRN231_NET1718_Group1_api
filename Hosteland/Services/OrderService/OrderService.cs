@@ -48,10 +48,10 @@ namespace Hosteland.Services.OrderService
             serviceResponse.Data = await _orderRepository.AddOrder(order);
             return serviceResponse;
         }
-        public async Task<ServiceResponse<Order>> CreateOrder(Order order, List<Contract> contract)
+        public async Task<ServiceResponse<Order>> CreateOrder(Order order, List<Contract> contract, List<Fee> fee)
         {
             var serviceResponse = new ServiceResponse<Order>();
-            serviceResponse.Data = await _orderRepository.CreateOrder(order, contract);
+            serviceResponse.Data = await _orderRepository.CreateOrder(order, contract, fee);
             return serviceResponse;
         }
 
