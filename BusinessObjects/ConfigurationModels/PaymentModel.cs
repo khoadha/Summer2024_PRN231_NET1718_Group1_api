@@ -9,8 +9,8 @@ namespace BusinessObjects.ConfigurationModels {
 
     public class PaymentRequestModel
     {
-        public double PaymentAmount { get; set; }
         public string? Description { get; set; }
+        public List<int> FeeIds { get; set; }
     }
 
     public class PaymentInformationModel {

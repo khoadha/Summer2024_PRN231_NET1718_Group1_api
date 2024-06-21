@@ -1,5 +1,7 @@
 ﻿using BusinessObjects.ConfigurationModels;
 using BusinessObjects.Constants;
+using BusinessObjects.Entities;
+using Hosteland.Services.OrderService;
 using Hosteland.Services.VnPayService;
 using HostelandAuthorization.Context;
 using HostelandAuthorization.Services.ApplicationUserService;
@@ -16,14 +18,17 @@ namespace Hosteland.Controllers.Payment
         private readonly IVnPayService _vnPayService;
         private readonly IApplicationUserService _accountService;
         private readonly IUserContext _userContext;
+        private readonly IOrderService _orderService;
         public PaymentsController(
             IUserContext userContext,
             IApplicationUserService accountService,
-            IVnPayService vnPayService)
+            IVnPayService vnPayService,
+            IOrderService orderService)
         {
             _accountService = accountService;
             _vnPayService = vnPayService;
             _userContext = userContext;
+            _orderService = orderService;
         }
 
         [HttpGet("transactions")]
@@ -37,31 +42,69 @@ namespace Hosteland.Controllers.Payment
 
         [HttpPost("create/{userId}")]
         [Authorize]
-        public IActionResult CreatePaymentUrl([FromBody] PaymentRequestModel paymentRequestModel, [FromRoute] string userId)
+        public async Task<IActionResult> CreatePaymentUrl([FromBody] PaymentRequestModel paymentRequestModel, [FromRoute] string userId)
         {
-
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { Result = false, Message = "Invalid data" });
+            }
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized(new AuthResult
+                {
+                    Result = false,
+                    Errors = new List<string> { "Please sign in." }
+                });
+            }
             var requestUser = _userContext.GetCurrentUser(HttpContext);
+            //if (requestUser.UserId != userId)
+            //{
+            //    return Forbid();
+            //}
 
             var host = Request.Headers.Referer;
 
-            if (requestUser.UserId != userId)
+            if(paymentRequestModel.FeeIds.Count <= 0)
             {
-                return Forbid();
+                return BadRequest("Should have fee");
             }
+            var allFee = new List<Fee>();
+
+            for (var i = 0; i < paymentRequestModel.FeeIds.Count; i++)
+            {
+                try
+                { 
+                    var fee = _orderService.GetFeeById(paymentRequestModel.FeeIds[i]).Result.Data;
+                    allFee.Add(fee);
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+            }
+
+            if (allFee == null || allFee.Count != paymentRequestModel.FeeIds.Count)
+            {
+                return BadRequest("One or more fees are invalid.");
+            }
+
+            // Calculate total amount
+            var totalAmount = allFee.Sum(f => f.Amount);
 
             var paymentModel = new PaymentInformationModel
             {
-                OrderType = "Fee",
-                Amount = paymentRequestModel.PaymentAmount,
-                OrderDescription = paymentRequestModel.Description != null ? paymentRequestModel.Description : string.Empty,
-                Name = "",
+                OrderType = "Pay Fees",
+                Amount = totalAmount,
+                OrderDescription = paymentRequestModel.Description ?? string.Empty,
+                Name = requestUser.UserName,
             };
 
-            var url = _vnPayService.CreatePaymentUrl(paymentModel, userId, HttpContext, host);
-            var response = new { url = url.Result };
+            var url = await _vnPayService.CreatePaymentUrl(paymentModel, userId, HttpContext, host, allFee);
+            var response = new { url };
 
             return Ok(response);
         }
+
 
         [HttpPut("payment-success/{txnRef}/{userId}")]
         [Authorize]
