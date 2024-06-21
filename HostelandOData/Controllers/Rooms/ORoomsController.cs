@@ -11,7 +11,6 @@ namespace HostelandOData.Controllers.Rooms
     [Route("odata/")]
     public class ORoomsController : ODataController
     {
-
         private readonly IMapper _mapper;
         private readonly IRoomCategoryService _roomCategoryService;
         private readonly IRoomService _roomService;
@@ -41,7 +40,8 @@ namespace HostelandOData.Controllers.Rooms
             return Ok(response.AsQueryable());
         }
 
-        [HttpGet("ORoomDetails({id})")]
+        /*
+         [HttpGet("ORoomDetails({id})")]
         [EnableQuery]
         public async Task<IActionResult> GetRoomById([FromRoute] int id)
         {
@@ -49,13 +49,13 @@ namespace HostelandOData.Controllers.Rooms
             var response = _mapper.Map<GetRoomDetailDTO>(rooms.Data);
             return Ok(response);
         }
+         */
 
         //Test: https://localhost:7267/odata/ORoomCategories?$select=CategoryName (Select only name) 
         [HttpGet("ORoomCategories")]
         [EnableQuery]
         public async Task<IActionResult> GetRoomCategories()
         {
-
             var cates = await _roomCategoryService.GetRoomCategories();
 
             var data = cates.Data;
@@ -65,7 +65,8 @@ namespace HostelandOData.Controllers.Rooms
             return Ok(response.AsQueryable());
         }
 
-        [HttpGet("ORoomCategories({id})")]
+        /*
+         [HttpGet("ORoomCategories({id})")]
         [EnableQuery]
         public async Task<IActionResult> GetRoomCategoryById([FromRoute] int id)
         {
@@ -78,5 +79,6 @@ namespace HostelandOData.Controllers.Rooms
 
             return Ok(response);
         }
+         */
     }
 }
