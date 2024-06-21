@@ -9,6 +9,7 @@ using Hosteland.Services.RoomService;
 using Hosteland.Services.ServiceService;
 using HostelandAuthorization.Context;
 using Microsoft.AspNetCore.Mvc;
+using System.Drawing;
 
 namespace Hosteland.Controllers.Orders
 {
@@ -17,6 +18,7 @@ namespace Hosteland.Controllers.Orders
 
     public class OrdersController : ControllerBase
     {
+        #region dependency injection
         private readonly IMapper _mapper;
         private readonly IOrderService _orderService;
         private readonly IServiceService _serviceService;
@@ -39,6 +41,7 @@ namespace Hosteland.Controllers.Orders
             _globalRateService = globalRateService;
             _userContext = userContext;
         }
+        #endregion
 
         [HttpPost]
         [Route("order/add")]
@@ -215,6 +218,7 @@ namespace Hosteland.Controllers.Orders
             return Ok(response);
         }
 
+        #region Private method 
         private async Task InitContractType()
         {
             var serviceRes = _orderService.GetContractTypes().Result;
@@ -243,40 +247,41 @@ namespace Hosteland.Controllers.Orders
             if (!cates.Any() && serviceRes.Success)
             {
                 AddFeeCateDto typeDto1 = new AddFeeCateDto();
-                typeDto1.FeeName = "Room Fee";
+                typeDto1.FeeCategoryName = "Room Fee";
                 var type1 = _mapper.Map<FeeCategory>(typeDto1);
                 await _orderService.AddFeeCate(type1);
 
                 AddFeeCateDto typeDto2 = new AddFeeCateDto();
-                typeDto2.FeeName = "Service Fee";
+                typeDto2.FeeCategoryName = "Service Fee";
                 var type2 = _mapper.Map<FeeCategory>(typeDto2);
                 await _orderService.AddFeeCate(type2);
 
                 AddFeeCateDto typeDto3 = new AddFeeCateDto();
-                typeDto3.FeeName = "Deposit Fee";
+                typeDto3.FeeCategoryName = "Deposit Fee";
                 var type3 = _mapper.Map<FeeCategory>(typeDto3);
                 await _orderService.AddFeeCate(type3);
 
                 AddFeeCateDto typeDto4 = new AddFeeCateDto();
-                typeDto4.FeeName = "Furniture Fee";
+                typeDto4.FeeCategoryName = "Furniture Fee";
                 var type4 = _mapper.Map<FeeCategory>(typeDto4);
                 await _orderService.AddFeeCate(type4);
 
                 AddFeeCateDto typeDto5 = new AddFeeCateDto();
-                typeDto5.FeeName = "Water Fee";
+                typeDto5.FeeCategoryName = "Water Fee";
                 var type5 = _mapper.Map<FeeCategory>(typeDto5);
                 await _orderService.AddFeeCate(type5);
                 
                 AddFeeCateDto typeDto6 = new AddFeeCateDto();
-                typeDto6.FeeName = "Electric Fee";
+                typeDto6.FeeCategoryName = "Electric Fee";
                 var type6 = _mapper.Map<FeeCategory>(typeDto6);
                 await _orderService.AddFeeCate(type6);
                 
                 AddFeeCateDto typeDto7 = new AddFeeCateDto();
-                typeDto7.FeeName = "Fine";
+                typeDto7.FeeCategoryName = "Fine";
                 var type7 = _mapper.Map<FeeCategory>(typeDto7);
                 await _orderService.AddFeeCate(type7);
             }
         }
+        #endregion
     }
 }

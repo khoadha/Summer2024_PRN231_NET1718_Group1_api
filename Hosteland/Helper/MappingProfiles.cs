@@ -43,10 +43,10 @@ namespace HostelandAuthorization.Helper {
                 .ForMember(dest => dest.ImgPath, opt => opt.MapFrom(src => src.Url));
 
             // ROOM
-            CreateMap<Room, GetRoomDTO>()
-                .ForMember(des => des.ImgPath, act => act.MapFrom(src => src.RoomImages.Count() > 0 ? src.RoomImages.First().Url : string.Empty))
-                .ForMember(des => des.CategoryName, act => act.MapFrom(src => src.Category.CategoryName ?? string.Empty))
-                .ForMember(des => des.RoomFurniture, act => act.MapFrom(src => src.RoomFurniture));
+            //CreateMap<Room, GetRoomDTO>()
+            //    .ForMember(des => des.ImgPath, act => act.MapFrom(src => src.RoomImages.Count() > 0 ? src.RoomImages.First().Url : string.Empty))
+            //    .ForMember(des => des.CategoryName, act => act.MapFrom(src => src.Category.CategoryName ?? string.Empty))
+            //    .ForMember(des => des.RoomFurniture, act => act.MapFrom(src => src.RoomFurniture));
 
             CreateMap<Room, GetRoomDetailDTO>()
                 .ForMember(des => des.CategoryName, act => act.MapFrom(src => src.Category.CategoryName ?? string.Empty))
@@ -75,13 +75,14 @@ namespace HostelandAuthorization.Helper {
             CreateMap<AddContractTypeDto, ContractType>();
 
             // FEE CATEGORY
-            CreateMap<FeeCategory, GetFeeCateDto>();
-            CreateMap<AddFeeCateDto, FeeCategory>();
+            CreateMap<FeeCategory, GetFeeCateDto>()
+                .ForMember(dest => dest.FeeCategoryName, opt => opt.MapFrom(src => src.Name));
+            CreateMap<AddFeeCateDto, FeeCategory>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.FeeCategoryName));
 
             // FEE
             CreateMap<Fee, GetFeeDto>()
                 .ForMember(dest => dest.FeeCategoryName, opt => opt.MapFrom(src => src.FeeCategory.Name ?? string.Empty));
-
 
             // GLOBAL RATE
             CreateMap<GlobalRate, GlobalRateDTO>();

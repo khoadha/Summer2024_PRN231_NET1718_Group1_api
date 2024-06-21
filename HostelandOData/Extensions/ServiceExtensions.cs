@@ -65,8 +65,8 @@ namespace HostelandOData.Extensions {
             builder.EntitySet<FurnitureDTO>("OFurnitures");
 
             builder.EntitySet<GetOrderDto>("OOrders");
-
             builder.EntitySet<GetContractTypeDto>("OOrders/ContractTypes");
+            builder.EntitySet<GetFeeCateDto>("OOrders/FeeCategories");
 
             builder.EntitySet<GetServiceNewestPriceDto>("OServices/NewestPrice");
             builder.EntitySet<GetServiceDto>("OServices");

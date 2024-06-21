@@ -42,17 +42,17 @@ namespace HostelandOData.Helper {
                 .ForMember(dest => dest.ImgPath, opt => opt.MapFrom(src => src.Url));
 
             // ROOM
-            CreateMap<Room, GetRoomDTO>()
-                .ForMember(des => des.ImgPath, act => act.MapFrom(src => src.RoomImages.Count() > 0 ? src.RoomImages.First().Url : string.Empty))
-                .ForMember(des => des.CategoryName, act => act.MapFrom(src => src.Category.CategoryName != null ? src.Category.CategoryName : string.Empty))
-                .ForMember(des => des.RoomFurniture, act => act.MapFrom(src => src.RoomFurniture));
+            //CreateMap<Room, GetRoomDTO>()
+            //    .ForMember(des => des.ImgPath, act => act.MapFrom(src => src.RoomImages.Count() > 0 ? src.RoomImages.First().Url : string.Empty))
+            //    .ForMember(des => des.CategoryName, act => act.MapFrom(src => src.Category.CategoryName != null ? src.Category.CategoryName : string.Empty))
+            //    .ForMember(des => des.RoomFurniture, act => act.MapFrom(src => src.RoomFurniture));
             
             CreateMap<Room, GetRoomDisplayDTO>()
                 .ForMember(des => des.ImgPath, act => act.MapFrom(src => src.RoomImages.Count() > 0 ? src.RoomImages.First().Url : string.Empty))
                 .ForMember(des => des.RoomFurniture, act => act.MapFrom(src => src.RoomFurniture));
 
             CreateMap<Room, GetRoomDetailDTO>()
-                .ForMember(des => des.CategoryName, act => act.MapFrom(src => src.Category.CategoryName != null ? src.Category.CategoryName : string.Empty))
+                .ForMember(des => des.CategoryName, act => act.MapFrom(src => src.Category.CategoryName ?? string.Empty))
                 .ForMember(des => des.RoomImages, act => act.MapFrom(src => src.RoomImages))
                 .ForMember(des => des.RoomFurniture, act => act.MapFrom(src => src.RoomFurniture));
             CreateMap<RoomFurniture, RoomFurnitureDTO>()
@@ -61,13 +61,6 @@ namespace HostelandOData.Helper {
             CreateMap<AddRoomDTO, Room>();
             CreateMap<UpdateRoomDTO, Room>();
 
-            //CreateMap<UpdateProductDto, Product>();
-            //CreateMap<Product, UpdateProductImageDto>();
-
-
-            
-
-            
             // ORDER
             CreateMap<GuestDto, Guest>();
             CreateMap<CreateOrderDto, Order>()
@@ -75,7 +68,6 @@ namespace HostelandOData.Helper {
             CreateMap<RoomServiceDto, RoomService>();
             CreateMap<GetOrderDto, Order>();
             CreateMap<CreateOrderDto, Contract>();
-                //.ForMember(dest => dest.ContractTypeId, opt => opt.MapFrom(src => src.RoomServices.Count > 0 ? 2 : 1));
 
             CreateMap<Order, GetOrderDto>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))
@@ -85,17 +77,20 @@ namespace HostelandOData.Helper {
             CreateMap<ContractType, GetContractTypeDto>();
             CreateMap<AddContractTypeDto, ContractType>();
 
+            // FEE CATEGORY
+            CreateMap<FeeCategory, GetFeeCateDto>()
+                .ForMember(dest => dest.FeeCategoryName, opt => opt.MapFrom(src => src.Name));
+            CreateMap<AddFeeCateDto, FeeCategory>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.FeeCategoryName));
 
-            //CreateMap<AddProductDto, Product>();
-
-            //CreateMap<UpdateProductDto, Product>();
-            //CreateMap<Product, UpdateProductImageDto>();
-
+            // FEE
+            CreateMap<Fee, GetFeeDto>()
+                .ForMember(dest => dest.FeeCategoryName, opt => opt.MapFrom(src => src.FeeCategory.Name ?? string.Empty));
 
             // GLOBAL RATE
             CreateMap<GlobalRate, GlobalRateDTO>();
             CreateMap<AddGlobalRateDTO, GlobalRate>();
-            
+
         }
     }
 }

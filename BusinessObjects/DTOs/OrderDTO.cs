@@ -60,12 +60,12 @@ namespace BusinessObjects.DTOs
     public class GetFeeCateDto
     {
         public int Id { get; set; }
-        public string FeeName { get; set; }
+        public string FeeCategoryName { get; set; }
     }
     public class AddFeeCateDto
     {
         [Required]
-        public string FeeName { get; set; }
+        public string FeeCategoryName { get; set; }
     }
 
     public class GetFeeDto
