@@ -49,7 +49,7 @@ namespace Hosteland.Controllers.Orders
         }
 
         [HttpPost]
-        [Route("order/create")]
+        [Route("order/create-day")]
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto orderDto)
         {
             // check model
@@ -68,11 +68,9 @@ namespace Hosteland.Controllers.Orders
             List<Contract> allContract = new List<Contract>();
             List<Fee> allFee = new List<Fee>();
 
-            // create list service CONTRACT 
+            // create list service CONTRACT and FEE 
             if (orderDto.RoomServices.Count > 0)
             {
-
-
                 // create contract for each service
                 for (int i = 0; i < orderDto.RoomServices.Count; i++)
                 {
@@ -246,9 +244,19 @@ namespace Hosteland.Controllers.Orders
                 await _orderService.AddFeeCate(type4);
 
                 AddFeeCateDto typeDto5 = new AddFeeCateDto();
-                typeDto5.FeeName = "Fine";
+                typeDto5.FeeName = "Water Fee";
                 var type5 = _mapper.Map<FeeCategory>(typeDto5);
                 await _orderService.AddFeeCate(type5);
+                
+                AddFeeCateDto typeDto6 = new AddFeeCateDto();
+                typeDto6.FeeName = "Electric Fee";
+                var type6 = _mapper.Map<FeeCategory>(typeDto6);
+                await _orderService.AddFeeCate(type6);
+                
+                AddFeeCateDto typeDto7 = new AddFeeCateDto();
+                typeDto7.FeeName = "Fine";
+                var type7 = _mapper.Map<FeeCategory>(typeDto7);
+                await _orderService.AddFeeCate(type7);
             }
         }
     }
