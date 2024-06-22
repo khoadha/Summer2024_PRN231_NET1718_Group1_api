@@ -87,6 +87,7 @@ namespace BusinessObjects.DTOs
     public class GetFeeDto
     {
         public int Id { get; set; }
+        public string Name { get; set; }
         public string FeeCategoryName { get; set; }
         public double Amount { get; set; }
         public DateTime? PaymentDate { get; set; }
