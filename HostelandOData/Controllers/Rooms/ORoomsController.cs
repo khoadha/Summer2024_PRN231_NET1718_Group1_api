@@ -40,7 +40,7 @@ namespace HostelandOData.Controllers.Rooms
             return Ok(response.AsQueryable());
         }
 
-         [HttpGet("ORoomDetails({id})")]
+        [HttpGet("ORoomDetails({id})")]
         [EnableQuery]
         public async Task<IActionResult> GetRoomById([FromRoute] int id)
         {

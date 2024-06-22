@@ -75,6 +75,9 @@ namespace BusinessObjects.Entities {
         public FeeStatus FeeStatus { get; set; }
         public virtual Order? Order { get; set; }
         public virtual FeeCategory? FeeCategory { get; set; }
+        [ForeignKey("PaymentTransactionId")]
+        public int? PaymentTransactionId { get; set; }
+        public virtual PaymentTransaction? PaymentTransaction { get; set; }
     }
 
     public class FeeCategory : BaseEntity {

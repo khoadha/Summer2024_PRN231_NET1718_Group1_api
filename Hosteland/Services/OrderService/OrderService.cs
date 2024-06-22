@@ -134,6 +134,22 @@ namespace Hosteland.Services.OrderService
             }
             return serviceResponse;
         }
+        
+        public async Task<ServiceResponse<Fee>> GetFeeById(int id)
+        {
+            var serviceResponse = new ServiceResponse<Fee>();
+            try
+            {
+                var list = _orderRepository.GetFees().Result.FirstOrDefault(x => x.Id == id);
+                serviceResponse.Data = list;
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+            return serviceResponse;
+        }
 
         public async Task<ServiceResponse<bool>> SaveAsync()
         {

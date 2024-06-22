@@ -63,12 +63,20 @@ namespace Repositories.PaymentTransactionRepository
                         if (transaction.TransactionStatus == TransactionStatus.Pending)
                         {
 
-                            user.AccountBalance += ((int)transaction.Amount);
+                            //user.AccountBalance += ((int)transaction.Amount);
+                            //_context.Users.Update(user);
 
-                            _context.Users.Update(user);
 
                             transaction.TransactionStatus = TransactionStatus.Success;
                             _context.PaymentTransactions.Update(transaction);
+                            _context.SaveChanges();
+
+                            var fees = _context.Fees.Where(f => f.PaymentTransactionId == transaction.Id).ToList();
+                            foreach (var fee in fees)
+                            {
+                                fee.FeeStatus = FeeStatus.Paid;
+                                _context.Fees.Update(fee);
+                            }
                             _context.SaveChanges();
                         }
                     }

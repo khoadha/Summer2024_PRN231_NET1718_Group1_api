@@ -38,7 +38,7 @@ namespace Hosteland.Services.VnPayService
         }
 
 
-        public async Task<string> CreatePaymentUrl(PaymentInformationModel model, string userId, HttpContext context, string host)
+        public async Task<string> CreatePaymentUrl(PaymentInformationModel model, string userId, HttpContext context, string host, List<Fee> fees)
         {
             var timeZoneById = TimeZoneInfo.FindSystemTimeZoneById(_configuration["TimeZoneId"]);
             var timeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneById);
@@ -53,7 +53,8 @@ namespace Hosteland.Services.VnPayService
                 Amount = model.Amount,
                 Description = model.OrderDescription,
                 TransactionStatus = TransactionStatus.Pending, //Pending
-                CreatedDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneById)
+                CreatedDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneById),
+                Fees = fees
             };
 
             await _transactionRepository.AddPaymentTransaction(pt);
