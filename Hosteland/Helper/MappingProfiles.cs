@@ -88,7 +88,8 @@ namespace HostelandAuthorization.Helper {
 
             // FEE
             CreateMap<Fee, GetFeeDto>()
-                .ForMember(dest => dest.FeeCategoryName, opt => opt.MapFrom(src => src.FeeCategory.Name ?? string.Empty));
+                .ForMember(dest => dest.FeeCategoryName, opt => opt.MapFrom(src => src.FeeCategory.Name ?? string.Empty))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name ?? string.Empty));
 
             // GLOBAL RATE
             CreateMap<GlobalRate, GlobalRateDTO>();

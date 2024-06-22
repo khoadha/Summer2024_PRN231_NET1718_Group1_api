@@ -114,7 +114,7 @@ namespace Hosteland.Controllers.Orders
             await InitFeeCate();
             var feeCates = _orderService.GetFeeCates().Result.Data;
             var contractTypes = _orderService.GetContractTypes().Result.Data;
-            var dayOccupied = (orderDto.EndDate - orderDto.StartDate).Value.TotalDays +1;
+            var dayOccupied = (orderDto.EndDate - orderDto.StartDate).Value.TotalDays + 1;
 
             List<Contract> allContract = new List<Contract>();
             List<Fee> allFee = new List<Fee>();
@@ -126,8 +126,13 @@ namespace Hosteland.Controllers.Orders
                 for (int i = 0; i < orderDto.RoomServices.Count; i++)
                 {
                     var serviceId = orderDto.RoomServices[i].ServiceId;
-                    //var bookedService = _serviceService.GetServiceById(serviceId).Result.Data;
-                    var serviceCost = _serviceService.GetServiceNewestPricesByServiceId(serviceId).Result.Data.Amount;
+                    var bookedService = _serviceService.GetServiceById(serviceId).Result.Data;
+                    var bookedServicePrice = _serviceService.GetServiceNewestPricesByServiceId(serviceId).Result.Data;
+                    double serviceCost = 0;
+                    if (bookedServicePrice != null)
+                    {
+                        serviceCost = bookedServicePrice.Amount;
+                    }
 
                     Contract serviceContract = new Contract();
                     Fee serviceFee = new Fee();
@@ -197,6 +202,7 @@ namespace Hosteland.Controllers.Orders
             depositFee.FeeCategory = feeCates.FirstOrDefault(c => c.Id == 3);
             depositFee.FeeStatus = FeeStatus.Unpaid;
             depositFee.PaymentDate = orderDto.StartDate;
+            double depositRate = (double)rate.Deposit == null ? 0 : (double)rate.Deposit;
             depositFee.Amount = (double)(totalCost * rate.Deposit);
 
             allFee.Add(depositFee);
@@ -212,7 +218,7 @@ namespace Hosteland.Controllers.Orders
             var allOrders = _orderService.GetOrdersByRoomId(orderDto.RoomId).Result.Data;
             var overlapFlag = false;
             overlapFlag = allOrders.Any(order =>
-                order.Contracts.Any(c => c.EndDate >= roomContract.StartDate && c.StartDate <= roomContract.EndDate)
+                 order.Contracts.Any(c => c.EndDate >= roomContract.StartDate && c.StartDate <= roomContract.EndDate)
             );
             if (overlapFlag)
             {
