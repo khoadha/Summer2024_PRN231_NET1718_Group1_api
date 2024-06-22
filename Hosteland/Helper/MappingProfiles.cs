@@ -70,6 +70,12 @@ namespace HostelandAuthorization.Helper {
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))
                 .ForMember(dest => dest.RoomName, opt => opt.MapFrom(src => src.Room.Name));
 
+            CreateMap<Contract, ContractDto>()
+                .ForMember(dest => dest.ContractTypeName, opt => opt.MapFrom(src => src.Type.ContractName));
+            CreateMap<RoomService, GetRoomServiceDto>()
+                .ForMember(dest => dest.ServiceName, opt => opt.MapFrom(src => src.Service.Name));
+            CreateMap<Guest, GuestDto>();
+
             // CONTRACT TYPE
             CreateMap<ContractType, GetContractTypeDto>();
             CreateMap<AddContractTypeDto, ContractType>();
