@@ -48,6 +48,7 @@ namespace HostelandOData.Helper {
             //    .ForMember(des => des.RoomFurniture, act => act.MapFrom(src => src.RoomFurniture));
             
             CreateMap<Room, GetRoomDisplayDTO>()
+                .ForMember(des => des.CategoryName, act => act.MapFrom(src => src.Category.CategoryName ?? string.Empty))
                 .ForMember(des => des.ImgPath, act => act.MapFrom(src => src.RoomImages.Count() > 0 ? src.RoomImages.First().Url : string.Empty))
                 .ForMember(des => des.RoomFurniture, act => act.MapFrom(src => src.RoomFurniture));
 
