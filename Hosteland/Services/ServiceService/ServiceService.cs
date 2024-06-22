@@ -70,6 +70,22 @@ namespace Hosteland.Services.ServiceService
             return serviceResponse;
         }
         
+        public async Task<ServiceResponse<Service>> GetServiceById(int id)
+        {
+            var serviceResponse = new ServiceResponse<Service>();
+            try
+            {
+                var list = await _repo.GetServiceById(id);
+                serviceResponse.Data = list;
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+            return serviceResponse;
+        }
+        
         public async Task<ServiceResponse<List<ServicePrice>>> GetServicePricesByServiceId(int id)
         {
             var serviceResponse = new ServiceResponse<List<ServicePrice>>();
