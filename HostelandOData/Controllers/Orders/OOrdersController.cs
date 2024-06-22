@@ -26,6 +26,7 @@ namespace HostelandOData.Controllers.Orders {
             var response = _mapper.Map<List<GetOrderDto>>(orders.Data);
             return Ok(response.AsQueryable());
         }
+
         [HttpGet("OOrders({id})")]
         [EnableQuery]
         public async Task<IActionResult> GetOrderById([FromRoute] int id)

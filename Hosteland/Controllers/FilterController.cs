@@ -120,20 +120,43 @@ namespace Hosteland.Controllers {
             return searchResponse;
         }
 
-        private Uri GetODataRequestUrl(ODataRequestType type) {
-
-            //Not filter yet
+        private Uri GetODataRequestUrl(ODataRequestType type, string filter = "", string orderBy = "", int top = 0, int skip = 0) {
             var result = ODATA_SERVICE_URL;
+            string query = "";
+
+            if (!string.IsNullOrEmpty(filter)) {
+                query += $"?$filter={Uri.EscapeDataString(filter)}";
+            }
+
+            if (!string.IsNullOrEmpty(orderBy)) {
+                query += string.IsNullOrEmpty(query) ? "?" : "&";
+                query += $"$orderby={Uri.EscapeDataString(orderBy)}";
+            }
+
+            if (top > 0) {
+                query += string.IsNullOrEmpty(query) ? "?" : "&";
+                query += $"$top={top}";
+            }
+
+            if (skip > 0) {
+                query += string.IsNullOrEmpty(query) ? "?" : "&";
+                query += $"$skip={skip}";
+            }
+
+            return new Uri($"{result}/{GetEntityPath(type)}{query}");
+        }
+        private string GetEntityPath(ODataRequestType type) {
             return type switch {
-                ODataRequestType.PRODUCT => new Uri($"{result}/OFurnitures"),
-                ODataRequestType.GLOBAL_RATE => new Uri($"{result}/OGlobalRates"),
-                ODataRequestType.SERVICE => new Uri($"{result}/OServices"),
-                ODataRequestType.ROOM_CATEGORY => new Uri($"{result}/ORoomCategories"),
-                ODataRequestType.ROOM => new Uri($"{result}/ORooms"),
-                ODataRequestType.ROOM_DISPLAY => new Uri($"{result}/ORoomDisplays"),
-                ODataRequestType.ORDER => new Uri($"{result}/OOrders"),
-                _ => new Uri(""),
+                ODataRequestType.PRODUCT => "OFurnitures",
+                ODataRequestType.GLOBAL_RATE => "OGlobalRates",
+                ODataRequestType.SERVICE => "OServices",
+                ODataRequestType.ROOM_CATEGORY => "ORoomCategories",
+                ODataRequestType.ROOM => "ORooms",
+                ODataRequestType.ROOM_DISPLAY => "ORoomDisplays",
+                ODataRequestType.ORDER => "OOrders",
+                _ => "",
             };
         }
+
     }
 }
