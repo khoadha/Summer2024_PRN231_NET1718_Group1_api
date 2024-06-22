@@ -48,6 +48,7 @@ namespace HostelandOData.Helper {
             //    .ForMember(des => des.RoomFurniture, act => act.MapFrom(src => src.RoomFurniture));
             
             CreateMap<Room, GetRoomDisplayDTO>()
+                .ForMember(des => des.CategoryName, act => act.MapFrom(src => src.Category.CategoryName ?? string.Empty))
                 .ForMember(des => des.ImgPath, act => act.MapFrom(src => src.RoomImages.Count() > 0 ? src.RoomImages.First().Url : string.Empty))
                 .ForMember(des => des.RoomFurniture, act => act.MapFrom(src => src.RoomFurniture));
 
@@ -77,6 +78,7 @@ namespace HostelandOData.Helper {
                 .ForMember(dest => dest.ContractTypeName, opt => opt.MapFrom(src => src.Type.ContractName));
             CreateMap<RoomService, GetRoomServiceDto>()
                 .ForMember(dest => dest.ServiceName, opt => opt.MapFrom(src => src.Service.Name));
+            CreateMap<Guest, GuestDto>();
 
             // CONTRACT TYPE
             CreateMap<ContractType, GetContractTypeDto>();

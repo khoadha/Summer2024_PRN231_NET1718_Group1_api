@@ -56,7 +56,7 @@ namespace Hosteland.Controllers.Orders
             return Ok(createdOrder);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("order/{id}")]
         public async Task<IActionResult> GetOrderById([FromRoute] int id) {
 
             var order = await _orderService.GetOrderById(id);

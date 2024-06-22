@@ -40,16 +40,6 @@ namespace HostelandOData.Controllers.Rooms
             return Ok(response.AsQueryable());
         }
 
-        [HttpGet("ORoomDetails({id})")]
-        [EnableQuery]
-        public async Task<IActionResult> GetRoomById([FromRoute] int id)
-        {
-            var rooms = await _roomService.GetRoomById(id);
-            var response = _mapper.Map<GetRoomDetailDTO>(rooms.Data);
-            return Ok(response);
-        }
-
-        //Test: https://localhost:7267/odata/ORoomCategories?$select=CategoryName (Select only name) 
         [HttpGet("ORoomCategories")]
         [EnableQuery]
         public async Task<IActionResult> GetRoomCategories()
@@ -62,21 +52,5 @@ namespace HostelandOData.Controllers.Rooms
 
             return Ok(response.AsQueryable());
         }
-
-        /*
-         [HttpGet("ORoomCategories({id})")]
-        [EnableQuery]
-        public async Task<IActionResult> GetRoomCategoryById([FromRoute] int id)
-        {
-
-            var cates = await _roomCategoryService.GetRoomCategories();
-
-            var data = cates.Data.SingleOrDefault(a => a.Id == id);
-
-            var response = _mapper.Map<GetRoomCategoryDto>(data);
-
-            return Ok(response);
-        }
-         */
     }
 }
