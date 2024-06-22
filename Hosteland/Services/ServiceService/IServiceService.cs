@@ -6,6 +6,7 @@ namespace Hosteland.Services.ServiceService
     public interface IServiceService
     {
         Task<ServiceResponse<List<Service>>> GetServices();
+        Task<ServiceResponse<Service>> GetServiceById(int id);
         Task<ServiceResponse<Service>> AddService(Service service);
         Task<ServiceResponse<ServicePrice>> CreateServicePrice(ServicePrice servicePrice);
         Task<ServiceResponse<List<ServicePrice>>> GetServicePricesByServiceId(int id);

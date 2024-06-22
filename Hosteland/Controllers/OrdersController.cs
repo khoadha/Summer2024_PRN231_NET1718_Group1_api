@@ -117,6 +117,7 @@ namespace Hosteland.Controllers.Orders
                 for (int i = 0; i < orderDto.RoomServices.Count; i++)
                 {
                     var serviceId = orderDto.RoomServices[i].ServiceId;
+                    var bookedService = _serviceService.GetServiceById(serviceId).Result.Data;
                     var serviceCost = _serviceService.GetServiceNewestPricesByServiceId(serviceId).Result.Data.Amount;
 
                     Contract serviceContract = new Contract();
@@ -125,6 +126,7 @@ namespace Hosteland.Controllers.Orders
                     // prop for contract
                     serviceContract = _mapper.Map<CreateOrderDto, Contract>(orderDto);
 
+                    serviceContract.Name = bookedService.Name;
                     serviceContract.ContractTypeId = contractTypes.FirstOrDefault(c => c.Id == 2).Id;
                     serviceContract.Type = contractTypes.FirstOrDefault(c => c.Id == 2);
                     serviceContract.Cost = serviceCost * dayOccupied;
@@ -132,6 +134,7 @@ namespace Hosteland.Controllers.Orders
                     allContract.Add(serviceContract);
 
                     // prop for fee
+                    serviceFee.Name = bookedService.Name;
                     serviceFee.FeeCategoryId = feeCates.FirstOrDefault(c => c.Id == 2).Id;
                     serviceFee.FeeCategory = feeCates.FirstOrDefault(c => c.Id == 2);
                     serviceFee.FeeStatus = FeeStatus.Unpaid;
@@ -143,18 +146,21 @@ namespace Hosteland.Controllers.Orders
             }
 
             // create 1 room CONTRACT and FEE
+            var bookedRoom = _roomService.GetRoomById(orderDto.RoomId).Result.Data;
             var roomCost = _roomService.GetRoomById(orderDto.RoomId).Result.Data.CostPerDay;
 
             Contract roomContract = new Contract();
             Fee roomFee = new Fee();
 
             roomContract = _mapper.Map<CreateOrderDto, Contract>(orderDto);
+            roomContract.Name = bookedRoom.Name;
             roomContract.ContractTypeId = contractTypes.FirstOrDefault(c => c.Id == 1).Id;
             roomContract.Type = contractTypes.FirstOrDefault(c => c.Id == 1);
             roomContract.Cost = roomCost * dayOccupied;
 
             allContract.Add(roomContract);
 
+            roomFee.Name = bookedRoom.Name;
             roomFee.FeeCategoryId = feeCates.FirstOrDefault(c => c.Id == 1).Id;
             roomFee.FeeCategory = feeCates.FirstOrDefault(c => c.Id == 1);
             roomFee.FeeStatus = FeeStatus.Unpaid;
@@ -177,6 +183,7 @@ namespace Hosteland.Controllers.Orders
             }
 
             Fee depositFee = new Fee();
+            depositFee.Name = "Deposit";
             depositFee.FeeCategoryId = feeCates.FirstOrDefault(c => c.Id == 3).Id;
             depositFee.FeeCategory = feeCates.FirstOrDefault(c => c.Id == 3);
             depositFee.FeeStatus = FeeStatus.Unpaid;
