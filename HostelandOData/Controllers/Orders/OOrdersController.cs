@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using BusinessObjects.DTOs;
-using BusinessObjects.Entities;
 using HostelandOData.Services.OrderService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
@@ -25,15 +24,6 @@ namespace HostelandOData.Controllers.Orders {
             var orders = await _orderService.GetOrders();
             var response = _mapper.Map<List<GetOrderDto>>(orders.Data);
             return Ok(response.AsQueryable());
-        }
-
-        [HttpGet("OOrders({id})")]
-        [EnableQuery]
-        public async Task<IActionResult> GetOrderById([FromRoute] int id)
-        {
-            var rooms = await _orderService.GetOrderById(id);
-            var response = _mapper.Map<GetOrderDto>(rooms.Data);
-            return Ok(response);
         }
 
         [HttpGet("OOrders/ContractTypes")]
