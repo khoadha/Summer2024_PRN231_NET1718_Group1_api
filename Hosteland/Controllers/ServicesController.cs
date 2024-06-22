@@ -42,5 +42,16 @@ namespace Hosteland.Controllers.Services
 
             return Ok(response);
         }
+
+
+        [HttpGet]
+        [Route("newest-price")]
+        public async Task<IActionResult> GetServicesWithNewestPrice()
+        {
+            var cates = await _serviceService.GetServices();
+            var response = _mapper.Map<List<GetServiceNewestPriceDto>>(cates.Data);
+            return Ok(response.AsQueryable());
+        }
+
     }
 }
