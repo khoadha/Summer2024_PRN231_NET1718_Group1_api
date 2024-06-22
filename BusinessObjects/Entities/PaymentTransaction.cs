@@ -9,5 +9,6 @@ namespace BusinessObjects.Entities {
         public TransactionStatus? TransactionStatus { get; set; }
         public DateTime? CreatedDate { get; set; }
         public ApplicationUser? User { get; set; }
+        public virtual ICollection<Fee>? Fees { get; set; } = new List<Fee>();
     }
 }

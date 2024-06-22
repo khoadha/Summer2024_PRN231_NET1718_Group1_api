@@ -105,7 +105,7 @@ namespace Hosteland.Controllers.Orders
             await InitFeeCate();
             var feeCates = _orderService.GetFeeCates().Result.Data;
             var contractTypes = _orderService.GetContractTypes().Result.Data;
-            var dayOccupied = (orderDto.EndDate - orderDto.StartDate).Value.TotalDays;
+            var dayOccupied = (orderDto.EndDate - orderDto.StartDate).Value.TotalDays +1;
 
             List<Contract> allContract = new List<Contract>();
             List<Fee> allFee = new List<Fee>();
