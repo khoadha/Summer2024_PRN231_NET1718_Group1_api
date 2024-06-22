@@ -1,6 +1,6 @@
 ﻿namespace BusinessObjects.Enums {
     public enum ODataRequestType {
-        PRODUCT,
+        FURNITURE,
         GLOBAL_RATE,
         ORDER,
         ROOM,

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using BusinessObjects.DTOs;
-using BusinessObjects.Entities;
 using HostelandOData.Services.FurnitureService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
@@ -20,7 +19,7 @@ namespace HostelandOData.Controllers.Furnitures {
 
         [HttpGet("OFurnitures")]
         [EnableQuery]
-        public async Task<ActionResult<List<RoomCategory>>> GetFurnitures() {
+        public async Task<IActionResult> GetFurnitures() {
             var furn = await _furnitureService.GetFurnitures();
             var response = _mapper.Map<List<FurnitureDTO>>(furn.Data);
             return Ok(response.AsQueryable());

@@ -4,11 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace Hosteland.Controllers {
-
     [Route("api/v1/filter")]
     [ApiController]
     public class FilterController : ControllerBase {
-
         private readonly IHttpClientFactory _clientFactory;
         private static readonly IConfiguration config = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
@@ -20,88 +18,59 @@ namespace Hosteland.Controllers {
             _clientFactory = clientFactory;
         }
 
-
-        [HttpGet("product")]
-        public async Task<IActionResult> GetOProducts() {
-
-            var uri = GetODataRequestUrl(ODataRequestType.PRODUCT);
-
+        [HttpGet("furniture")]
+        public async Task<IActionResult> GetOFurniture([FromQuery] string? filter = "", [FromQuery] string? orderBy = "", [FromQuery] int top = 0, [FromQuery] int skip = 0) {
+            var uri = GetODataRequestUrl(ODataRequestType.FURNITURE, filter, orderBy, top, skip);
             var request = GetHttpRequestMessage(uri);
-
             var response = await GetODataCollectionResponse(request);
-
             return Ok(response.Value);
         }
 
         [HttpGet("room")]
-        public async Task<IActionResult> GetORooms() {
-
-            var uri = GetODataRequestUrl(ODataRequestType.ROOM);
-
+        public async Task<IActionResult> GetORooms([FromQuery] string? filter = "", [FromQuery] string? orderBy = "", [FromQuery] int top = 0, [FromQuery] int skip = 0) {
+            var uri = GetODataRequestUrl(ODataRequestType.ROOM, filter, orderBy, top, skip);
             var request = GetHttpRequestMessage(uri);
-
             var response = await GetODataCollectionResponse(request);
-
             return Ok(response.Value);
         }
 
         [HttpGet("room-display")]
-        public async Task<IActionResult> GetORoomsDisplay() {
-
-            var uri = GetODataRequestUrl(ODataRequestType.ROOM_DISPLAY);
-
+        public async Task<IActionResult> GetORoomsDisplay([FromQuery] string? filter = "", [FromQuery] string? orderBy = "", [FromQuery] int top = 0, [FromQuery] int skip = 0) {
+            var uri = GetODataRequestUrl(ODataRequestType.ROOM_DISPLAY, filter, orderBy, top, skip);
             var request = GetHttpRequestMessage(uri);
-
             var response = await GetODataCollectionResponse(request);
-
             return Ok(response.Value);
         }
 
         [HttpGet("room-categories")]
-        public async Task<IActionResult> GetORoomCategories() {
-
-            var uri = GetODataRequestUrl(ODataRequestType.ROOM_CATEGORY);
-
+        public async Task<IActionResult> GetORoomCategories([FromQuery] string? filter = "", [FromQuery] string? orderBy = "", [FromQuery] int top = 0, [FromQuery] int skip = 0) {
+            var uri = GetODataRequestUrl(ODataRequestType.ROOM_CATEGORY, filter, orderBy, top, skip);
             var request = GetHttpRequestMessage(uri);
-
             var response = await GetODataCollectionResponse(request);
-
             return Ok(response.Value);
         }
 
         [HttpGet("services")]
-        public async Task<IActionResult> GetOServices() {
-
-            var uri = GetODataRequestUrl(ODataRequestType.SERVICE);
-
+        public async Task<IActionResult> GetOServices([FromQuery] string? filter = "", [FromQuery] string? orderBy = "", [FromQuery] int top = 0, [FromQuery] int skip = 0) {
+            var uri = GetODataRequestUrl(ODataRequestType.SERVICE, filter, orderBy, top, skip);
             var request = GetHttpRequestMessage(uri);
-
             var response = await GetODataCollectionResponse(request);
-
             return Ok(response.Value);
         }
 
         [HttpGet("global-rates")]
-        public async Task<IActionResult> GetOGlobalRates() {
-
-            var uri = GetODataRequestUrl(ODataRequestType.GLOBAL_RATE);
-
+        public async Task<IActionResult> GetOGlobalRates([FromQuery] string? filter = "", [FromQuery] string? orderBy = "", [FromQuery] int top = 0, [FromQuery] int skip = 0) {
+            var uri = GetODataRequestUrl(ODataRequestType.GLOBAL_RATE, filter, orderBy, top, skip);
             var request = GetHttpRequestMessage(uri);
-
             var response = await GetODataCollectionResponse(request);
-
             return Ok(response.Value);
         }
 
         [HttpGet("orders")]
-        public async Task<IActionResult> GetOOrders() {
-
-            var uri = GetODataRequestUrl(ODataRequestType.ORDER);
-
+        public async Task<IActionResult> GetOOrders([FromQuery] string? filter = "", [FromQuery] string? orderBy = "", [FromQuery] int top = 0, [FromQuery] int skip = 0) {
+            var uri = GetODataRequestUrl(ODataRequestType.ORDER, filter, orderBy, top, skip);
             var request = GetHttpRequestMessage(uri);
-
             var response = await GetODataCollectionResponse(request);
-
             return Ok(response.Value);
         }
 
@@ -120,17 +89,17 @@ namespace Hosteland.Controllers {
             return searchResponse;
         }
 
-        private Uri GetODataRequestUrl(ODataRequestType type, string filter = "", string orderBy = "", int top = 0, int skip = 0) {
+        private Uri GetODataRequestUrl(ODataRequestType type, string? filter = "", string? orderBy = "", int top = 0, int skip = 0) {
             var result = ODATA_SERVICE_URL;
-            string query = "";
+            string query = "?";
 
             if (!string.IsNullOrEmpty(filter)) {
-                query += $"?$filter={Uri.EscapeDataString(filter)}";
+                query += $"filter= contains(tolower({GetEntityFieldForFilter(type)}), tolower('{Uri.EscapeDataString(filter)}'))";
             }
 
             if (!string.IsNullOrEmpty(orderBy)) {
                 query += string.IsNullOrEmpty(query) ? "?" : "&";
-                query += $"$orderby={Uri.EscapeDataString(orderBy)}";
+                query += $"$orderby={Uri.EscapeDataString(orderBy)}";   
             }
 
             if (top > 0) {
@@ -145,9 +114,23 @@ namespace Hosteland.Controllers {
 
             return new Uri($"{result}/{GetEntityPath(type)}{query}");
         }
+
+        private string GetEntityFieldForFilter(ODataRequestType type) {
+            return type switch {
+                ODataRequestType.FURNITURE => "name",
+                //ODataRequestType.GLOBAL_RATE => "OGlobalRates",
+                ODataRequestType.SERVICE => "name",
+                ODataRequestType.ROOM_CATEGORY => "categoryName",
+                ODataRequestType.ROOM => "name",
+                ODataRequestType.ROOM_DISPLAY => "name",
+                //ODataRequestType.ORDER => "OOrders",
+                _ => "",
+            };
+        }
+
         private string GetEntityPath(ODataRequestType type) {
             return type switch {
-                ODataRequestType.PRODUCT => "OFurnitures",
+                ODataRequestType.FURNITURE => "OFurnitures",
                 ODataRequestType.GLOBAL_RATE => "OGlobalRates",
                 ODataRequestType.SERVICE => "OServices",
                 ODataRequestType.ROOM_CATEGORY => "ORoomCategories",
@@ -157,6 +140,5 @@ namespace Hosteland.Controllers {
                 _ => "",
             };
         }
-
     }
 }
