@@ -27,7 +27,7 @@ namespace BusinessObjects.DTOs
         [Required]
         public int FurnitureId { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "Quantity must be greater than 0")]
+        [Range(0, int.MaxValue, ErrorMessage = "Quantity must be greater than or equal to 0")]
         public int Quantity { get; set; }
 
         public string FurnitureName { get; set; }

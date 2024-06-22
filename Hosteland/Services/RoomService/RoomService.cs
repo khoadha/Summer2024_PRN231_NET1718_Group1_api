@@ -89,10 +89,17 @@ namespace Hosteland.Services.RoomService
                     var existingFurniture = room.RoomFurniture.FirstOrDefault(f => f.FurnitureId == furnitureDto.FurnitureId);
                     if (existingFurniture != null)
                     {
-                        // If furniture exists in the room, update the quantity
-                        existingFurniture.Quantity += furnitureDto.Quantity;
+                        if (furnitureDto.Quantity > 0)
+                        {
+                            existingFurniture.Quantity = furnitureDto.Quantity;
+                        }
+                        else
+                        {
+                            room.RoomFurniture.Remove(existingFurniture);
+                        }
                     }
                     else
+                    if (furnitureDto.Quantity > 0)
                     {
                         var newFurniture = new RoomFurniture
                         {
