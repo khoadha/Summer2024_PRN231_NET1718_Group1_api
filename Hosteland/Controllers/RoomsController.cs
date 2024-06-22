@@ -28,6 +28,13 @@ namespace Hosteland.Controllers.Rooms
             return Ok(response);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetRoomById([FromRoute] int id) {
+            var room = await _roomService.GetRoomById(id);
+            var response = _mapper.Map<GetRoomDetailDTO>(room.Data);
+            return Ok(response);
+        } 
+
         [HttpPost]
         [Route("add-room")]
         public async Task<IActionResult> AddRoom([FromForm] AddRoomDTO roomDto)

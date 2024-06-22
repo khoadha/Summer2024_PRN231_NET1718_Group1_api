@@ -40,7 +40,6 @@ namespace HostelandOData.Controllers.Rooms
             return Ok(response.AsQueryable());
         }
 
-
         [HttpGet("ORoomDetails({id})")]
         [EnableQuery]
         public async Task<IActionResult> GetRoomById([FromRoute] int id)
@@ -49,7 +48,6 @@ namespace HostelandOData.Controllers.Rooms
             var response = _mapper.Map<GetRoomDetailDTO>(rooms.Data);
             return Ok(response);
         }
-
 
         //Test: https://localhost:7267/odata/ORoomCategories?$select=CategoryName (Select only name) 
         [HttpGet("ORoomCategories")]

@@ -56,6 +56,16 @@ namespace Hosteland.Controllers.Orders
             return Ok(createdOrder);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetOrderById([FromRoute] int id) {
+
+            var order = await _orderService.GetOrderById(id);
+
+            var response = _mapper.Map<GetOrderDto>(order.Data);
+
+            return Ok(response);
+        }
+
         [HttpGet]
         [Route("order/get-fee/{orderId}")]
         public async Task<ActionResult<List<Fee>>> GetFeesByOrderId([FromRoute] int orderId, string userId)

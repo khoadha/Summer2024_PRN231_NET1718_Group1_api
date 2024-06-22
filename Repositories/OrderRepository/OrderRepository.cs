@@ -21,11 +21,14 @@ namespace Repositories.OrderRepository
         public async Task<List<Order>> GetOrders()
         {
             var list = await _context.Order
-                .Include(o => o.Contracts)
                 .Include(o => o.User)
                 .Include(o => o.Room)
                 .Include(o => o.Guests)
                 .Include(o =>o.Fees)
+                .Include(o => o.RoomServices)
+                .ThenInclude(rs => rs.Service)
+                .Include(o => o.Contracts)
+                    .ThenInclude(c => c.Type)
                 .ToListAsync();
             return list;
         }
@@ -33,11 +36,14 @@ namespace Repositories.OrderRepository
         public async Task<Order> GetOrderById(int id)
         {
             var order = await _context.Order
-                .Include(o => o.Contracts)
-                .Include(o => o.Guests)
                 .Include(o => o.User)
                 .Include(o => o.Room)
+                .Include(o => o.Guests)
                 .Include(o => o.Fees)
+                .Include(o => o.RoomServices)
+                .ThenInclude(rs => rs.Service)
+                .Include(o => o.Contracts)
+                    .ThenInclude(c => c.Type)
                 .FirstOrDefaultAsync(o => o.Id == id);
 
             return order;
