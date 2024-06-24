@@ -41,7 +41,7 @@ namespace Hosteland.Controllers.Payment
         }
 
         [HttpPost("create/{userId}")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> CreatePaymentUrl([FromBody] PaymentRequestModel paymentRequestModel, [FromRoute] string userId)
         {
             if (!ModelState.IsValid)
@@ -105,9 +105,8 @@ namespace Hosteland.Controllers.Payment
             return Ok(response);
         }
 
-
         [HttpPut("payment-success/{txnRef}/{userId}")]
-        //[Authorize]
+        [Authorize]
         public IActionResult HandlePaymentSuccess([FromRoute] string txnRef, [FromRoute] string userId)
         {
             //txnRef = transactionId
@@ -124,22 +123,5 @@ namespace Hosteland.Controllers.Payment
 
             return NoContent();
         }
-
-        //[HttpGet("point")]
-        //[Authorize]
-        //public async Task<IActionResult> GetWemadePoint(string userId)
-        //{
-
-        //    var requestUser = _userContext.GetCurrentUser(HttpContext);
-
-        //    if (requestUser.UserId != userId)
-        //    {
-        //        return Forbid();
-        //    }
-
-        //    var response = await _accountService.GetWemadePoint(userId);
-
-        //    return Ok(response.Data);
-        //}
     }
 }
