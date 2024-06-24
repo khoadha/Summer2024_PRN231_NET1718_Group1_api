@@ -16,6 +16,13 @@ namespace BusinessObjects.ConfigurationModels {
     public class ODataCollectionResponse {
         [JsonProperty("@odata.context")]
         public string ODataContext { get; set; }
+        [JsonProperty("@odata.count")]
+        public int Count { get; set; }
         public dynamic Value { get; set; }
+    }
+
+    public class ODataPaginationResponse {
+        public int Total { get; set; }
+        public dynamic Data { get; set; }
     }
 }

@@ -96,5 +96,9 @@ namespace Repositories.PaymentTransactionRepository
         {
             return await _context.SaveChangesAsync() > 0;
         }
+
+        public async Task<List<PaymentTransaction>> GetTransactionsByUserId(string? userId) {
+            return await _context.PaymentTransactions.Where(a=>a.UserId==userId).ToListAsync();
+        }
     }
 }

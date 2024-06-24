@@ -36,10 +36,16 @@ namespace Hosteland.Controllers {
 
         [HttpGet("room-display")]
         public async Task<IActionResult> GetORoomsDisplay([FromQuery] string? filter = "", [FromQuery] string? orderBy = "", [FromQuery] int top = 0, [FromQuery] int skip = 0, [FromQuery] string? selectedDropdownValue = "") {
-            var uri = GetODataRequestUrl(ODataRequestType.ROOM_DISPLAY, filter, orderBy, top, skip, selectedDropdownValue);
+            var uri = GetODataRequestUrl(ODataRequestType.ROOM_DISPLAY, filter, orderBy, top, skip, selectedDropdownValue, true);
             var request = GetHttpRequestMessage(uri);
-            var response = await GetODataCollectionResponse(request);
-            return Ok(response.Value);
+            var oDataResponse = await GetODataCollectionResponse(request);
+
+            var response = new ODataPaginationResponse() {
+                Total = oDataResponse.Count,
+                Data = oDataResponse.Value
+            };
+
+            return Ok(response);
         }
 
         [HttpGet("room-categories")]
@@ -89,9 +95,12 @@ namespace Hosteland.Controllers {
             return searchResponse;
         }
 
-        private Uri GetODataRequestUrl(ODataRequestType type, string? filter = "", string? orderBy = "", int top = 0, int skip = 0, string? selectedDropdownValue = "") {
+        private Uri GetODataRequestUrl(ODataRequestType type, string? filter = "", string? orderBy = "", int top = 0, int skip = 0, string? selectedDropdownValue = "", bool isPaging = false) {
             var result = ODATA_SERVICE_URL;
             string query = "?";
+
+            if(isPaging)
+                query += "count=true";
 
             if (!string.IsNullOrEmpty(filter)) {
                 query += $"filter= contains(tolower({GetEntityFieldForFilter(type)}), tolower('{Uri.EscapeDataString(filter)}'))";

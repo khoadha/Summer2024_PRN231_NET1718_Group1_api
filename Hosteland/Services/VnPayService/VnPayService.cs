@@ -86,5 +86,17 @@ namespace Hosteland.Services.VnPayService
 
             return response;
         }
+
+        public async Task<ServiceResponse<List<PaymentTransaction>>> GetTransactionsByUserId(string? userId) {
+            var serviceResponse = new ServiceResponse<List<PaymentTransaction>>();
+            try {
+                var data = await _transactionRepository.GetTransactionsByUserId(userId);
+                serviceResponse.Data = data;
+            } catch (Exception ex) {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+            return serviceResponse;
+        }
     }
 }

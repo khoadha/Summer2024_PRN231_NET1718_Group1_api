@@ -1,9 +1,4 @@
 ﻿using BusinessObjects.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repositories.PaymentTransactionRepository
 {
@@ -11,6 +6,7 @@ namespace Repositories.PaymentTransactionRepository
     {
         void HandlePaymentSuccess(string txnRef);
         Task<List<PaymentTransaction>> GetPaymentTransactions(int? count);
+        Task<List<PaymentTransaction>> GetTransactionsByUserId(string? userId);
         Task<PaymentTransaction> AddPaymentTransaction(PaymentTransaction pt);
         Task<bool> SaveAsync();
     }
