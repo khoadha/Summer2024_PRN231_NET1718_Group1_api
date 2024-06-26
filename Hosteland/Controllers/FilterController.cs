@@ -100,29 +100,29 @@ namespace Hosteland.Controllers {
             string query = "?";
 
             if(isPaging)
-                query += "count=true";
+                query += "count=true&";
 
             if (!string.IsNullOrEmpty(filter)) {
                 query += $"filter= contains(tolower({GetEntityFieldForFilter(type)}), tolower('{Uri.EscapeDataString(filter)}'))";
             }
 
             if (!string.IsNullOrEmpty(selectedDropdownValue)) {
-                query += $"$filter={GetEntityFieldForDropdownSelect(type)} eq '{Uri.EscapeDataString(selectedDropdownValue)}'";
+                query += $"&filter={GetEntityFieldForDropdownSelect(type)} eq '{Uri.EscapeDataString(selectedDropdownValue)}'";
             }
 
             if (!string.IsNullOrEmpty(orderBy)) {
                 query += string.IsNullOrEmpty(query) ? "?" : "&";
-                query += $"$orderby={Uri.EscapeDataString(orderBy)}";   
+                query += $"&orderby={Uri.EscapeDataString(orderBy)}";   
             }
 
             if (top > 0) {
                 query += string.IsNullOrEmpty(query) ? "?" : "&";
-                query += $"$top={top}";
+                query += $"&top={top}";
             }
 
             if (skip > 0) {
                 query += string.IsNullOrEmpty(query) ? "?" : "&";
-                query += $"$skip={skip}";
+                query += $"&skip={skip}";
             }
 
             return new Uri($"{result}/{GetEntityPath(type)}{query}");
