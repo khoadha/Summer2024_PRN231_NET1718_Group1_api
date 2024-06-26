@@ -19,13 +19,12 @@ namespace Hosteland.Controllers.Services
             _serviceService = serviceService;
         }
 
-        [HttpPost]
-        [Route("add-service")]
-        public async Task<ActionResult<Service>> AddService(AddServiceDto addServiceDto)
+        [HttpPost("add-service")]
+        public async Task<ActionResult<Service>> AddService([FromForm] AddServiceDto addServiceDto)
         {
             var cate = _mapper.Map<Service>(addServiceDto);
 
-            var serviceResponse = await _serviceService.AddService(cate);
+            var serviceResponse = await _serviceService.AddService(cate, addServiceDto.Image);
             var response = _mapper.Map<GetServiceDto>(serviceResponse.Data);
 
             return Ok(response);

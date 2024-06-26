@@ -7,7 +7,7 @@ namespace Hosteland.Services.ServiceService
     {
         Task<ServiceResponse<List<Service>>> GetServices();
         Task<ServiceResponse<Service>> GetServiceById(int id);
-        Task<ServiceResponse<Service>> AddService(Service service);
+        Task<ServiceResponse<Service>> AddService(Service service, IFormFile imgFile);
         Task<ServiceResponse<ServicePrice>> CreateServicePrice(ServicePrice servicePrice);
         Task<ServiceResponse<List<ServicePrice>>> GetServicePricesByServiceId(int id);
         Task<ServiceResponse<ServicePrice>> GetServiceNewestPricesByServiceId(int id);

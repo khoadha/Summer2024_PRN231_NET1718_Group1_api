@@ -1,4 +1,4 @@
-﻿namespace HostelandAuthorization.EmailTemplate {
+﻿namespace Hosteland.EmailTemplate {
     public class ConfirmEmailTemplate {
 
         public string Subject = "Hosteland - Xác nhận email";

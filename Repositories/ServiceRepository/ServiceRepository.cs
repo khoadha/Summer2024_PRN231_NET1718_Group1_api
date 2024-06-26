@@ -17,10 +17,11 @@ namespace Repositories.ServiceRepository
             _context = context;
         }
 
-        public async Task<Service> AddService(Service service)
+        public async Task<Service> AddService(Service service, string imgPath)
         {
             try
             {
+                service.ImgPath = imgPath;
                 await _context.Services.AddAsync(service);
                 await SaveAsync();
             }

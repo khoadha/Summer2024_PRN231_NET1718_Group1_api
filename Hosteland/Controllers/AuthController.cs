@@ -13,12 +13,12 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text.Encodings.Web;
 using System.Text;
-using HostelandAuthorization.Services.ApplicationUserService;
-using HostelandAuthorization.Services.EmailService;
+using Hosteland.Services.ApplicationUserService;
+using Hosteland.Services.EmailService;
 using Microsoft.EntityFrameworkCore;
-using HostelandAuthorization.EmailTemplate;
+using Hosteland.EmailTemplate;
 
-namespace HostelandAuthorization.Controllers {
+namespace Hosteland.Controllers {
 
     [ApiController]
     [Route("api/v1/")]

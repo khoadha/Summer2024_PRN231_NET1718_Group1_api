@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BusinessObjects.DTOs
 {
@@ -12,6 +8,8 @@ namespace BusinessObjects.DTOs
         public int Id { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
+        public string? ImgPath { get; set; }
+        public bool? IsCountPerCapita { get; set; }
     }
     public class GetServiceNewestPriceDto
     {
@@ -19,12 +17,16 @@ namespace BusinessObjects.DTOs
         public string? Name { get; set; }
         public string? Description { get; set; }
         public int? ServicePriceNumber { get; set; }
+        public string? ImgPath { get; set; }
+        public bool? IsCountPerCapita { get; set; }
     }
     public class AddServiceDto
     {
         [Required]
         public string Name { get; set; }
         public string? Description { get; set; }
+        public IFormFile? Image { get; set; }
+        public bool? IsCountPerCapita { get; set; }
     }
 
     public class ServicePriceDto

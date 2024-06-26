@@ -27,6 +27,8 @@ namespace BusinessObjects.Entities {
 
     public class Service : BaseEntity {
         public string? Name { get; set; }
+        public string? ImgPath { get; set; }
+        public bool? IsCountPerCapita { get; set; }
         public string? Description { get; set; }
         public virtual ICollection<RoomService>? RoomServices { get; set; }
         public virtual ICollection<ServicePrice>? ServicePrice { get; set; }

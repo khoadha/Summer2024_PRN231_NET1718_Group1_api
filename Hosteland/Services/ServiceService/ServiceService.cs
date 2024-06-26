@@ -7,18 +7,21 @@ namespace Hosteland.Services.ServiceService
     public class ServiceService : IServiceService
     {
         private readonly IServiceRepository _repo;
+        private readonly IBlobService _blobService;
 
-        public ServiceService(IServiceRepository repo)
+        public ServiceService(IServiceRepository repo, IBlobService blobService)
         {
             _repo = repo;
+            _blobService = blobService;
         }
 
-        public async Task<ServiceResponse<Service>> AddService(Service Service)
+        public async Task<ServiceResponse<Service>> AddService(Service service, IFormFile imgFile)
         {
             var serviceResponse = new ServiceResponse<Service>();
             try
             {
-                var addedCate = await _repo.AddService(Service);
+                var imageUrl = await _blobService.UploadFileAsync(imgFile);
+                var addedCate = await _repo.AddService(service, imageUrl);
                 serviceResponse.Data = addedCate;
             }
             catch (Exception ex)

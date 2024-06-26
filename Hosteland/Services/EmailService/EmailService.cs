@@ -3,7 +3,7 @@ using MailKit.Net.Smtp;
 using MimeKit;
 using System.Text;
 
-namespace HostelandAuthorization.Services.EmailService {
+namespace Hosteland.Services.EmailService {
     public class EmailService : IEmailService {
 
         private readonly EmailConfiguration _emailConfig;

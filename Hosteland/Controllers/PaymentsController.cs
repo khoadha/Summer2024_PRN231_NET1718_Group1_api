@@ -1,9 +1,10 @@
 ﻿using BusinessObjects.ConfigurationModels;
+using BusinessObjects.Constants;
 using BusinessObjects.Entities;
 using Hosteland.Services.OrderService;
 using Hosteland.Services.VnPayService;
-using HostelandAuthorization.Context;
-using HostelandAuthorization.Services.ApplicationUserService;
+using Hosteland.Context;
+using Hosteland.Services.ApplicationUserService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,7 +31,7 @@ namespace Hosteland.Controllers.Payment
         }
 
         [HttpGet("transactions")]
-        //[Authorize(Roles = AppRole.ADMIN)]
+        [Authorize(Roles = AppRole.ADMIN)]
         public async Task<IActionResult> GetAllTransactions([FromQuery] int? count)
         {
 
@@ -39,7 +40,6 @@ namespace Hosteland.Controllers.Payment
         }
 
         [HttpGet("transactions/{userId}")]
-        //[Authorize(Roles = AppRole.ADMIN)]
         public async Task<IActionResult> GetTransactionsByUserId([FromRoute] string? userId) {
 
             var data = await _vnPayService.GetTransactionsByUserId(userId);

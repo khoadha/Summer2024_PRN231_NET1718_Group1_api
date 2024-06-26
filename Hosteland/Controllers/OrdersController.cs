@@ -7,7 +7,7 @@ using Hosteland.Services.GlobalRateService;
 using Hosteland.Services.OrderService;
 using Hosteland.Services.RoomService;
 using Hosteland.Services.ServiceService;
-using HostelandAuthorization.Context;
+using Hosteland.Context;
 using Microsoft.AspNetCore.Mvc;
 using System.Drawing;
 

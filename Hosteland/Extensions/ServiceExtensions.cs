@@ -1,10 +1,10 @@
-﻿using HostelandAuthorization.Services.ApplicationUserService;
-using HostelandAuthorization.Services.EmailService;
+﻿using Hosteland.Services.ApplicationUserService;
+using Hosteland.Services.EmailService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Repositories.ApplicationUserRepositories;
-using HostelandAuthorization.Context;
+using Hosteland.Context;
 using Hosteland.Services.FurnitureService;
 using Hosteland.Services.GlobalRateService;
 using Hosteland.Services.OrderService;
@@ -20,7 +20,7 @@ using Repositories.RoomCategoryRepository;
 using Repositories.RoomRepository;
 using Repositories.ServiceRepository;
 
-namespace HostelandAuthorization.Extensions
+namespace Hosteland.Extensions
 {
     public static class ServiceExtensions {
 

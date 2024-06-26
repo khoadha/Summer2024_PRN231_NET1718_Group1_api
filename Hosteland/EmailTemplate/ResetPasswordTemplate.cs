@@ -1,4 +1,4 @@
-﻿namespace HostelandAuthorization.EmailTemplate {
+﻿namespace Hosteland.EmailTemplate {
     public class ResetPasswordTemplate {
 
         public string Subject = "Hosteland - Đặt lại mật khẩu";

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Text;
 using Microsoft.AspNetCore.Http.Features;
 using BusinessObjects.ConfigurationModels;
-using HostelandAuthorization.Extensions;
+using Hosteland.Extensions;
 using BusinessObjects.Entities;
 
 var builder = WebApplication.CreateBuilder(args);

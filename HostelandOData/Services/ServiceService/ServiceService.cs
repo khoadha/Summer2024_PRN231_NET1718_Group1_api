@@ -13,22 +13,6 @@ namespace HostelandOData.Services.ServiceService
             _repo = repo;
         }
 
-        public async Task<ServiceResponse<Service>> AddService(Service Service)
-        {
-            var serviceResponse = new ServiceResponse<Service>();
-            try
-            {
-                var addedCate = await _repo.AddService(Service);
-                serviceResponse.Data = addedCate;
-            }
-            catch (Exception ex)
-            {
-                serviceResponse.Success = false;
-                serviceResponse.Message = ex.Message;
-            }
-            return serviceResponse;
-        }
-
         public async Task<ServiceResponse<ServicePrice>> CreateServicePrice(ServicePrice servicePrice)
         {
             var serviceResponse = new ServiceResponse<ServicePrice>();
