@@ -11,13 +11,11 @@ using Hosteland.Context;
 using Microsoft.AspNetCore.Mvc;
 using System.Drawing;
 
-namespace Hosteland.Controllers.Orders
-{
+namespace Hosteland.Controllers.Orders {
     [ApiController]
     [Route("api/v1/")]
 
-    public class OrdersController : ControllerBase
-    {
+    public class OrdersController : ControllerBase {
         #region dependency injection
         private readonly IMapper _mapper;
         private readonly IOrderService _orderService;
@@ -32,8 +30,7 @@ namespace Hosteland.Controllers.Orders
             IServiceService serviceService,
             IRoomService roomService,
             IGlobalRateService globalRateService,
-            IUserContext userContext)
-        {
+            IUserContext userContext) {
             _mapper = mapper;
             _orderService = orderService;
             _serviceService = serviceService;
@@ -45,10 +42,8 @@ namespace Hosteland.Controllers.Orders
 
         [HttpPost]
         [Route("order/add")]
-        public async Task<IActionResult> AddOrder([FromBody] Order order)
-        {
-            if (!ModelState.IsValid)
-            {
+        public async Task<IActionResult> AddOrder([FromBody] Order order) {
+            if (!ModelState.IsValid) {
                 return BadRequest(new { Result = false, Message = "Invalid data" });
             }
 
@@ -67,8 +62,7 @@ namespace Hosteland.Controllers.Orders
         }
 
         [HttpGet("order/get-user-id/{id}")]
-        public async Task<IActionResult> GetOrderByUserId([FromRoute] string id)
-        {
+        public async Task<IActionResult> GetOrderByUserId([FromRoute] string id) {
             var order = await _orderService.GetOrders();
 
             var response = _mapper.Map<List<GetOrderDto>>(order.Data.Where(o => o.UserId == id));
@@ -77,12 +71,9 @@ namespace Hosteland.Controllers.Orders
         }
         [HttpGet]
         [Route("order/get-fee/{orderId}")]
-        public async Task<ActionResult<List<Fee>>> GetFeesByOrderId([FromRoute] int orderId, string userId)
-        {
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Unauthorized(new AuthResult
-                {
+        public async Task<ActionResult<List<Fee>>> GetFeesByOrderId([FromRoute] int orderId, string userId) {
+            if (string.IsNullOrEmpty(userId)) {
+                return Unauthorized(new AuthResult {
                     Result = false,
                     Errors = new List<string> { "Please sign in." }
                 });
@@ -101,11 +92,9 @@ namespace Hosteland.Controllers.Orders
 
         [HttpPost]
         [Route("order/create-day")]
-        public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto orderDto)
-        {
+        public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto orderDto) {
             // check model
-            if (!ModelState.IsValid)
-            {
+            if (!ModelState.IsValid) {
                 return BadRequest(new { Result = false, Message = "Invalid data" });
             }
 
@@ -115,22 +104,20 @@ namespace Hosteland.Controllers.Orders
             var feeCates = _orderService.GetFeeCates().Result.Data;
             var contractTypes = _orderService.GetContractTypes().Result.Data;
             var dayOccupied = (orderDto.EndDate - orderDto.StartDate).Value.TotalDays + 1;
+            var guestsCount = orderDto.Guests.Count;
 
             List<Contract> allContract = new List<Contract>();
             List<Fee> allFee = new List<Fee>();
 
             // create list service CONTRACT and FEE 
-            if (orderDto.RoomServices.Count > 0)
-            {
+            if (orderDto.RoomServices.Count > 0) {
                 // create contract for each service
-                for (int i = 0; i < orderDto.RoomServices.Count; i++)
-                {
+                for (int i = 0; i < orderDto.RoomServices.Count; i++) {
                     var serviceId = orderDto.RoomServices[i].ServiceId;
                     var bookedService = _serviceService.GetServiceById(serviceId).Result.Data;
                     var bookedServicePrice = _serviceService.GetServiceNewestPricesByServiceId(serviceId).Result.Data;
                     double serviceCost = 0;
-                    if (bookedServicePrice != null)
-                    {
+                    if (bookedServicePrice != null) {
                         serviceCost = bookedServicePrice.Amount;
                     }
 
@@ -153,7 +140,16 @@ namespace Hosteland.Controllers.Orders
                     serviceFee.FeeCategory = feeCates.FirstOrDefault(c => c.Id == 2);
                     serviceFee.FeeStatus = FeeStatus.Unpaid;
                     serviceFee.PaymentDate = orderDto.StartDate;
-                    serviceFee.Amount = serviceCost * dayOccupied;
+
+                    if (bookedService != null) {
+                        if (bookedService.IsCountPerCapita is true) {
+                            serviceFee.Amount = serviceCost * guestsCount * dayOccupied;
+                        } else {
+                            serviceFee.Amount = serviceCost * dayOccupied;
+                        }
+                        serviceFee.Name = bookedService.Name + " Fee";
+                    }
+
 
                     allFee.Add(serviceFee);
                 }
@@ -180,19 +176,18 @@ namespace Hosteland.Controllers.Orders
             roomFee.FeeStatus = FeeStatus.Unpaid;
             roomFee.PaymentDate = orderDto.StartDate;
             roomFee.Amount = roomCost * dayOccupied;
+            roomFee.Name = "Room Rental Fees";
 
             allFee.Add(roomFee);
 
             // create FEE deposit
             var globalServiceRes = _globalRateService.GetNewestGlobalRate().Result;
             var rate = globalServiceRes.Data;
-            if (!globalServiceRes.Success || rate == null)
-            {
+            if (!globalServiceRes.Success || rate == null) {
                 return NotFound("Rate not found");
             }
             var totalCost = roomCost;
-            foreach (var fee in allFee)
-            {
+            foreach (var fee in allFee) {
                 totalCost += fee.Amount;
             }
 
@@ -204,15 +199,14 @@ namespace Hosteland.Controllers.Orders
             depositFee.PaymentDate = orderDto.StartDate;
             double depositRate = (double)rate.Deposit == null ? 0 : (double)rate.Deposit;
             depositFee.Amount = (double)(totalCost * rate.Deposit);
-
+            depositFee.Name = "Deposit Fees";
             allFee.Add(depositFee);
 
             //create order 
             var order = _mapper.Map<CreateOrderDto, Order>(orderDto);
 
             var orderServiceRes = _orderService.GetOrdersByRoomId(orderDto.RoomId).Result;
-            if (!orderServiceRes.Success)
-            {
+            if (!orderServiceRes.Success) {
                 return BadRequest("Order not found");
             }
             var allOrders = _orderService.GetOrdersByRoomId(orderDto.RoomId).Result.Data;
@@ -220,10 +214,8 @@ namespace Hosteland.Controllers.Orders
             overlapFlag = allOrders.Any(order =>
                  order.Contracts.Any(c => c.EndDate >= roomContract.StartDate && c.StartDate <= roomContract.EndDate)
             );
-            if (overlapFlag)
-            {
-                return BadRequest(new AuthResult()
-                {
+            if (overlapFlag) {
+                return BadRequest(new AuthResult() {
                     Errors = new List<string>() { "This room is already booked on that date." },
                     Result = false
                 });
@@ -235,10 +227,8 @@ namespace Hosteland.Controllers.Orders
 
         [HttpPost]
         [Route("add-contracttype")]
-        public async Task<ActionResult<RoomCategory>> AddContractType(AddContractTypeDto roomCategoryDto)
-        {
-            if (!ModelState.IsValid)
-            {
+        public async Task<ActionResult<RoomCategory>> AddContractType(AddContractTypeDto roomCategoryDto) {
+            if (!ModelState.IsValid) {
                 return BadRequest(new { Result = false, Message = "Invalid data" });
             }
 
@@ -251,13 +241,11 @@ namespace Hosteland.Controllers.Orders
         }
 
         #region Private method 
-        private async Task InitContractType()
-        {
+        private async Task InitContractType() {
             var serviceRes = _orderService.GetContractTypes().Result;
             var contractTypes = serviceRes.Data;
 
-            if (!contractTypes.Any() && serviceRes.Success)
-            {
+            if (!contractTypes.Any() && serviceRes.Success) {
                 AddContractTypeDto typeDto = new AddContractTypeDto();
                 typeDto.ContractName = "Room Contract";
                 var type = _mapper.Map<ContractType>(typeDto);
@@ -272,12 +260,10 @@ namespace Hosteland.Controllers.Orders
             }
         }
 
-        private async Task InitFeeCate()
-        {
+        private async Task InitFeeCate() {
             var serviceRes = _orderService.GetFeeCates().Result;
             var cates = serviceRes.Data;
-            if (!cates.Any() && serviceRes.Success)
-            {
+            if (!cates.Any() && serviceRes.Success) {
                 AddFeeCateDto typeDto1 = new AddFeeCateDto();
                 typeDto1.FeeCategoryName = "Room Fee";
                 var type1 = _mapper.Map<FeeCategory>(typeDto1);
@@ -302,12 +288,12 @@ namespace Hosteland.Controllers.Orders
                 typeDto5.FeeCategoryName = "Water Fee";
                 var type5 = _mapper.Map<FeeCategory>(typeDto5);
                 await _orderService.AddFeeCate(type5);
-                
+
                 AddFeeCateDto typeDto6 = new AddFeeCateDto();
                 typeDto6.FeeCategoryName = "Electric Fee";
                 var type6 = _mapper.Map<FeeCategory>(typeDto6);
                 await _orderService.AddFeeCate(type6);
-                
+
                 AddFeeCateDto typeDto7 = new AddFeeCateDto();
                 typeDto7.FeeCategoryName = "Fine";
                 var type7 = _mapper.Map<FeeCategory>(typeDto7);

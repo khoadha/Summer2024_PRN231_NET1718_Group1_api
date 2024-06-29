@@ -10,6 +10,7 @@ namespace BusinessObjects.Entities {
         public DateTime? CancelDate { get; set; }
         public OrderStatus Status { get; set; }
         public RefundStatus RefundStatus {  get; set; }
+        public bool IsMonthly { get; set; }
         public virtual Room? Room { get; set; }
         public virtual ICollection<Contract>? Contracts { get; set; } = new List<Contract>();
         public virtual ApplicationUser? User { get; set; }

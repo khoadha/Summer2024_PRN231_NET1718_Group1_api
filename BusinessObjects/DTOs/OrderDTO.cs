@@ -48,6 +48,7 @@ namespace BusinessObjects.DTOs
         public DateTime? StartDate { get; set; }
         [Required]
         public DateTime? EndDate { get; set; }
+        public bool IsMonthly { get; set; }
     }
 
     public class GuestDto
