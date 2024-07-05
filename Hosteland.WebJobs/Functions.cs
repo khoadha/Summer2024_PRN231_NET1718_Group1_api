@@ -1,22 +1,25 @@
 ﻿using Hosteland.Services.OrderService;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace Hosteland.WebJobs {
     public class Functions {
 
         private readonly IOrderService _orderService;
-        private readonly IConfiguration _configuration;
+        private readonly ILogger<Functions> _logger;
 
-        public Functions(IOrderService orderService, IConfiguration configuration)
-        {
-            _configuration = configuration;
+        public Functions(IOrderService orderService, ILogger<Functions> logger) {
             _orderService = orderService;
+            _logger = logger;
         }
 
-        public async Task MyTimerTriggerOperation([TimerTrigger("%schedule%", RunOnStartup = false)] TimerInfo timerInfo, CancellationToken cancellationToken) {
-            await _orderService.TriggerMonthlyBill(cancellationToken);
-            Console.WriteLine(timerInfo.ScheduleStatus);
+        public async Task Trigger(
+            [TimerTrigger("0 0 15 * *", RunOnStartup = false)]
+            TimerInfo timerInfo,
+            CancellationToken cancellationToken) {
+            //if(timerInfo.IsPastDue) {
+                await _orderService.TriggerMonthlyBill(cancellationToken);
+            //}
         }
     }
 }

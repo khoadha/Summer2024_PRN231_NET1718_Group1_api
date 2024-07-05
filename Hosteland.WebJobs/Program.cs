@@ -1,14 +1,15 @@
 ﻿using Hosteland.Services.OrderService;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Repositories.OrderRepository;
 using Microsoft.EntityFrameworkCore;
 using BusinessObjects.Entities;
-using Microsoft.Extensions.Configuration;
+using Hosteland.WebJobs;
 
 var builder = new HostBuilder();
-
 
 builder.ConfigureAppConfiguration((context, config) => {
     config.AddJsonFile("Settings.job", optional: true, reloadOnChange: true);
@@ -17,25 +18,23 @@ builder.ConfigureAppConfiguration((context, config) => {
 builder.ConfigureServices((context, services) => {
     services.AddDbContext<AppDbContext>(options =>
         options.UseSqlServer(context.Configuration.GetConnectionString("DefaultConnection")));
-
-    // Register other services
     services.AddScoped<IOrderService, OrderService>();
     services.AddScoped<IOrderRepository, OrderRepository>();
+    services.AddSingleton<Functions>();
 });
 
-builder.ConfigureWebJobs(b =>
-{
+builder.ConfigureWebJobs(b => {
     b.AddAzureStorageCoreServices();
     b.AddAzureStorage();
     b.AddTimers();
 });
 
-builder.ConfigureLogging((context, b) =>
-{
+builder.ConfigureLogging((context, b) => {
     b.AddConsole();
 });
 
 var host = builder.Build();
+
 using (host) {
     await host.RunAsync();
 }
