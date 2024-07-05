@@ -1,4 +1,5 @@
 ﻿using BusinessObjects.ConfigurationModels;
+using BusinessObjects.DTOs;
 using BusinessObjects.Entities;
 
 namespace Hosteland.Services.OrderService
@@ -12,11 +13,13 @@ namespace Hosteland.Services.OrderService
         Task<ServiceResponse<Order>> CreateOrder(Order order, List<Contract> contract, List<Fee> fee);
         Task<ServiceResponse<List<ContractType>>> GetContractTypes();
         Task<ServiceResponse<ContractType>> AddContractType(ContractType type);
+        Task TriggerMonthlyBill(CancellationToken cancellationToken);
+        Task<ServiceResponse<List<Fee>>> GetDeferredElectricityFee();
+        Task UpdateAmountFee(UpdateAmountFeeRequestDTO dto);
         Task<ServiceResponse<List<FeeCategory>>> GetFeeCates();
         Task<ServiceResponse<FeeCategory>> AddFeeCate(FeeCategory type);
         Task<ServiceResponse<Fee>> GetFeeById(int id);
         Task<ServiceResponse<List<Fee>>> GetFeesByOrderId(int orderId);
         Task<ServiceResponse<bool>> SaveAsync();
-
     }
 }

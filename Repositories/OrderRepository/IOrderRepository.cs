@@ -1,4 +1,5 @@
-﻿using BusinessObjects.Entities;
+﻿using BusinessObjects.DTOs;
+using BusinessObjects.Entities;
 
 namespace Repositories.OrderRepository
 {
@@ -17,6 +18,10 @@ namespace Repositories.OrderRepository
         Task<List<FeeCategory>> GetFeeCates();
         Task<FeeCategory> AddFeeCate(FeeCategory type);
         Task<List<Fee>> GetFees();
+        Task<List<Fee>> GetDeferredElectricityFee();
+        Task UpdateAmountFee(UpdateAmountFeeRequestDTO dto);
+        Task<Fee> GetFeeById(int id);
+        Task TriggerMonthlyBill(CancellationToken cancellationToken);
         Task<List<Fee>> GetFeesByOrderId(int orderId);
         Task<bool> SaveAsync();
 

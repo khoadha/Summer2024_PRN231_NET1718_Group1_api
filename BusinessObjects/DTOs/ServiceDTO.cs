@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BusinessObjects.Enums;
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
 namespace BusinessObjects.DTOs
@@ -8,6 +9,7 @@ namespace BusinessObjects.DTOs
         public int Id { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
+        public ServiceType ServiceType { get; set; }
         public string? ImgPath { get; set; }
         public bool? IsCountPerCapita { get; set; }
     }
@@ -18,6 +20,7 @@ namespace BusinessObjects.DTOs
         public string? Description { get; set; }
         public int? ServicePriceNumber { get; set; }
         public string? ImgPath { get; set; }
+        public ServiceType? ServiceType { get; set; }
         public bool? IsCountPerCapita { get; set; }
     }
     public class AddServiceDto
@@ -26,6 +29,7 @@ namespace BusinessObjects.DTOs
         public string Name { get; set; }
         public string? Description { get; set; }
         public IFormFile? Image { get; set; }
+        public ServiceType? ServiceType { get; set; }
         public bool? IsCountPerCapita { get; set; }
     }
 

@@ -79,8 +79,6 @@ namespace HostelandOData.Services.OrderService
         //    return serviceResponse;
         //}
 
-
-
         public async Task<ServiceResponse<List<ContractType>>> GetContractTypes()
         {
             var serviceResponse = new ServiceResponse<List<ContractType>>();

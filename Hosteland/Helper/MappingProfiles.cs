@@ -90,6 +90,10 @@ namespace Hosteland.Helper {
             CreateMap<Fee, GetFeeDto>()
                 .ForMember(dest => dest.FeeCategoryName, opt => opt.MapFrom(src => src.FeeCategory.Name ?? string.Empty))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name ?? string.Empty));
+            // FEE
+            CreateMap<Fee, GetDeferredElectricityFeeDto>()
+                .ForMember(dest => dest.FeeCategoryName, opt => opt.MapFrom(src => src.FeeCategory.Name ?? string.Empty))
+                .ForMember(dest => dest.RoomName, opt => opt.MapFrom(src => src.Order.Room.Name ?? string.Empty));
 
             // GLOBAL RATE
             CreateMap<GlobalRate, GlobalRateDTO>();

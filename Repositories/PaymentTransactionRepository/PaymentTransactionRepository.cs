@@ -52,6 +52,7 @@ namespace Repositories.PaymentTransactionRepository
 
         public void HandlePaymentSuccess(string txnRef)
         {
+            using var dbTransaction = _context.Database.BeginTransaction();
             try
             {
                 PaymentTransaction transaction = _context.PaymentTransactions.First(fc => fc.VnPayTransactionId == txnRef);
@@ -85,9 +86,11 @@ namespace Repositories.PaymentTransactionRepository
                 {
                     throw new Exception("This transaction is not existed.");
                 }
+                dbTransaction.Commit();
             }
             catch (Exception ex)
             {
+                dbTransaction.Rollback();
                 throw;
             }
         }

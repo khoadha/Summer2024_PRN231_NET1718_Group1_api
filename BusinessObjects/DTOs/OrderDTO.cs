@@ -94,4 +94,17 @@ namespace BusinessObjects.DTOs
         public DateTime? PaymentDate { get; set; }
         public FeeStatus FeeStatus { get; set; }
     }
+
+    public class GetDeferredElectricityFeeDto {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string FeeCategoryName { get; set; }
+        public double Amount { get; set; }
+        public DateTime? PaymentDate { get; set; }
+        public FeeStatus FeeStatus { get; set; }
+
+        //MAP
+        public int OrderId { get; set; }
+        public string RoomName { get; set; }
+    }
 }

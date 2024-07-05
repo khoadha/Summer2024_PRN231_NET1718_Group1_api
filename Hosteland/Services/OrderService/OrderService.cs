@@ -1,5 +1,5 @@
-﻿
-using BusinessObjects.ConfigurationModels;
+﻿using BusinessObjects.ConfigurationModels;
+using BusinessObjects.DTOs;
 using BusinessObjects.Entities;
 using Repositories.OrderRepository;
 
@@ -134,13 +134,29 @@ namespace Hosteland.Services.OrderService
             }
             return serviceResponse;
         }
-        
+
+        public async Task<ServiceResponse<List<Fee>>> GetDeferredElectricityFee() {
+            var serviceResponse = new ServiceResponse<List<Fee>>();
+            try {
+                var list = await _orderRepository.GetDeferredElectricityFee();
+                serviceResponse.Data = list;
+            } catch (Exception ex) {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+            return serviceResponse;
+        }
+
+        public async Task UpdateAmountFee(UpdateAmountFeeRequestDTO dto) {
+               await _orderRepository.UpdateAmountFee(dto);
+        }
+
         public async Task<ServiceResponse<Fee>> GetFeeById(int id)
         {
             var serviceResponse = new ServiceResponse<Fee>();
             try
             {
-                var list = _orderRepository.GetFees().Result.FirstOrDefault(x => x.Id == id);
+                var list = await _orderRepository.GetFeeById(id);
                 serviceResponse.Data = list;
             }
             catch (Exception ex)
@@ -165,6 +181,10 @@ namespace Hosteland.Services.OrderService
                 serviceResponse.Message = ex.Message;
             }
             return serviceResponse;
+        }
+
+        public async Task TriggerMonthlyBill(CancellationToken cancellationToken) {
+            await _orderRepository.TriggerMonthlyBill(cancellationToken);
         }
     }
 }
