@@ -57,11 +57,19 @@ namespace Hosteland.Controllers {
         }
 
         [HttpGet("services")]
-        public async Task<IActionResult> GetOServices([FromQuery] string? filter = "", [FromQuery] string? orderBy = "", [FromQuery] int top = 0, [FromQuery] int skip = 0) {
-            var uri = GetODataRequestUrl(ODataRequestType.SERVICE, filter, orderBy, top, skip);
+        public async Task<IActionResult> GetOServices([FromQuery] string? filter = "", [FromQuery] string? orderBy = "", [FromQuery] int top = 0, [FromQuery] int skip = 0, [FromQuery] string? selectedDropdownValue = "")
+        {
+            var uri = GetODataRequestUrl(ODataRequestType.SERVICE, filter, orderBy, top, skip, selectedDropdownValue, true);
             var request = GetHttpRequestMessage(uri);
-            var response = await GetODataCollectionResponse(request);
-            return Ok(response.Value);
+            var oDataResponse = await GetODataCollectionResponse(request);
+
+            var response = new ODataPaginationResponse()
+            {
+                Total = oDataResponse.Count,
+                Data = oDataResponse.Value
+            };
+
+            return Ok(response);
         }
 
         [HttpGet("global-rates")]
@@ -138,7 +146,7 @@ namespace Hosteland.Controllers {
             return type switch {
                 //ODataRequestType.FURNITURE => "name",
                 //ODataRequestType.GLOBAL_RATE => "OGlobalRates",
-                //ODataRequestType.SERVICE => "name",
+                ODataRequestType.SERVICE => "serviceType",
                 //ODataRequestType.ROOM_CATEGORY => "categoryName",
                 ODataRequestType.ROOM => "categoryName",
                 ODataRequestType.ROOM_DISPLAY => "categoryName",

@@ -14,7 +14,7 @@ namespace Hosteland.WebJobs {
         }
 
         public async Task Trigger(
-            [TimerTrigger("0 0 15 * *", RunOnStartup = false)]
+            [TimerTrigger("0 0 * * * *", RunOnStartup = false, UseMonitor = false)]
             TimerInfo timerInfo,
             CancellationToken cancellationToken) {
             //if(timerInfo.IsPastDue) {

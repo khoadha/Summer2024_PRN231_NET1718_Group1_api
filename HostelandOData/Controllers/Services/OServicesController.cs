@@ -26,6 +26,7 @@ namespace HostelandOData.Controllers.Services {
             var response = _mapper.Map<List<GetServiceDto>>(cates.Data);
             return Ok(response.AsQueryable());
         }
+
         [HttpGet("OServicePrices({serviceId})")]
         [EnableQuery]
         public async Task<IActionResult> GetServicePricesByServiceId([FromRoute] int serviceId) {
