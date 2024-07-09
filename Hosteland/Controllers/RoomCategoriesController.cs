@@ -3,6 +3,8 @@ using BusinessObjects.Entities;
 using AutoMapper;
 using BusinessObjects.DTOs;
 using Hosteland.Services.RoomCategoryService;
+using Microsoft.AspNetCore.Authorization;
+using BusinessObjects.Constants;
 
 namespace Hosteland.Controllers.Rooms
 {
@@ -21,6 +23,7 @@ namespace Hosteland.Controllers.Rooms
 
         [HttpPost]
         [Route("add-category")]
+        [Authorize(Roles = AppRole.ADMIN)]
         public async Task<ActionResult<RoomCategory>> AddRoomCategory(AddRoomCategoryDto roomCategoryDto)
         {
             var cate = _mapper.Map<RoomCategory>(roomCategoryDto);

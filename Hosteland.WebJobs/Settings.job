@@ -1,6 +1,6 @@
 {
   //    Runs at 15th day every month
-  //"schedule": "0 0 15 * *"
+  //    "schedule": "0 0 15 * *"
 
   //                           (USE ALL CRONS BELOW FOR TESTING)
 
@@ -12,7 +12,7 @@
   //    "schedule": "0 */15 * * * *"
 
   //    Runs every hour (i.e. whenever the count of minutes is 0)
-  "schedule": "0 0 * * * *"
+        "schedule": "0 0 * * * *"
 
   //    Runs every hour from 9 AM to 5 PM
   //    "schedule": "0 0 9-17 * * *"

@@ -3,6 +3,8 @@ using BusinessObjects.DTOs;
 using BusinessObjects.Entities;
 using Hosteland.Services.ServiceService;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using BusinessObjects.Constants;
 
 namespace Hosteland.Controllers.Services
 {
@@ -20,6 +22,7 @@ namespace Hosteland.Controllers.Services
         }
 
         [HttpPost("add-service")]
+        [Authorize(Roles = AppRole.ADMIN)]
         public async Task<ActionResult<Service>> AddService([FromForm] AddServiceDto addServiceDto)
         {
             var cate = _mapper.Map<Service>(addServiceDto);
@@ -32,6 +35,7 @@ namespace Hosteland.Controllers.Services
 
         [HttpPost]
         [Route("prices/add-price")]
+        [Authorize(Roles = AppRole.ADMIN)]
         public async Task<ActionResult<Service>> AddServicePrice(AddServicePriceDto addServicePriceDto)
         {
             var cate = _mapper.Map<ServicePrice>(addServicePriceDto);

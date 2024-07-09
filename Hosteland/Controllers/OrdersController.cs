@@ -11,6 +11,8 @@ using Hosteland.Context;
 using Microsoft.AspNetCore.Mvc;
 using System.Drawing;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
+using BusinessObjects.Constants;
 
 namespace Hosteland.Controllers.Orders {
     [ApiController]
@@ -43,6 +45,7 @@ namespace Hosteland.Controllers.Orders {
 
         [HttpPost]
         [Route("order/add")]
+        [Authorize]
         public async Task<IActionResult> AddOrder([FromBody] Order order) {
             if (!ModelState.IsValid) {
                 return BadRequest(new { Result = false, Message = "Invalid data" });
@@ -53,9 +56,16 @@ namespace Hosteland.Controllers.Orders {
         }
 
         [HttpGet("order/{id}")]
+        [Authorize]
         public async Task<IActionResult> GetOrderById([FromRoute] int id) {
+            var currentUser = _userContext.GetCurrentUser(HttpContext);
 
             var order = await _orderService.GetOrderById(id);
+
+            if (currentUser.UserId != order.Data.UserId)
+            {
+                return Forbid();
+            }
 
             var response = _mapper.Map<GetOrderDto>(order.Data);
 
@@ -64,6 +74,13 @@ namespace Hosteland.Controllers.Orders {
 
         [HttpGet("order/get-user-id/{id}")]
         public async Task<IActionResult> GetOrderByUserId([FromRoute] string id) {
+            var currentUser = _userContext.GetCurrentUser(HttpContext);
+
+            if (currentUser.UserId != id)
+            {
+                return Forbid();
+            }
+
             var order = await _orderService.GetOrders();
 
             var response = _mapper.Map<List<GetOrderDto>>(order.Data.Where(o => o.UserId == id));
@@ -72,26 +89,22 @@ namespace Hosteland.Controllers.Orders {
         }
         [HttpGet]
         [Route("order/get-fee/{orderId}")]
+        [Authorize]
         public async Task<ActionResult<List<Fee>>> GetFeesByOrderId([FromRoute] int orderId, string userId) {
-            if (string.IsNullOrEmpty(userId)) {
-                return Unauthorized(new AuthResult {
-                    Result = false,
-                    Errors = new List<string> { "Please sign in." }
-                });
+            
+
+            var requestUser = _userContext.GetCurrentUser(HttpContext);
+            if (requestUser == null || requestUser.UserId != userId)
+            {
+                return Forbid();
             }
-
-            //var requestUser = _userContext.GetCurrentUser(HttpContext);
-            //if (requestUser == null || requestUser.UserId != userId)
-            //{
-            //    return Forbid();
-            //}
-
             var list = await _orderService.GetFeesByOrderId(orderId);
             var res = _mapper.Map<List<GetFeeDto>>(list.Data);
             return Ok(res);
         }
 
         [HttpGet("order/deferred-electricity-fee")]
+        [Authorize(Roles = AppRole.ADMIN)]
         public async Task<IActionResult> GetDeferredElectricityFees() {
             var list = await _orderService.GetDeferredElectricityFee();
             var res = _mapper.Map<List<GetDeferredElectricityFeeDto>>(list.Data);
@@ -99,6 +112,7 @@ namespace Hosteland.Controllers.Orders {
         }
 
         [HttpPost("order/update-amount-fee")]
+        [Authorize(Roles = AppRole.ADMIN)]
         public async Task<IActionResult> UpdateAmountFee([FromBody] UpdateAmountFeeRequestDTO dto) {
 
             if (dto is not null) {
@@ -110,8 +124,8 @@ namespace Hosteland.Controllers.Orders {
             return Ok(res);
         }
 
-        [HttpPost]
-        [Route("order")]
+        [HttpPost("order")]
+        [Authorize]
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto orderDto) {
 
             var today = DateTime.Now;

@@ -3,6 +3,8 @@ using BusinessObjects.DTOs;
 using BusinessObjects.Entities;
 using Hosteland.Services.RoomService;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using BusinessObjects.Constants;
 
 namespace Hosteland.Controllers.Rooms
 {
@@ -28,6 +30,7 @@ namespace Hosteland.Controllers.Rooms
 
         [HttpPost]
         [Route("add-room")]
+        [Authorize(Roles = AppRole.ADMIN)]
         public async Task<IActionResult> AddRoom([FromForm] AddRoomDTO roomDto)
         {
             if (!ModelState.IsValid)
@@ -43,6 +46,7 @@ namespace Hosteland.Controllers.Rooms
 
         [HttpPost]
         [Route("add-furniture-to-room")]
+        [Authorize(Roles = AppRole.ADMIN)]
         public async Task<IActionResult> AddFurnitureToRoom([FromBody] AddFurnitureToRoomDTO addFurnitureToRoomDto)
         {
             if (!ModelState.IsValid)
@@ -63,6 +67,7 @@ namespace Hosteland.Controllers.Rooms
 
         [HttpPut]
         [Route("update-room")]
+        [Authorize(Roles = AppRole.ADMIN)]
         public async Task<IActionResult> UpdateRoom([FromBody] UpdateRoomDTO updateRoomDto)
         {
             if (!ModelState.IsValid)
