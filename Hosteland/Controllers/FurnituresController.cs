@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using BusinessObjects.DTOs;
 using BusinessObjects.Entities;
+using BusinessObjects.Constants;
+using Microsoft.AspNetCore.Authorization;
 using Hosteland.Services.FurnitureService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +24,7 @@ namespace Hosteland.Controllers.Furnitures
 
         [HttpPost]
         [Route("add-furniture")]
+        [Authorize(Roles = AppRole.ADMIN)]
         public async Task<ActionResult<RoomCategory>> AddFurniture(AddFurnitureDTO dto)
         {
             var cate = _mapper.Map<Furniture>(dto);

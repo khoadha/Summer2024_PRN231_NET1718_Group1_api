@@ -40,7 +40,14 @@ namespace Hosteland.Controllers.Payment
         }
 
         [HttpGet("transactions/{userId}")]
+        [Authorize]
         public async Task<IActionResult> GetTransactionsByUserId([FromRoute] string? userId) {
+            var currentUser = _userContext.GetCurrentUser(HttpContext);
+
+            if (currentUser.UserId != userId)
+            {
+                return Forbid();
+            }
 
             var data = await _vnPayService.GetTransactionsByUserId(userId);
             return Ok(data.Data);

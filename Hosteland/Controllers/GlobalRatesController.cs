@@ -2,6 +2,8 @@
 using BusinessObjects.DTOs;
 using BusinessObjects.Entities;
 using Hosteland.Services.GlobalRateService;
+using Microsoft.AspNetCore.Authorization;
+using BusinessObjects.Constants;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,6 +24,7 @@ namespace Hosteland.Controllers.GlobalRates
 
         [HttpPost]
         [Route("add-rate")]
+        [Authorize(Roles = AppRole.ADMIN)]
         public async Task<ActionResult<GlobalRate>> AddGlobalRate(AddGlobalRateDTO addServiceDto)
         {
             var cate = _mapper.Map<GlobalRate>(addServiceDto);
