@@ -14,6 +14,11 @@ namespace Hosteland.Helper {
             CreateMap<RoomCategory, GetRoomCategoryDto>();
             CreateMap<AddRoomCategoryDto, RoomCategory>();
 
+            //REPORT
+            CreateMap<Report, GetReportDto>()
+                .ForMember(dest => dest.RoomName, opt => opt.MapFrom(src => src.Room.Name))
+                .ForMember(dest => dest.AuthorName, opt => opt.MapFrom(src => src.Author.UserName));
+
             // SERVICE
             CreateMap<Service, GetServiceDto>();
             CreateMap<Service, GetServiceNewestPriceDto>()

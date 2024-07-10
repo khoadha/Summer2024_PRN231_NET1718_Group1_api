@@ -9,6 +9,7 @@ namespace BusinessObjects.Entities {
         public DateTime? CreatedDate { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+        public string? Reply { get; set; }
         public virtual ApplicationUser? Author { get; set; }
         public virtual Room? Room { get; set; }
         public MaintainanceStatus Status { get; set; }

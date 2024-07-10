@@ -19,6 +19,8 @@ using Repositories.PaymentTransactionRepository;
 using Repositories.RoomCategoryRepository;
 using Repositories.RoomRepository;
 using Repositories.ServiceRepository;
+using Repositories.ReportRepository;
+using Hosteland.Services.ReportService;
 
 namespace Hosteland.Extensions
 {
@@ -38,6 +40,7 @@ namespace Hosteland.Extensions
             services.AddScoped<IServiceService, ServiceService>();
             services.AddScoped<IVnPayService, VnPayService>();
             services.AddScoped<IGlobalRateService, GlobalRateService>();
+            services.AddScoped<IReportService, ReportService>();
 
             // REPOSITORY
             services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
@@ -48,6 +51,7 @@ namespace Hosteland.Extensions
             services.AddScoped<IServiceRepository, ServiceRepository>();
             services.AddScoped<IPaymentTransactionRepository, PaymentTransactionRepository>();
             services.AddScoped<IGlobalRateRepository, GlobalRateRepository>();
+            services.AddScoped<IReportRepository, ReportRepository>();
         }
 
         public static void ConfigureCors(this IServiceCollection services) {
