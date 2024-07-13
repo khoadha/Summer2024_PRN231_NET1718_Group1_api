@@ -18,7 +18,8 @@ namespace Hosteland.Helper {
             CreateMap<Report, GetReportDto>()
                 .ForMember(dest => dest.RoomName, opt => opt.MapFrom(src => src.Room.Name))
                 .ForMember(dest => dest.AuthorName, opt => opt.MapFrom(src => src.Author.UserName));
-
+            CreateMap<AddReportDto, Report>();
+            CreateMap<UpdateReportDto, Report>();
             // SERVICE
             CreateMap<Service, GetServiceDto>();
             CreateMap<Service, GetServiceNewestPriceDto>()
