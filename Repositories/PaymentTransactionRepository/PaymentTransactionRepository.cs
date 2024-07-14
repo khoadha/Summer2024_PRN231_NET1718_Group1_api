@@ -103,5 +103,10 @@ namespace Repositories.PaymentTransactionRepository
         public async Task<List<PaymentTransaction>> GetTransactionsByUserId(string? userId) {
             return await _context.PaymentTransactions.Where(a=>a.UserId==userId).ToListAsync();
         }
+
+        public async Task<int> GetTotalTransactionCount()
+        {
+            return await _context.PaymentTransactions.CountAsync();
+        }
     }
 }

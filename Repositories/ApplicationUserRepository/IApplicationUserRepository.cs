@@ -7,5 +7,7 @@ namespace Repositories.ApplicationUserRepositories {
         Task<ApplicationUser> GetUserById(string id);
         Task<bool> IsUserExist(string id);
         bool Save();
+
+        Task<int> GetUsersCount();
     }
 }

@@ -26,7 +26,17 @@ namespace Hosteland.Controllers.Rooms
             var room = await _roomService.GetRoomById(id);
             var response = _mapper.Map<GetRoomDetailDTO>(room.Data);
             return Ok(response);
-        } 
+        }
+
+
+        [HttpGet]
+        [Route("get-room-count")]
+        public async Task<IActionResult> GetRoomCount()
+        {
+            var room = await _roomService.GetTotalRoom();
+            var response = room.Data;
+            return Ok(response);
+        }
 
         [HttpPost]
         [Route("add-room")]

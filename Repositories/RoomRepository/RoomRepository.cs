@@ -92,5 +92,20 @@ namespace Repositories.RoomRepository
                 .ToListAsync();
             return listProducts;
         }
+
+        public async Task<int> GetRoomCount()
+        {
+            return await _context.Rooms.CountAsync();
+        }
+
+        public async Task<int> GetAvailableRoomCount()
+        {
+            return await _context.Rooms.CountAsync(room => room.IsAvailable);
+        }
+
+        public async Task<int> GetInavailableRoomCount()
+        {
+            return await _context.Rooms.CountAsync(room => !room.IsAvailable);
+        }
     }
 }

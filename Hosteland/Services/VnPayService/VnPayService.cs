@@ -1,4 +1,5 @@
 ﻿using BusinessObjects.ConfigurationModels;
+using BusinessObjects.DTOs;
 using BusinessObjects.Entities;
 using BusinessObjects.Enums;
 using Repositories.PaymentTransactionRepository;
@@ -93,6 +94,48 @@ namespace Hosteland.Services.VnPayService
                 var data = await _transactionRepository.GetTransactionsByUserId(userId);
                 serviceResponse.Data = data;
             } catch (Exception ex) {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<List<TransactionAmountDateDTO>>> GetTransactionAmountsAndDates(int? count)
+        {
+            var serviceResponse = new ServiceResponse<List<TransactionAmountDateDTO>>();
+            try
+            {
+                var transactions = await _transactionRepository.GetPaymentTransactions(count);
+
+                var groupedTransactions = transactions
+                    .GroupBy(t => t.CreatedDate.Value.Date)
+                    .Select(g => new TransactionAmountDateDTO
+                    {
+                        CreatedDate = g.Key,
+                        Amount = g.Sum(t => t.Amount)
+                    })
+                    .ToList();
+
+                serviceResponse.Data = groupedTransactions;
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<int>> GetTotalTransactionCount()
+        {
+            var serviceResponse = new ServiceResponse<int>();
+            try
+            {
+                var totalCount = await _transactionRepository.GetTotalTransactionCount();
+                serviceResponse.Data = totalCount;
+            }
+            catch (Exception ex)
+            {
                 serviceResponse.Success = false;
                 serviceResponse.Message = ex.Message;
             }

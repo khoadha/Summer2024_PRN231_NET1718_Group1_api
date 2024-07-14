@@ -193,5 +193,20 @@ namespace Hosteland.Services.RoomService
             return serviceResponse;
         }
 
+        public async Task<ServiceResponse<GetRoomAdminDisplayDTO>> GetTotalRoom()
+        {
+            var serviceResponse = new ServiceResponse<GetRoomAdminDisplayDTO>();
+            var roomCount = await _roomRepository.GetRoomCount();
+            var roomAvailable = await _roomRepository.GetAvailableRoomCount();
+            var roomInavailable = await _roomRepository.GetInavailableRoomCount();
+            serviceResponse.Data = new GetRoomAdminDisplayDTO
+            {
+                RoomCount = roomCount,
+                RoomAvailable = roomAvailable,
+                RoomInavailable = roomInavailable
+            };
+            return serviceResponse;
+        }
+
     }
 }

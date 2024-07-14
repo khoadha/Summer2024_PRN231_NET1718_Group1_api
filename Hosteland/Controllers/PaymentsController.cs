@@ -39,6 +39,24 @@ namespace Hosteland.Controllers.Payment
             return Ok(data.Data);
         }
 
+        [HttpGet("transactions-data")]
+        //[Authorize(Roles = AppRole.ADMIN)]
+        public async Task<IActionResult> GetAllTransactionsFeeAndDate([FromQuery] int? count)
+        {
+
+            var data = await _vnPayService.GetTransactionAmountsAndDates(count);
+            return Ok(data.Data);
+        }
+
+        [HttpGet("total-transactions")]
+        //[Authorize(Roles = AppRole.ADMIN)]
+        public async Task<IActionResult> GetTotalTransactions()
+        {
+
+            var data = await _vnPayService.GetTotalTransactionCount();
+            return Ok(data.Data);
+        }
+
         [HttpGet("transactions/{userId}")]
         [Authorize]
         public async Task<IActionResult> GetTransactionsByUserId([FromRoute] string? userId) {

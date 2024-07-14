@@ -34,5 +34,16 @@ namespace Hosteland.Controllers.Furnitures
 
             return Ok(response);
         }
+
+        [HttpGet]
+        [Route("get-furniture-count")]
+        //[Authorize(Roles = AppRole.ADMIN)]
+        public async Task<ActionResult<int>> GetFurnitureCount()
+        {
+            var serviceResponse = await _furnitureService.GetFurnituresTotal();
+            var response = serviceResponse.Data;
+
+            return Ok(response);
+        }
     }
 }

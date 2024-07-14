@@ -12,5 +12,6 @@ namespace Hosteland.Services.RoomService
         Task<ServiceResponse<Room>> UpdateRoom(UpdateRoomDTO updateRoomDto);
         Task<ServiceResponse<Room>> GetRoomById(int id);
         Task<ServiceResponse<List<Room>>> SearchRooms(string query);
+        Task<ServiceResponse<GetRoomAdminDisplayDTO>> GetTotalRoom();
     }
 }

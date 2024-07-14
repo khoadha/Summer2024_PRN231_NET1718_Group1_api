@@ -46,6 +46,22 @@ namespace Hosteland.Services.FurnitureService
             return serviceResponse;
         }
 
+        public async Task<ServiceResponse<int>> GetFurnituresTotal()
+        {
+            var serviceResponse = new ServiceResponse<int>();
+            try
+            {
+                var count = await _repo.GetFurnituresTotal();
+                serviceResponse.Data = count;
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+            return serviceResponse;
+        }
+
         public async Task<ServiceResponse<bool>> SaveAsync()
         {
             var serviceResponse = new ServiceResponse<bool>();

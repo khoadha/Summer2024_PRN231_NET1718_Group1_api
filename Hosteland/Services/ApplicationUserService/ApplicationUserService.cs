@@ -18,6 +18,14 @@ namespace Hosteland.Services.ApplicationUserService {
             return serviceResponse;
         }
 
+        public async Task<ServiceResponse<int>> GetUsersCount()
+        {
+            var serviceResponse = new ServiceResponse<int>();
+            var count = await _userRepo.GetUsersCount();
+            serviceResponse.Data = count;
+            return serviceResponse;
+        }
+
         public async Task<ServiceResponse<ApplicationUser>> GetUserByEmail(string email) {
             var serviceResponse = new ServiceResponse<ApplicationUser>();
             var user = await _userRepo.GetUserByEmail(email);

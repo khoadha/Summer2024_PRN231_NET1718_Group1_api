@@ -96,4 +96,21 @@ namespace BusinessObjects.DTOs
         public int CategoryId { get; set; }
     }
 
+    public class GetRoomAdminDisplayDTO
+    {
+        public int RoomCount { get; set; }
+
+        public int RoomAvailable { get; set; }
+
+        public int RoomInavailable { get; set; }
+       
+    }
+
+    public class TransactionAmountDateDTO
+    {
+        public double Amount { get; set; }
+        public DateTime? CreatedDate { get; set; }
+
+    }
+
 }

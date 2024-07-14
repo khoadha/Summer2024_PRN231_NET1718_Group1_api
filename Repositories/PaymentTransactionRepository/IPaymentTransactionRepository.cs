@@ -9,5 +9,7 @@ namespace Repositories.PaymentTransactionRepository
         Task<List<PaymentTransaction>> GetTransactionsByUserId(string? userId);
         Task<PaymentTransaction> AddPaymentTransaction(PaymentTransaction pt);
         Task<bool> SaveAsync();
+
+        Task<int> GetTotalTransactionCount();
     }
 }

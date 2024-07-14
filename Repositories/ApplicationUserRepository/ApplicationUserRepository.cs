@@ -9,7 +9,11 @@ namespace Repositories.ApplicationUserRepositories {
         public ApplicationUserRepository(AppDbContext context) {
             _context = context;
         }
-
+        public async Task<int> GetUsersCount()
+        {
+            var count = await _context.Users.CountAsync();
+            return count;
+        }
         public async Task<List<ApplicationUser>> GetUsers() {
             var listUsers = await _context.Users.ToListAsync();
             return listUsers;

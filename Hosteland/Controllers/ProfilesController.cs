@@ -68,6 +68,17 @@ namespace Hosteland.Controllers.Profiles
         }
 
         [HttpGet]
+        [Route("get-totaluser")]
+        public async Task<IActionResult> GetTotalUser()
+        {
+            var count = await _applicationUserService.GetUsersCount();
+            
+            var response = count.Data;
+
+            return Ok(response);
+        }
+
+        [HttpGet]
         [Route("check-login-method/{userId}")]
         public async Task<IActionResult> CheckLoginMethod(string userId)
         {

@@ -50,5 +50,19 @@ namespace Repositories.FurnitureRepository
             return await _context.SaveChangesAsync() > 0;
 
         }
+
+        public async Task<int> GetFurnituresTotal()
+        {
+            var result = 0;
+            try
+            {
+                result = await _context.Furniture.CountAsync();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return result;
+        }
     }
 }

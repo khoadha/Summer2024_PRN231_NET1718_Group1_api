@@ -1,4 +1,5 @@
 ﻿using BusinessObjects.ConfigurationModels;
+using BusinessObjects.DTOs;
 using BusinessObjects.Entities;
 
 namespace Hosteland.Services.VnPayService
@@ -10,5 +11,8 @@ namespace Hosteland.Services.VnPayService
         Task<ServiceResponse<List<PaymentTransaction>>> GetTransactionsByUserId(string? userId);
         void HandlePaymentSuccess(string transactionId);
         PaymentResponseModel PaymentExecute(IQueryCollection collections);
+
+        Task<ServiceResponse<List<TransactionAmountDateDTO>>> GetTransactionAmountsAndDates(int? count);
+        Task<ServiceResponse<int>> GetTotalTransactionCount();
     }
 }

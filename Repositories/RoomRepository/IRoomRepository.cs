@@ -15,5 +15,8 @@ namespace Repositories.RoomRepository
         Task<bool> DeleteRoom(int roomId);
         Task<Room> FindRoomById(int id);
         Task<List<Room>> SearchRoom(string query);
+        Task<int> GetRoomCount();
+        Task<int> GetAvailableRoomCount();
+        Task<int> GetInavailableRoomCount();
     }
 }

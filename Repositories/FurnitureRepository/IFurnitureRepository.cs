@@ -12,6 +12,6 @@ namespace Repositories.FurnitureRepository
         Task<List<Furniture>> GetFurnitures();
         Task<Furniture> AddFurniture(Furniture furniture);
         Task<bool> SaveAsync();
-
+        Task<int> GetFurnituresTotal();
     }
 }
