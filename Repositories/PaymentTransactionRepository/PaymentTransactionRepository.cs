@@ -27,6 +27,32 @@ namespace Repositories.PaymentTransactionRepository
             return await _context.PaymentTransactions.ToListAsync();
         }
 
+        public async Task<List<PaymentTransaction>> GetPaymentTransactionsByDate(DateTime? fromDate, DateTime? toDate)
+        {
+            var query = _context.PaymentTransactions.AsQueryable();
+
+            if (fromDate.HasValue)
+            {
+                query = query.Where(a => a.CreatedDate >= fromDate.Value);
+            }
+
+            if (toDate.HasValue)
+            {
+                query = query.Where(a => a.CreatedDate <= toDate.Value);
+            }
+
+            return await query.ToListAsync();
+        }
+
+        public async Task<List<PaymentTransaction>> GetTopLatestTransactions()
+        {
+            return await _context.PaymentTransactions
+                                 .OrderByDescending(a => a.CreatedDate)
+                                 .Take(10)
+                                 .ToListAsync();
+        }
+
+
         public async Task<PaymentTransaction> AddPaymentTransaction(PaymentTransaction transaction)
         {
             try

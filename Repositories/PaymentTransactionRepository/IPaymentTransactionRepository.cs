@@ -11,5 +11,8 @@ namespace Repositories.PaymentTransactionRepository
         Task<bool> SaveAsync();
 
         Task<int> GetTotalTransactionCount();
+
+        Task<List<PaymentTransaction>> GetPaymentTransactionsByDate(DateTime? fromDate, DateTime? toDate);
+        Task<List<PaymentTransaction>> GetTopLatestTransactions();
     }
 }

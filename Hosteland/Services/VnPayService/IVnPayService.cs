@@ -12,7 +12,10 @@ namespace Hosteland.Services.VnPayService
         void HandlePaymentSuccess(string transactionId);
         PaymentResponseModel PaymentExecute(IQueryCollection collections);
 
-        Task<ServiceResponse<List<TransactionAmountDateDTO>>> GetTransactionAmountsAndDates(int? count);
+        Task<ServiceResponse<List<TransactionAmountDateDTO>>> GetTransactionAmountsAndDates(DateTime? fromDate, DateTime? toDate);
         Task<ServiceResponse<int>> GetTotalTransactionCount();
+
+        Task<ServiceResponse<List<PaymentTransaction>>> GetTopLatestTransactions();
+
     }
 }

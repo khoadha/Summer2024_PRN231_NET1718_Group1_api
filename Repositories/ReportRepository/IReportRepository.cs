@@ -10,5 +10,7 @@ namespace Repositories.ReportRepository
         Task<Report> UpdateReport(int id, Report report);
         Task<Report> AddReport(Report Report);
         Task<bool> SaveAsync();
+
+        Task<List<Report>> GetLatestReports();
     }
 }

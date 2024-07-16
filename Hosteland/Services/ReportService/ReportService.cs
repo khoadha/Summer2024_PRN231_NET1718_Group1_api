@@ -33,6 +33,22 @@ namespace Hosteland.Services.ReportService
             return result;
         }
 
+        public async Task<ServiceResponse<List<Report>>> GetLatestReports()
+        {
+            var result = new ServiceResponse<List<Report>>();
+            try
+            {
+                var response = await _repository.GetLatestReports();
+                result.Data = response;
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = ex.Message;
+            }
+            return result;
+        }
+
 
         public async Task<ServiceResponse<List<Report>>> GetReportsByUserId(string userId)
         {

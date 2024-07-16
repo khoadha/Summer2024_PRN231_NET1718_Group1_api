@@ -55,6 +55,16 @@ namespace Repositories.ReportRepository
             .ToListAsync();
         }
 
+        public async Task<List<Report>> GetLatestReports()
+        {
+            return await _context.Reports
+             .Include(a => a.Author)
+             .Include(a => a.Room)
+             .OrderByDescending(r => r.CreatedDate)
+             .Take(10)
+             .ToListAsync();
+        }
+
 
         public async Task<Report> UpdateReport(int id, Report report)
         {

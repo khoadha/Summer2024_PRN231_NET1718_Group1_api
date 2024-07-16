@@ -100,12 +100,12 @@ namespace Hosteland.Services.VnPayService
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<TransactionAmountDateDTO>>> GetTransactionAmountsAndDates(int? count)
+        public async Task<ServiceResponse<List<TransactionAmountDateDTO>>> GetTransactionAmountsAndDates(DateTime? fromDate, DateTime? toDate)
         {
             var serviceResponse = new ServiceResponse<List<TransactionAmountDateDTO>>();
             try
             {
-                var transactions = await _transactionRepository.GetPaymentTransactions(count);
+                var transactions = await _transactionRepository.GetPaymentTransactionsByDate(fromDate,toDate);
 
                 var groupedTransactions = transactions
                     .GroupBy(t => t.CreatedDate.Value.Date)
@@ -125,7 +125,21 @@ namespace Hosteland.Services.VnPayService
             }
             return serviceResponse;
         }
-
+        public async Task<ServiceResponse<List<PaymentTransaction>>> GetTopLatestTransactions()
+        {
+            var serviceResponse = new ServiceResponse<List<PaymentTransaction>>();
+            try
+            {
+                var data = await _transactionRepository.GetTopLatestTransactions();
+                serviceResponse.Data = data;
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+            return serviceResponse;
+        }
         public async Task<ServiceResponse<int>> GetTotalTransactionCount()
         {
             var serviceResponse = new ServiceResponse<int>();

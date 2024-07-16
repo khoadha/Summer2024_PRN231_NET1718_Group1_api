@@ -13,5 +13,7 @@ namespace Hosteland.Services.ReportService
         Task<ServiceResponse<Report>> UpdateReport(int id, Report report);
         Task<ServiceResponse<Report>> AddReport(Report Report);
         Task<ServiceResponse<bool>> SaveAsync();
+
+        Task<ServiceResponse<List<Report>>> GetLatestReports();
     }
 }

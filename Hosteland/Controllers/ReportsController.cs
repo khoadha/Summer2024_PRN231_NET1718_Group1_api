@@ -47,6 +47,14 @@ namespace Hosteland.Controllers
             return Ok(response);
         }
 
+        [HttpGet("top-reports")]
+        [Authorize(Roles = AppRole.ADMIN)]
+        public async Task<IActionResult> GetLatestReports()
+        {
+            var serviceResponse = await _reportService.GetReports();
+            var response = _mapper.Map<List<GetReportDto>>(serviceResponse.Data);
+            return Ok(response);
+        }
 
         [HttpGet("user")]
         [Authorize]
