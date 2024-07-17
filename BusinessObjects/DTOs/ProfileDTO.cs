@@ -15,6 +15,8 @@ namespace BusinessObjects.DTOs
         public string? Email { get; set; }
         public string? ImgPath { get; set; }
         public decimal? AccountBalance { get; set; }
+        public string? Role { get; set; }
+        public bool? IsStaff { get; set; }
     }
 
     public class ChangePasswordDto

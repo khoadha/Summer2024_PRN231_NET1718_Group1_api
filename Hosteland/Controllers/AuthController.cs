@@ -98,6 +98,8 @@ namespace Hosteland.Controllers {
                     Email = model.Email,
                     AccountBalance = 0,
                     ImgPath = imageUrl,
+                    IsStaff = false,
+
                 };
 
                 var isCreated = await _userManager.CreateAsync(newUser, model.Password);
@@ -195,6 +197,7 @@ namespace Hosteland.Controllers {
                             Email = payload.Email,
                             ImgPath = payload.Picture,
                             AccountBalance = 0,
+                            IsStaff = false,
                         };
 
                         var isCreated = await _userManager.CreateAsync(newUser);
@@ -501,6 +504,7 @@ namespace Hosteland.Controllers {
                 {
                     new Claim("Id", user.Id),
                     new Claim("ImgPath", user.ImgPath),
+                    new Claim("IsStaff", user.IsStaff.ToString()),
                     new Claim(ClaimTypes.NameIdentifier, user.Id),
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
                     new Claim(JwtRegisteredClaimNames.Name, user.UserName),

@@ -8,7 +8,6 @@ namespace Hosteland.Services.ApplicationUserService {
         Task<ServiceResponse<ApplicationUser>> GetUserById(string id);
         Task<ServiceResponse<bool>> IsUserExist(string id);
         bool Save();
-
         Task<ServiceResponse<int>> GetUsersCount();
     }
 }

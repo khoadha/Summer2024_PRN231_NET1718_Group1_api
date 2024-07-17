@@ -25,6 +25,7 @@ namespace Hosteland.Context
                     UserName = decodedToken.Claims.FirstOrDefault(c => c.Type == "name")?.Value,
                     Email = decodedToken.Claims.FirstOrDefault(c => c.Type == "email")?.Value,
                     Role = (decodedToken.Claims.FirstOrDefault(c => c.Type == "role")?.Value),
+                    IsStaff = (decodedToken.Claims.FirstOrDefault(c => c.Type == "IsStaff")?.Value),
                 };
                 return result;
             }

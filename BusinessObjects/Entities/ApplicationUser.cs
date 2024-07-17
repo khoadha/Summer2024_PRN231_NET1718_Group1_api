@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BusinessObjects.Entities {
@@ -9,6 +8,7 @@ namespace BusinessObjects.Entities {
         public string? ImgPath { get; set; }
         [NotMapped]
         public string? Token { get; set; }
+        public bool? IsStaff { get; set; }
         public string? RefreshToken { get; set; }
         public DateTime RefreshTokenExpiryTime { get; set; }
         public decimal? AccountBalance { get; set; }
