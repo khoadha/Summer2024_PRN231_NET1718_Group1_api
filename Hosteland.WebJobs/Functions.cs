@@ -14,12 +14,10 @@ namespace Hosteland.WebJobs {
         }
 
         public async Task Trigger(
-            [TimerTrigger("0 0 15 * *", RunOnStartup = false, UseMonitor = false)]
+            [TimerTrigger("0 * * * * *", RunOnStartup = false, UseMonitor = false)]
             TimerInfo timerInfo,
             CancellationToken cancellationToken) {
-            //if(timerInfo.IsPastDue) {
-                await _orderService.TriggerMonthlyBill(cancellationToken);
-            //}
+            await _orderService.TriggerMonthlyBill(cancellationToken);
         }
     }
 }

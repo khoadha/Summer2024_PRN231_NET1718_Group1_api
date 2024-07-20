@@ -28,7 +28,8 @@ namespace BusinessObjects.DTOs
         public DateTime? EndDate { get; set; }
         public int ContractTypeId { get; set; }
         public string ContractTypeName { get; set; }
-
+        public string Name { get; set; }
+        public int ServiceId { get; set; }
     }
     public class GetRoomServiceDto
     {

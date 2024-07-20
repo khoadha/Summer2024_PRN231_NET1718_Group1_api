@@ -62,8 +62,7 @@ namespace Hosteland.Controllers.Orders {
 
             var order = await _orderService.GetOrderById(id);
 
-            if (currentUser.UserId != order.Data.UserId)
-            {
+            if (currentUser.UserId != order.Data.UserId) {
                 return Forbid();
             }
 
@@ -76,8 +75,7 @@ namespace Hosteland.Controllers.Orders {
         public async Task<IActionResult> GetOrderByUserId([FromRoute] string id) {
             var currentUser = _userContext.GetCurrentUser(HttpContext);
 
-            if (currentUser.UserId != id)
-            {
+            if (currentUser.UserId != id) {
                 return Forbid();
             }
 
@@ -91,11 +89,10 @@ namespace Hosteland.Controllers.Orders {
         [Route("order/get-fee/{orderId}")]
         [Authorize]
         public async Task<ActionResult<List<Fee>>> GetFeesByOrderId([FromRoute] int orderId, string userId) {
-            
+
 
             var requestUser = _userContext.GetCurrentUser(HttpContext);
-            if (requestUser == null || requestUser.UserId != userId)
-            {
+            if (requestUser == null || requestUser.UserId != userId) {
                 return Forbid();
             }
             var list = await _orderService.GetFeesByOrderId(orderId);
@@ -143,12 +140,13 @@ namespace Hosteland.Controllers.Orders {
             var dayOccupied = (orderDto.EndDate - orderDto.StartDate).Value.TotalDays + 1;
             var guestsCount = orderDto.Guests.Count;
 
+            double dateDiffAdditionalFee = 0;
+            var startDate = orderDto.StartDate;
+
             List<Contract> allContract = new List<Contract>();
             List<Fee> allFee = new List<Fee>();
 
-            // create list service CONTRACT and FEE 
             if (orderDto.RoomServices.Count > 0) {
-                // create contract for each service
                 for (int i = 0; i < orderDto.RoomServices.Count; i++) {
                     var serviceId = orderDto.RoomServices[i].ServiceId;
                     var bookedService = _serviceService.GetServiceById(serviceId).Result.Data;
@@ -159,50 +157,62 @@ namespace Hosteland.Controllers.Orders {
                     }
 
                     Contract serviceContract = new Contract();
-                    Fee serviceFee = new Fee();
 
                     serviceContract = _mapper.Map<CreateOrderDto, Contract>(orderDto);
 
                     serviceContract.ContractTypeId = contractTypes.FirstOrDefault(c => c.Id == 2).Id;
                     serviceContract.Type = contractTypes.FirstOrDefault(c => c.Id == 2);
-                    serviceContract.Cost = serviceCost * dayOccupied;
-
+                    if(bookedService.IsCountPerCapita == true) {
+                        serviceContract.Cost = serviceCost * dayOccupied * guestsCount;
+                    } else {
+                        serviceContract.Cost = serviceCost * dayOccupied;
+                    }
+                    serviceContract.Name = bookedService.Name + " Service Contract";
+                    serviceContract.ServicePriceId = bookedServicePrice.Id;
                     allContract.Add(serviceContract);
 
-                    serviceFee.FeeCategoryId = feeCates.FirstOrDefault(c => c.Id == 2).Id;
-                    serviceFee.FeeCategory = feeCates.FirstOrDefault(c => c.Id == 2);
-                    serviceFee.FeeStatus = FeeStatus.Unpaid;
-                    serviceFee.PaymentDate = orderDto.StartDate;
+                    if (!orderDto.IsMonthly) {
+                        Fee serviceFee = new Fee();
+                        serviceFee.FeeCategoryId = feeCates.FirstOrDefault(c => c.Id == 2).Id;
+                        serviceFee.FeeCategory = feeCates.FirstOrDefault(c => c.Id == 2);
+                        serviceFee.FeeStatus = FeeStatus.Unpaid;
+                        serviceFee.PaymentDate = orderDto.StartDate;
 
-                    if (bookedService != null) {
-                        if (bookedService.IsCountPerCapita is true) {
-                            serviceFee.Amount = serviceCost * guestsCount * dayOccupied;
-                        } else {
-                            serviceFee.Amount = serviceCost * dayOccupied;
+                        if (bookedService != null) {
+                            if (bookedService.IsCountPerCapita is true) {
+                                serviceFee.Amount = serviceCost * guestsCount * dayOccupied;
+                            } else {
+                                serviceFee.Amount = serviceCost * dayOccupied;
+                            }
+                            serviceFee.Name = bookedService.Name + " Fee";
                         }
-                        serviceFee.Name = bookedService.Name + " Fee";
+                        allFee.Add(serviceFee);
+                    } else {
+                        double serviceAmount = 0;
+                        if (bookedService != null) {
+                            if (bookedService.IsCountPerCapita is true) {
+                                serviceAmount = serviceCost * guestsCount * dayOccupied;
+                            } else {
+                                serviceAmount = serviceCost * dayOccupied;
+                            }
+                        }
+                        dateDiffAdditionalFee += CalculateDayDifferenceFromBillingDay((DateTime)startDate) * serviceAmount;
                     }
-
-
-                    allFee.Add(serviceFee);
                 }
             }
 
             // create 1 room CONTRACT and FEE
             var bookedRoom = _roomService.GetRoomById(orderDto.RoomId).Result.Data;
             var roomCost = _roomService.GetRoomById(orderDto.RoomId).Result.Data.CostPerDay;
-
             Contract roomContract = new Contract();
 
             roomContract = _mapper.Map<CreateOrderDto, Contract>(orderDto);
-            //roomContract.Name = bookedRoom.Name;
+            roomContract.Name = $"Room {bookedRoom.Name} Rental Contract";
             roomContract.ContractTypeId = contractTypes.FirstOrDefault(c => c.Id == 1).Id;
             roomContract.Type = contractTypes.FirstOrDefault(c => c.Id == 1);
             roomContract.Cost = roomCost * dayOccupied;
             allContract.Add(roomContract);
 
-            var startDate = orderDto.StartDate;
-            double dateDiffAdditionalFee = 0;
 
             if (!orderDto.IsMonthly) {
                 Fee roomFee = new Fee();
@@ -215,7 +225,7 @@ namespace Hosteland.Controllers.Orders {
                 allFee.Add(roomFee);
             } else {
                 if (startDate is not null) {
-                    dateDiffAdditionalFee = CalculateDayDifferenceFromBillingDay((DateTime)startDate) * roomCost;
+                    dateDiffAdditionalFee += CalculateDayDifferenceFromBillingDay((DateTime)startDate) * roomCost;
                 }
             }
 
@@ -231,7 +241,7 @@ namespace Hosteland.Controllers.Orders {
             }
 
             Fee depositFee = new Fee();
-            //depositFee.Name = "Deposit";
+            depositFee.Name = "Deposit Fee";
             depositFee.FeeCategoryId = feeCates.FirstOrDefault(c => c.Id == 3).Id;
             depositFee.FeeCategory = feeCates.FirstOrDefault(c => c.Id == 3);
             depositFee.FeeStatus = FeeStatus.Unpaid;
@@ -243,7 +253,6 @@ namespace Hosteland.Controllers.Orders {
                 depositFee.Amount -= dateDiffAdditionalFee;
             }
 
-            depositFee.Name = "Deposit Fees";
             allFee.Add(depositFee);
 
             //create order 

@@ -46,6 +46,7 @@ namespace BusinessObjects.Entities {
 
     public class Contract : BaseEntity {
         public string? Name { get; set; }
+        public int? ServicePriceId { get; set; }
         public int OrderId { get; set; }
         public double Cost { get; set; }
         public DateTime? StartDate { get; set; }
