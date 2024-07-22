@@ -1,6 +1,4 @@
-﻿using Hosteland.Services.OrderService;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -8,6 +6,7 @@ using Repositories.OrderRepository;
 using Microsoft.EntityFrameworkCore;
 using BusinessObjects.Entities;
 using Hosteland.WebJobs;
+using Hosteland.WebJobs.Services.OrderService;
 
 var builder = new HostBuilder();
 

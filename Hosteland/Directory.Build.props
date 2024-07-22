@@ -1,0 +1,12 @@
+<Project>
+	<PropertyGroup>
+		<CopyAllFilesToSingleFolderForPackageDependsOn>
+			$(CopyAllFilesToSingleFolderForPackageDependsOn);
+			CopyAppSettingsJson;
+		</CopyAllFilesToSingleFolderForPackageDependsOn>
+	</PropertyGroup>
+
+	<Target Name="CopyAppSettingsJson">
+		<Copy SourceFiles="appsettings.json" DestinationFolder="$(PublishDir)" />
+	</Target>
+</Project>

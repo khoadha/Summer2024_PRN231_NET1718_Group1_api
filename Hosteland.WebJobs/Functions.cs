@@ -1,4 +1,4 @@
-﻿using Hosteland.Services.OrderService;
+﻿using Hosteland.WebJobs.Services.OrderService;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 
