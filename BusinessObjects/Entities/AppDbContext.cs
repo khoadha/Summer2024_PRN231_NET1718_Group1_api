@@ -27,6 +27,7 @@ namespace BusinessObjects.Entities {
         public virtual DbSet<RoomImage> RoomImages { get; set; }
         public virtual DbSet<GlobalRate> GlobalRates { get; set; }
         public virtual DbSet<ContractType> ContractTypes { get; set; }
+        public virtual DbSet<BackgroundTask> BackgroundTasks { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             optionsBuilder.UseSqlServer(GetConnectionString());
         }

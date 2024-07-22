@@ -168,67 +168,107 @@ namespace Repositories.OrderRepository {
                     int ELECTRIC_FEE_CATEGORY_ID = 6;
                     int SERVICE_FEE_CATEGORY_ID = 2;
 
+                    int ROOM_CONTRACT_TYPE_ID = 1;
+                    int SERVICE_CONTRACT_TYPE_ID = 2;
+
                     var feeCates = await _context.FeeCategories.ToListAsync(cancellationToken);
 
                     var monthlyBillOrders = await _context.Order
                     .Include(o => o.Room)
+                    .Include(o => o.Contracts)
                     .Where(a => a.IsMonthly)
                     .ToListAsync(cancellationToken);
                     var totalDaysToBill = CalculateTotalDays();
 
                     var now = DateTime.Now;
+                    var currentDay = now.Day;
+                    var currentMonth = now.Month;
+                    var currentYear = now.Year;
 
-                    foreach (var order in monthlyBillOrders) {
-                        if (order.Fees is not null) {
+                    bool isExist = await _context.BackgroundTasks
+                        .AnyAsync(r => r.ExecutedDay == currentDay && r.ExecutedMonth == currentMonth);
 
-                            //HANDLE ROOM FEE
-                            Fee roomFee = new();
-                            roomFee.FeeCategoryId = feeCates.Find(c => c.Id == ROOM_FEE_CATEGORY_ID).Id;
-                            roomFee.FeeCategory = feeCates.Find(c => c.Id == ROOM_FEE_CATEGORY_ID);
-                            roomFee.FeeStatus = FeeStatus.Unpaid;
-                            roomFee.PaymentDate = now.AddDays(7);
-                            roomFee.Amount = order.Room.CostPerDay * totalDaysToBill * 0.9; //Thue theo thang *0.9 so voi thue theo ngay
-                            roomFee.Name = $"Room Fee {now.Month}/{now.Year}";
-                            order.Fees.Add(roomFee);
+                    if (isExist) {
+                        var bt = new BackgroundTask() {
+                            Description = $"Failed handle system fees {now.Month}/{now.Year}. Fees are already exist",
+                            CreatedDate = now,
+                            ExecutedDay = currentDay,
+                            ExecutedMonth = currentMonth,
+                            ExecutedYear = currentYear,
+                            IsSuccess = false
+                        };
 
-                            //HANDLE ELECTRIC FEE
-                            Fee electricFee = new();
-                            electricFee.FeeCategoryId = feeCates.Find(c => c.Id == ELECTRIC_FEE_CATEGORY_ID).Id;
-                            electricFee.FeeCategory = feeCates.Find(c => c.Id == ELECTRIC_FEE_CATEGORY_ID);
-                            electricFee.FeeStatus = FeeStatus.Deferred;
-                            electricFee.PaymentDate = now.AddDays(10);
-                            electricFee.Amount = 0;
-                            electricFee.Name = $"Electric Fee {now.Month}/{now.Year}";
-                            order.Fees.Add(electricFee);
+                        await _context.BackgroundTasks.AddAsync(bt);
+                        await SaveAsync();
+                    } else {
+                        foreach (var order in monthlyBillOrders) {
+                            if (order.Fees is not null) {
+                                //HANDLE ROOM FEE
 
-                            //HANDLE SERVICE FEE
-                            var serviceContracts = await _context.Contracts
-                                .Where(a=>a.ContractTypeId==2 && a.OrderId == order.Id)
-                                .ToListAsync(cancellationToken);
+                                var roomContract = order.Contracts.FirstOrDefault(a => a.ContractTypeId == ROOM_CONTRACT_TYPE_ID);
 
-                            if (serviceContracts.Any()) {
-                                foreach(var serviceContract in serviceContracts) {
-                                    string serviceFeeName = "";
-                                    var servicePrice = await _context.ServicePrices.FirstOrDefaultAsync(a=>a.Id == serviceContract.ServicePriceId);
-                                    if(serviceContract.Name != null) {
-                                        serviceFeeName = serviceContract.Name.Replace("Contract", "Fee");
+                                if (roomContract.StartDate <= now && roomContract.EndDate >= now) {
+                                    Fee roomFee = new();
+                                    roomFee.FeeCategoryId = feeCates.Find(c => c.Id == ROOM_FEE_CATEGORY_ID).Id;
+                                    roomFee.FeeCategory = feeCates.Find(c => c.Id == ROOM_FEE_CATEGORY_ID);
+                                    roomFee.FeeStatus = FeeStatus.Unpaid;
+                                    roomFee.PaymentDate = now.AddDays(7);
+                                    roomFee.Amount = order.Room.CostPerDay * totalDaysToBill * 0.9; //Thue theo thang *0.9 so voi thue theo ngay
+                                    roomFee.Name = $"Room Fee {now.Month}/{now.Year}";
+                                    order.Fees.Add(roomFee);
+                                }
+
+                                //HANDLE ELECTRIC FEE
+                                Fee electricFee = new();
+                                electricFee.FeeCategoryId = feeCates.Find(c => c.Id == ELECTRIC_FEE_CATEGORY_ID).Id;
+                                electricFee.FeeCategory = feeCates.Find(c => c.Id == ELECTRIC_FEE_CATEGORY_ID);
+                                electricFee.FeeStatus = FeeStatus.Deferred;
+                                electricFee.PaymentDate = now.AddDays(10);
+                                electricFee.Amount = 0;
+                                electricFee.Name = $"Electric Fee {now.Month}/{now.Year}";
+                                order.Fees.Add(electricFee);
+
+                                //HANDLE SERVICE FEE
+                                var serviceContracts = await _context.Contracts
+                                    .Where(a => a.ContractTypeId == 2 && a.OrderId == order.Id)
+                                    .ToListAsync(cancellationToken);
+
+                                if (serviceContracts.Any()) {
+                                    foreach (var serviceContract in serviceContracts) {
+                                        if (serviceContract.StartDate <= now && serviceContract.EndDate >= now) {
+                                            string serviceFeeName = "";
+                                            var servicePrice = await _context.ServicePrices.FirstOrDefaultAsync(a => a.Id == serviceContract.ServicePriceId);
+                                            if (serviceContract.Name != null) {
+                                                serviceFeeName = serviceContract.Name.Replace("Contract", "Fee");
+                                            }
+                                            Fee serviceFee = new();
+                                            serviceFee.FeeCategoryId = feeCates.Find(c => c.Id == SERVICE_FEE_CATEGORY_ID).Id;
+                                            serviceFee.FeeCategory = feeCates.Find(c => c.Id == SERVICE_FEE_CATEGORY_ID);
+                                            serviceFee.FeeStatus = FeeStatus.Unpaid;
+                                            serviceFee.PaymentDate = now.AddDays(7);
+                                            serviceFee.Name = $"{serviceFeeName} {now.Month}/{now.Year}";
+                                            if (servicePrice != null) {
+                                                serviceFee.Amount = servicePrice.Amount * totalDaysToBill;
+                                            }
+                                            order.Fees.Add(serviceFee);
+                                        }
                                     }
-                                    Fee serviceFee = new();
-                                    serviceFee.FeeCategoryId = feeCates.Find(c => c.Id == SERVICE_FEE_CATEGORY_ID).Id;
-                                    serviceFee.FeeCategory = feeCates.Find(c => c.Id == SERVICE_FEE_CATEGORY_ID);
-                                    serviceFee.FeeStatus = FeeStatus.Unpaid;
-                                    serviceFee.PaymentDate = now.AddDays(7);
-                                    serviceFee.Name = $"{serviceFeeName} {now.Month}/{now.Year}";
-                                    if(servicePrice != null) {
-                                        serviceFee.Amount = servicePrice.Amount * totalDaysToBill;
-                                    }
-                                    order.Fees.Add(serviceFee);
                                 }
                             }
+                            await SaveAsync();
                         }
-                        await _context.SaveChangesAsync(cancellationToken);
-                    }
 
+                        var bt = new BackgroundTask() {
+                            Description = $"Successfully handle system fees {now.Month}/{now.Year}",
+                            CreatedDate = now,
+                            ExecutedDay = currentDay,
+                            ExecutedMonth = currentMonth,
+                            ExecutedYear = currentYear,
+                            IsSuccess = true
+                        };
+                        await _context.BackgroundTasks.AddAsync(bt);
+                        await SaveAsync();
+                    }
                     cancellationToken.ThrowIfCancellationRequested();
                     await transaction.CommitAsync();
                 } catch (OperationCanceledException) {
