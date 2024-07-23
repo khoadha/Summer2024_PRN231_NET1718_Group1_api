@@ -11,6 +11,7 @@ namespace Hosteland.Services.ServiceService
         Task<ServiceResponse<ServicePrice>> CreateServicePrice(ServicePrice servicePrice);
         Task<ServiceResponse<List<ServicePrice>>> GetServicePricesByServiceId(int id);
         Task<ServiceResponse<ServicePrice>> GetServiceNewestPricesByServiceId(int id);
+        Task<ServiceResponse<ServicePrice>> GetServicePricesInContractByServiceId(int id, DateTime? startDate);
         Task<ServiceResponse<bool>> SaveAsync();
     }
 }

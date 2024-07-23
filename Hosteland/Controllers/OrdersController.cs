@@ -146,14 +146,18 @@ namespace Hosteland.Controllers.Orders {
             List<Contract> allContract = new List<Contract>();
             List<Fee> allFee = new List<Fee>();
 
+            // SERVICE 's contract and fee
             if (orderDto.RoomServices.Count > 0) {
-                for (int i = 0; i < orderDto.RoomServices.Count; i++) {
+                for (int i = 0; i < orderDto.RoomServices.Count; i++) 
+                {
+                    // CONTRACT
                     var serviceId = orderDto.RoomServices[i].ServiceId;
                     var bookedService = _serviceService.GetServiceById(serviceId).Result.Data;
-                    var bookedServicePrice = _serviceService.GetServiceNewestPricesByServiceId(serviceId).Result.Data;
+                    var bookedServiceNewestPrice = _serviceService.GetServiceNewestPricesByServiceId(serviceId).Result.Data;
+                    var bookedServiceContractPrice = _serviceService.GetServicePricesInContractByServiceId(serviceId, orderDto.StartDate).Result.Data;
                     double serviceCost = 0;
-                    if (bookedServicePrice != null) {
-                        serviceCost = bookedServicePrice.Amount;
+                    if (bookedServiceNewestPrice != null) {
+                        serviceCost = bookedServiceNewestPrice.Amount;
                     }
 
                     Contract serviceContract = new Contract();
@@ -168,9 +172,10 @@ namespace Hosteland.Controllers.Orders {
                         serviceContract.Cost = serviceCost * dayOccupied;
                     }
                     serviceContract.Name = bookedService.Name + " Service Contract";
-                    serviceContract.ServicePriceId = bookedServicePrice.Id;
+                    serviceContract.ServicePriceId = bookedServiceNewestPrice.Id;
                     allContract.Add(serviceContract);
 
+                    // FEE
                     if (!orderDto.IsMonthly) {
                         Fee serviceFee = new Fee();
                         serviceFee.FeeCategoryId = feeCates.FirstOrDefault(c => c.Id == 2).Id;
@@ -201,11 +206,12 @@ namespace Hosteland.Controllers.Orders {
                 }
             }
 
-            // create 1 room CONTRACT and FEE
+            // ROOM 's contract and fee
             var bookedRoom = _roomService.GetRoomById(orderDto.RoomId).Result.Data;
             var roomCost = _roomService.GetRoomById(orderDto.RoomId).Result.Data.CostPerDay;
             Contract roomContract = new Contract();
 
+            // CONTRACT
             roomContract = _mapper.Map<CreateOrderDto, Contract>(orderDto);
             roomContract.Name = $"Room {bookedRoom.Name} Rental Contract";
             roomContract.ContractTypeId = contractTypes.FirstOrDefault(c => c.Id == 1).Id;
@@ -213,7 +219,7 @@ namespace Hosteland.Controllers.Orders {
             roomContract.Cost = roomCost * dayOccupied;
             allContract.Add(roomContract);
 
-
+            // FEE
             if (!orderDto.IsMonthly) {
                 Fee roomFee = new Fee();
                 roomFee.FeeCategoryId = feeCates.FirstOrDefault(c => c.Id == 1).Id;
