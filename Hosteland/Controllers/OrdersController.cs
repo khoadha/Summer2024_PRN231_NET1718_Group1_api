@@ -79,9 +79,9 @@ namespace Hosteland.Controllers.Orders {
                 return Forbid();
             }
 
-            var order = await _orderService.GetOrders();
+            var order = await _orderService.GetOrdersDisplay();
 
-            var response = _mapper.Map<List<GetOrderDto>>(order.Data.Where(o => o.UserId == id));
+            var response = _mapper.Map<List<GetOrderDisplayDto>>(order.Data.Where(o => o.UserId == id));
 
             return Ok(response);
         }

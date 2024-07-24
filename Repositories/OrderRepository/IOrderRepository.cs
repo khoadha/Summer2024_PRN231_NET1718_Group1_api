@@ -6,6 +6,7 @@ namespace Repositories.OrderRepository
     public interface IOrderRepository
     {
         Task<List<Order>> GetOrders();
+        Task<List<Order>> GetOrdersDisplay();
         Task<List<Order>> GetOrdersByRoomId(int roomId);
         Task<Order> AddOrder(Order order);
         Task<Order> CreateOrder(Order order, List<Contract> contract, List<Fee> fee);

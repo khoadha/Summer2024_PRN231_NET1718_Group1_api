@@ -21,6 +21,17 @@ namespace BusinessObjects.DTOs
         public string UserName { get; set; }
         public string RoomName { get; set; }
     }
+    public class GetOrderDisplayDto
+    {
+        public int Id { get; set; }
+        public string? UserId { get; set; }
+        public int RoomId { get; set; }
+        public DateTime? OrderDate { get; set; }
+        public DateTime? CancelDate { get; set; }
+        public OrderStatus Status { get; set; }
+        public string UserName { get; set; }
+        public string RoomName { get; set; }
+    }
     public class ContractDto
     {
         public double Cost { get; set; }

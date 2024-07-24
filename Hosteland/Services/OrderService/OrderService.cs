@@ -20,6 +20,13 @@ namespace Hosteland.Services.OrderService
             serviceResponse.Data = listOrder;
             return serviceResponse;
         }
+        public async Task<ServiceResponse<List<Order>>> GetOrdersDisplay()
+        {
+            var serviceResponse = new ServiceResponse<List<Order>>();
+            var listOrder = await _orderRepository.GetOrdersDisplay();
+            serviceResponse.Data = listOrder;
+            return serviceResponse;
+        }
         public async Task<ServiceResponse<Order>> GetOrderById(int id)
         {
             var serviceResponse = new ServiceResponse<Order>();

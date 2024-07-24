@@ -24,6 +24,15 @@ namespace Repositories.OrderRepository {
                 .ToListAsync();
             return list;
         }
+        public async Task<List<Order>> GetOrdersDisplay()
+        {
+            var list = await _context.Order
+                .Include(o => o.User)
+                .Include(o => o.Room)
+                .ToListAsync();
+            return list;
+        }
+
 
         public async Task<Order> GetOrderById(int id) {
             var order = await _context.Order
