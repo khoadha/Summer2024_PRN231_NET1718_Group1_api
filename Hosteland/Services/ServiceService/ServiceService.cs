@@ -134,6 +134,36 @@ namespace Hosteland.Services.ServiceService
             }
             return serviceResponse;
         }
+        
+        public async Task<ServiceResponse<ServicePrice>> GetServicePricesInContractByServiceId(int id, DateTime? startDate)
+        {
+            var serviceResponse = new ServiceResponse<ServicePrice>();
+            try
+            {
+                var serviceExist = await _repo.GetServiceById(id);
+                if (serviceExist == null)
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "Service not found";
+                    return serviceResponse;
+                }
+
+                var svPriceList = _repo.GetServicePricesByServiceId(id).Result;
+
+                var result = svPriceList
+                        .Where(a => a.StartDate <= startDate && (!a.EndDate.HasValue || a.EndDate >= startDate))
+                        .OrderByDescending(a => a.StartDate)
+                        .FirstOrDefault();
+
+                serviceResponse.Data = result;
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+            return serviceResponse;
+        }
 
         public async Task<ServiceResponse<bool>> SaveAsync()
         {

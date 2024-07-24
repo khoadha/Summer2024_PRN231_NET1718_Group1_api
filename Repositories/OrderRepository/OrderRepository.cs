@@ -24,6 +24,15 @@ namespace Repositories.OrderRepository {
                 .ToListAsync();
             return list;
         }
+        public async Task<List<Order>> GetOrdersDisplay()
+        {
+            var list = await _context.Order
+                .Include(o => o.User)
+                .Include(o => o.Room)
+                .ToListAsync();
+            return list;
+        }
+
 
         public async Task<Order> GetOrderById(int id) {
             var order = await _context.Order
@@ -174,10 +183,10 @@ namespace Repositories.OrderRepository {
                     var feeCates = await _context.FeeCategories.ToListAsync(cancellationToken);
 
                     var monthlyBillOrders = await _context.Order
-                    .Include(o => o.Room)
-                    .Include(o => o.Contracts)
-                    .Where(a => a.IsMonthly)
-                    .ToListAsync(cancellationToken);
+                        .Include(o => o.Room)
+                        .Include(o => o.Contracts)
+                        .Where(a => a.IsMonthly)
+                        .ToListAsync(cancellationToken);
                     var totalDaysToBill = CalculateTotalDays();
 
                     var now = DateTime.Now;
@@ -223,7 +232,7 @@ namespace Repositories.OrderRepository {
                                 electricFee.FeeCategoryId = feeCates.Find(c => c.Id == ELECTRIC_FEE_CATEGORY_ID).Id;
                                 electricFee.FeeCategory = feeCates.Find(c => c.Id == ELECTRIC_FEE_CATEGORY_ID);
                                 electricFee.FeeStatus = FeeStatus.Deferred;
-                                electricFee.PaymentDate = now.AddDays(10);
+                                electricFee.PaymentDate = now.AddDays(7);
                                 electricFee.Amount = 0;
                                 electricFee.Name = $"Electric Fee {now.Month}/{now.Year}";
                                 order.Fees.Add(electricFee);
@@ -237,7 +246,8 @@ namespace Repositories.OrderRepository {
                                     foreach (var serviceContract in serviceContracts) {
                                         if (serviceContract.StartDate <= now && serviceContract.EndDate >= now) {
                                             string serviceFeeName = "";
-                                            var servicePrice = await _context.ServicePrices.FirstOrDefaultAsync(a => a.Id == serviceContract.ServicePriceId);
+                                            var servicePrice = await _context.ServicePrices.FirstOrDefaultAsync(a => a.Id == serviceContract.ServicePriceId
+                                            && serviceContract.StartDate <= a.EndDate && (!a.EndDate.HasValue || a.EndDate >= serviceContract.StartDate));
                                             if (serviceContract.Name != null) {
                                                 serviceFeeName = serviceContract.Name.Replace("Contract", "Fee");
                                             }
@@ -247,8 +257,13 @@ namespace Repositories.OrderRepository {
                                             serviceFee.FeeStatus = FeeStatus.Unpaid;
                                             serviceFee.PaymentDate = now.AddDays(7);
                                             serviceFee.Name = $"{serviceFeeName} {now.Month}/{now.Year}";
-                                            if (servicePrice != null) {
-                                                serviceFee.Amount = servicePrice.Amount * totalDaysToBill;
+                                            //if (servicePrice != null) {
+                                            //    serviceFee.Amount = servicePrice.Amount * totalDaysToBill;
+                                            //}
+
+                                            if (servicePrice != null)
+                                            {
+                                                serviceFee.Amount = servicePrice.Amount * order.Guests.Count();
                                             }
                                             order.Fees.Add(serviceFee);
                                         }
