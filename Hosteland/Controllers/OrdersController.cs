@@ -146,6 +146,12 @@ namespace Hosteland.Controllers.Orders {
             List<Contract> allContract = new List<Contract>();
             List<Fee> allFee = new List<Fee>();
 
+            var monthLast = 1;
+            if (orderDto.StartDate != null && orderDto.EndDate != null)
+            {
+                monthLast = GetMonthsDifference((DateTime)orderDto.StartDate, (DateTime)orderDto.EndDate);
+            }
+
             // SERVICE 's contract and fee
             if (orderDto.RoomServices.Count > 0) {
                 for (int i = 0; i < orderDto.RoomServices.Count; i++) 
@@ -171,17 +177,20 @@ namespace Hosteland.Controllers.Orders {
 
                     serviceContract.ContractTypeId = contractTypes.FirstOrDefault(c => c.Id == 2).Id;
                     serviceContract.Type = contractTypes.FirstOrDefault(c => c.Id == 2);
-                    if(bookedService.IsCountPerCapita == true) {
-                        serviceContract.Cost = thatTimeServiceCost * dayOccupied * guestsCount;
-                    } else {
-                        serviceContract.Cost = thatTimeServiceCost * dayOccupied;
-                    }
                     serviceContract.Name = bookedService.Name + " Service Contract";
-                    serviceContract.ServicePriceId = bookedServiceNewestPrice.Id;
-                    allContract.Add(serviceContract);
+                    serviceContract.ServicePriceId = bookedServiceContractPrice.Id;
 
                     // FEE
-                    if (!orderDto.IsMonthly) {
+                    if (!orderDto.IsMonthly)
+                    {
+                        if (bookedService.IsCountPerCapita == true)
+                        {
+                            serviceContract.Cost = thatTimeServiceCost * dayOccupied * guestsCount;
+                        }
+                        else
+                        {
+                            serviceContract.Cost = thatTimeServiceCost * dayOccupied;
+                        }
                         Fee serviceFee = new Fee();
                         serviceFee.FeeCategoryId = feeCates.FirstOrDefault(c => c.Id == 2).Id;
                         serviceFee.FeeCategory = feeCates.FirstOrDefault(c => c.Id == 2);
@@ -197,17 +206,28 @@ namespace Hosteland.Controllers.Orders {
                             serviceFee.Name = bookedService.Name + " Fee";
                         }
                         allFee.Add(serviceFee);
-                    } else {
+                    } else
+                    {
+                        if (bookedService.IsCountPerCapita == true)
+                        {
+                            serviceContract.Cost = thatTimeServiceCost * guestsCount;
+                        }
+                        else
+                        {
+                            serviceContract.Cost = thatTimeServiceCost;
+                        }
+                        serviceContract.Cost *= monthLast;
                         double serviceAmount = 0;
                         if (bookedService != null) {
                             if (bookedService.IsCountPerCapita is true) {
-                                serviceAmount = thatTimeServiceCost * guestsCount * dayOccupied;
+                                serviceAmount = thatTimeServiceCost * guestsCount;
                             } else {
-                                serviceAmount = thatTimeServiceCost * dayOccupied;
+                                serviceAmount = thatTimeServiceCost;
                             }
                         }
                         dateDiffAdditionalFee += CalculateDayDifferenceFromBillingDay((DateTime)startDate) * serviceAmount;
                     }
+                    allContract.Add(serviceContract);
                 }
             }
 
@@ -295,6 +315,23 @@ namespace Hosteland.Controllers.Orders {
             var createdOrder = await _orderService.CreateOrder(order, allContract, allFee);
 
             return Ok(true);
+        }
+
+        private int GetMonthsDifference(DateTime startDate, DateTime endDate)
+        {
+            int months = 0;
+
+            if (endDate < startDate)
+            {
+                throw new ArgumentException("End date must be after start date.");
+            }
+
+            while (startDate <= endDate)
+            {
+                months++;
+                startDate = startDate.AddMonths(1);
+            }
+            return months - 1;
         }
 
         [HttpPost]
