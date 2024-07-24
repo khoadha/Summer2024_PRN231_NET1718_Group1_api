@@ -176,6 +176,7 @@ namespace Repositories.OrderRepository {
                     var monthlyBillOrders = await _context.Order
                         .Include(o => o.Room)
                         .Include(o => o.Contracts)
+                        .Include(o => o.Guests)
                         .Where(a => a.IsMonthly)
                         .ToListAsync(cancellationToken);
                     var totalDaysToBill = CalculateTotalDays();
@@ -237,8 +238,10 @@ namespace Repositories.OrderRepository {
                                     foreach (var serviceContract in serviceContracts) {
                                         if (serviceContract.StartDate <= now && serviceContract.EndDate >= now) {
                                             string serviceFeeName = "";
-                                            var servicePrice = await _context.ServicePrices.FirstOrDefaultAsync(a => a.Id == serviceContract.ServicePriceId
-                                            && serviceContract.StartDate <= a.EndDate && (!a.EndDate.HasValue || a.EndDate >= serviceContract.StartDate));
+                                            var servicePrice = await _context.ServicePrices.FirstOrDefaultAsync(a => a.Id == serviceContract.ServicePriceId);
+
+                                            var service = await _context.Services.FirstOrDefaultAsync(a=>a.Id==servicePrice.ServiceId);
+
                                             if (serviceContract.Name != null) {
                                                 serviceFeeName = serviceContract.Name.Replace("Contract", "Fee");
                                             }
@@ -248,13 +251,14 @@ namespace Repositories.OrderRepository {
                                             serviceFee.FeeStatus = FeeStatus.Unpaid;
                                             serviceFee.PaymentDate = now.AddDays(7);
                                             serviceFee.Name = $"{serviceFeeName} {now.Month}/{now.Year}";
-                                            //if (servicePrice != null) {
-                                            //    serviceFee.Amount = servicePrice.Amount * totalDaysToBill;
-                                            //}
 
-                                            if (servicePrice != null)
+                                            if (servicePrice is not null && service is not null)
                                             {
-                                                serviceFee.Amount = servicePrice.Amount * order.Guests.Count();
+                                                if(service.IsCountPerCapita==true) {
+                                                    serviceFee.Amount = servicePrice.Amount * order.Guests.Count;
+                                                } else {
+                                                    serviceFee.Amount = servicePrice.Amount;
+                                                }
                                             }
                                             order.Fees.Add(serviceFee);
                                         }
