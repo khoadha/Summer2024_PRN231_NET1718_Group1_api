@@ -155,9 +155,14 @@ namespace Hosteland.Controllers.Orders {
                     var bookedService = _serviceService.GetServiceById(serviceId).Result.Data;
                     var bookedServiceNewestPrice = _serviceService.GetServiceNewestPricesByServiceId(serviceId).Result.Data;
                     var bookedServiceContractPrice = _serviceService.GetServicePricesInContractByServiceId(serviceId, orderDto.StartDate).Result.Data;
-                    double serviceCost = 0;
+                    double newestServiceCost = 0;
+                    double thatTimeServiceCost = 0;  // AKA cost of serv in Contract at that time
                     if (bookedServiceNewestPrice != null) {
-                        serviceCost = bookedServiceNewestPrice.Amount;
+                        newestServiceCost = bookedServiceNewestPrice.Amount;
+                    }
+                    if (bookedServiceContractPrice != null)
+                    {
+                        thatTimeServiceCost = bookedServiceContractPrice.Amount;
                     }
 
                     Contract serviceContract = new Contract();
@@ -167,9 +172,9 @@ namespace Hosteland.Controllers.Orders {
                     serviceContract.ContractTypeId = contractTypes.FirstOrDefault(c => c.Id == 2).Id;
                     serviceContract.Type = contractTypes.FirstOrDefault(c => c.Id == 2);
                     if(bookedService.IsCountPerCapita == true) {
-                        serviceContract.Cost = serviceCost * dayOccupied * guestsCount;
+                        serviceContract.Cost = thatTimeServiceCost * dayOccupied * guestsCount;
                     } else {
-                        serviceContract.Cost = serviceCost * dayOccupied;
+                        serviceContract.Cost = thatTimeServiceCost * dayOccupied;
                     }
                     serviceContract.Name = bookedService.Name + " Service Contract";
                     serviceContract.ServicePriceId = bookedServiceNewestPrice.Id;
@@ -185,9 +190,9 @@ namespace Hosteland.Controllers.Orders {
 
                         if (bookedService != null) {
                             if (bookedService.IsCountPerCapita is true) {
-                                serviceFee.Amount = serviceCost * guestsCount * dayOccupied;
+                                serviceFee.Amount = thatTimeServiceCost * guestsCount * dayOccupied;
                             } else {
-                                serviceFee.Amount = serviceCost * dayOccupied;
+                                serviceFee.Amount = thatTimeServiceCost * dayOccupied;
                             }
                             serviceFee.Name = bookedService.Name + " Fee";
                         }
@@ -196,15 +201,16 @@ namespace Hosteland.Controllers.Orders {
                         double serviceAmount = 0;
                         if (bookedService != null) {
                             if (bookedService.IsCountPerCapita is true) {
-                                serviceAmount = serviceCost * guestsCount * dayOccupied;
+                                serviceAmount = thatTimeServiceCost * guestsCount * dayOccupied;
                             } else {
-                                serviceAmount = serviceCost * dayOccupied;
+                                serviceAmount = thatTimeServiceCost * dayOccupied;
                             }
                         }
                         dateDiffAdditionalFee += CalculateDayDifferenceFromBillingDay((DateTime)startDate) * serviceAmount;
                     }
                 }
             }
+
 
             // ROOM 's contract and fee
             var bookedRoom = _roomService.GetRoomById(orderDto.RoomId).Result.Data;
@@ -216,7 +222,14 @@ namespace Hosteland.Controllers.Orders {
             roomContract.Name = $"Room {bookedRoom.Name} Rental Contract";
             roomContract.ContractTypeId = contractTypes.FirstOrDefault(c => c.Id == 1).Id;
             roomContract.Type = contractTypes.FirstOrDefault(c => c.Id == 1);
-            roomContract.Cost = roomCost * dayOccupied;
+            if(!orderDto.IsMonthly)
+            {
+                roomContract.Cost = roomCost * dayOccupied;
+            }
+            else
+            {
+                roomContract.Cost = roomCost * 0.9 * dayOccupied;
+            }
             allContract.Add(roomContract);
 
             // FEE

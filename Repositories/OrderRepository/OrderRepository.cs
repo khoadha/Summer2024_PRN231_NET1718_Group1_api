@@ -174,10 +174,10 @@ namespace Repositories.OrderRepository {
                     var feeCates = await _context.FeeCategories.ToListAsync(cancellationToken);
 
                     var monthlyBillOrders = await _context.Order
-                    .Include(o => o.Room)
-                    .Include(o => o.Contracts)
-                    .Where(a => a.IsMonthly)
-                    .ToListAsync(cancellationToken);
+                        .Include(o => o.Room)
+                        .Include(o => o.Contracts)
+                        .Where(a => a.IsMonthly)
+                        .ToListAsync(cancellationToken);
                     var totalDaysToBill = CalculateTotalDays();
 
                     var now = DateTime.Now;
@@ -223,7 +223,7 @@ namespace Repositories.OrderRepository {
                                 electricFee.FeeCategoryId = feeCates.Find(c => c.Id == ELECTRIC_FEE_CATEGORY_ID).Id;
                                 electricFee.FeeCategory = feeCates.Find(c => c.Id == ELECTRIC_FEE_CATEGORY_ID);
                                 electricFee.FeeStatus = FeeStatus.Deferred;
-                                electricFee.PaymentDate = now.AddDays(10);
+                                electricFee.PaymentDate = now.AddDays(7);
                                 electricFee.Amount = 0;
                                 electricFee.Name = $"Electric Fee {now.Month}/{now.Year}";
                                 order.Fees.Add(electricFee);
